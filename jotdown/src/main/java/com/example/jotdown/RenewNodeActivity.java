@@ -83,6 +83,9 @@ public class RenewNodeActivity extends AppCompatActivity implements
             rowId=bundle.getInt("_id");
             handler.post(queryNode);
         }
+        else{
+            node=new NodeInfo(this);
+        }
     }
 
     private void initPage(){
