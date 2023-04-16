@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">jot down</string>
+    <string name="edit_title">输入标题</string>
+    <string name="edit_content">输入内容</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+
+    <string name="notRemind">不提醒</string>
+</resources>
