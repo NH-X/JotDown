@@ -76,14 +76,14 @@ public class RenewNodeActivity extends AppCompatActivity implements
         setSupportActionBar(tl_head);
         Intent intent=getIntent();
 
-        if(intent.hasExtra("_id")){
+        if(intent.hasExtra("_id")){                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
             //上一个Activity传入了包裹
             Bundle bundle=intent.getExtras();
             //进行更改数据操作
             rowId=bundle.getInt("_id");
             handler.post(queryNode);
         }
-        else{
+        else{                                               //如果上一个Activity没有传包裹，则创建一个新的对象
             node=new NodeInfo(this);
         }
     }
