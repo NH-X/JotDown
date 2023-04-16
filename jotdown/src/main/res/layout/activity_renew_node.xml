@@ -47,13 +47,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/linear_item"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_label"/>
+                        android:src="@drawable/ic_label"
+                        android:id="@+id/iv_mark"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -62,7 +64,8 @@
                         android:gravity="center"
                         android:text="ddddddfhsdkhfliisdufhalsdihfiladuhfd"
                         android:textSize="15sp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:id="@+id/tv_importance"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -79,7 +82,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:background="@drawable/edit_item"
+                    android:background="@drawable/linear_item"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -122,7 +125,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:background="@drawable/edit_item"
+                    android:background="@drawable/linear_item"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -147,7 +150,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:background="@drawable/edit_item"
+                    android:background="@drawable/linear_item"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
