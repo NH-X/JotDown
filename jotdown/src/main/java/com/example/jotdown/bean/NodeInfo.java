@@ -35,6 +35,6 @@ public class NodeInfo {
         backgroundColor= R.color.transparent;
         remind=context.getString(R.string.notRemind);
         requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);
-        changeTime= DateUtil.getNowDateTime("yyyy-MM-dd HH:mm");
+        changeTime= DateUtil.getNowDateTime();
     }
 }

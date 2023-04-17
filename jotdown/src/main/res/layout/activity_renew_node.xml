@@ -48,7 +48,8 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/linear_item"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/ll_importance">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

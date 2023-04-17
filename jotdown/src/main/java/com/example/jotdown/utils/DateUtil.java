@@ -16,7 +16,7 @@ public class DateUtil {
     }
 
     public static String getNowDateTime(){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return sdf.format(new Date());
     }
 
