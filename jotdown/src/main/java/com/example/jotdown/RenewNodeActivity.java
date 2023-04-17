@@ -73,7 +73,7 @@ public class RenewNodeActivity extends AppCompatActivity implements
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
         tl_head=findViewById(R.id.tl_head);
-        findViewById(R.id.ll_importance).setOnClickListener(this);
+        findViewById(R.id.sp_importance).setOnClickListener(this);
         setSupportActionBar(tl_head);
         Intent intent=getIntent();
 
@@ -174,7 +174,7 @@ public class RenewNodeActivity extends AppCompatActivity implements
         if(viewId==R.id.view_title_color || viewId==R.id.view_content_color || viewId==R.id.view_background_color){
             initColorPickerDialog(viewId);
         }
-        else if(viewId==R.id.ll_importance){
+        else if(viewId==R.id.sp_importance){
             Toast.makeText(this, "设置标签", Toast.LENGTH_SHORT).show();
         }
     }
