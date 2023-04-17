@@ -25,14 +25,14 @@ public class NodeInfo {
     public NodeInfo(Context context){
         _id=-1;
         title="";
-        titleColor=R.color.red;
+        titleColor=context.getColor(R.color.red);
         titleSize=35;
         content="";
-        contentColor=R.color.black;
+        contentColor=context.getColor(R.color.black);
         contentSize=20;
         importance="";
-        labelColor=R.color.red;
-        backgroundColor= R.color.transparent;
+        labelColor=context.getColor(R.color.red);
+        backgroundColor= context.getColor(R.color.transparent);
         remind=context.getString(R.string.notRemind);
         requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);
         changeTime= DateUtil.getNowDateTime();

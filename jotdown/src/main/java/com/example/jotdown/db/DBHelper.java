@@ -71,4 +71,24 @@ public abstract class DBHelper extends SQLiteOpenHelper {
 
     //修改一行数据
     protected abstract void update(Object obj);
+
+    //判断写数据库是否打开
+    public boolean writeIsOpen(){
+        return writeDB.isOpen();
+    }
+
+    //判断读数据库是否打开
+    public boolean readIsOpen(){
+        return readDB.isOpen();
+    }
+
+    //获取写数据库
+    public void getWriteDB(){
+        writeDB=getWritableDatabase();
+    }
+
+    //获取读数据库
+    public void getReadDB(){
+        readDB=getReadableDatabase();
+    }
 }
