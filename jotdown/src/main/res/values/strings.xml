@@ -7,4 +7,6 @@
     <string name="cancel">取消</string>
 
     <string name="notRemind">不提醒</string>
+
+    <string name="moreLabel">更多标签</string>
 </resources>

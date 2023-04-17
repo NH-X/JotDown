@@ -28,7 +28,7 @@ public class ChooseDateDialog implements View.OnClickListener {
         //根据布局文件dialog_date.xml生成视图对象
         view= LayoutInflater.from(context).inflate(R.layout.dialog_date,null);
         //创建一个指定风格的对话框对象
-        dialog=new Dialog(context,R.style.ChooseDateDialog);
+        dialog=new Dialog(context,R.style.ChooseDialog);
         dp_date=view.findViewById(R.id.dp_date);
         tp_time=view.findViewById(R.id.tp_time);
 

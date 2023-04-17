@@ -54,12 +54,12 @@ public class LabelDBHelper extends DBHelper{
         return labelArray;
     }
 
-    public List<?> queryInfoByImportance(String importance){
+    public List<LabelInfo> queryInfoByImportance(String importance){
         return queryInfo(String.format("%s where importance = %s;",selectSQL,importance));
     }
 
     @Override
-    public List<?> queryInfoAll() {
+    public List<LabelInfo> queryInfoAll() {
         return queryInfo(selectSQL+";");
     }
 

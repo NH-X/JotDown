@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     @Override
     protected void onResume(){
         super.onResume();
-        //helper=MainApplication.getNodesDBHelper();
-        helper=new NodesDBHelper(this,null,null,1);
+        helper=MainApplication.getNodesDBHelper();
+        //helper=new NodesDBHelper(this,null,null,1);
         refresh.post(queryAll);                 //分支线程查询数据
     }
 
