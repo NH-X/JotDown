@@ -30,26 +30,26 @@ public abstract class DBHelper extends SQLiteOpenHelper {
         this.version=version;
         this.readDB=getReadableDatabase();
         this.writeDB=getWritableDatabase();
+        Log.d(TAG, "DBHelper: version:"+version);
     }
-
-    //构建表结构
+    // onCreate方法
     @Override
-    public abstract void onCreate(SQLiteDatabase sqLiteDatabase);
+    public abstract void onCreate(SQLiteDatabase db);
 
     //改变数据表结构
     @Override
-    public abstract void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1);
+    public abstract void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion);
 
     //删除一行数据
-    protected void delete(int rowId){
-        String deleteSQL=String.format("delete from %s where _id=%d;",tableName,rowId);
-        Log.d(TAG, "delete: deleteSQL="+deleteSQL);
+    protected void deleteById(int rowId){
+        String deleteSQL=String.format("deleteById from %s where _id=%d;",tableName,rowId);
+        Log.d(TAG, "deleteById: deleteSQL="+deleteSQL);
         writeDB.execSQL(deleteSQL);
     }
 
     //删除所有数据
     protected void deleteAll(){
-        String deleteSQL=String.format("delete from %s;",tableName);
+        String deleteSQL=String.format("deleteById from %s;",tableName);
         Log.d(TAG, "deleteAll: deleteSQL="+deleteSQL);
         writeDB.execSQL(deleteSQL);
     }

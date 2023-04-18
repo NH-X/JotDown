@@ -1,8 +1,6 @@
 package com.example.jotdown;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +39,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnClickListener,
         OnItemClickListener ,OnItemLongClickListener{
     private static final String TAG="MainActivity";
-    private LinearLayout ll_main;
     private CoordinatorLayout cl_main;
     private RecyclerView rv_dynamic;
     private Toolbar tl_head;
@@ -57,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ll_main=findViewById(R.id.ll_main);
         cl_main=findViewById(R.id.cl_main);
         findViewById(R.id.fab_btn).setOnClickListener(this);
         tl_head=findViewById(R.id.tl_head);
@@ -127,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //从menu_search.xml中构建菜单洁面布局
+        //从menu_search.xml中构建菜单界面布局
         getMenuInflater().inflate(R.menu.menu_search,menu);
         //初始化搜索框
         initSearchView(menu);
@@ -142,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                     DateUtil.getNowDateTime("yyyy/MM/dd HH:mm:ss"), Snackbar.LENGTH_LONG).show();
             tv_fuzzy_query.setVisibility(View.GONE);
             refresh.post(queryAll);
-            Toast.makeText(this, "数据库数据条数："+helper.queryCount(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "数据库数据条数："+nodesArray.size(), Toast.LENGTH_SHORT).show();
             return true;
         }
         else if(id==R.id.menu_about){           //点击了关于菜单项
@@ -160,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     protected void onResume(){
         super.onResume();
         helper=MainApplication.getNodesDBHelper();
-        //helper=new NodesDBHelper(this,null,null,1);
         refresh.post(queryAll);                 //分支线程查询数据
     }
 
@@ -206,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                 if(!helper.writeIsOpen()){                      //如果写数据库没有打开，进行打开写数据库
                     helper.getWriteDB();
                 }
-                helper.delete(info._id);                        // 删除数据库中对应的记录
+                helper.deleteById(info._id);                        // 删除数据库中对应的记录
                 nodesArray.remove(position);                    // 删除列表中对应的元素
                 adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
                 adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表

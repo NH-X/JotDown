@@ -14,4 +14,9 @@ public class LabelInfo {
         labelColor = context.getColor(R.color.blue);
         importance = "个人";
     }
+
+    public LabelInfo(int color,String importance){
+        labelColor=color;
+        this.importance=importance;
+    }
 }

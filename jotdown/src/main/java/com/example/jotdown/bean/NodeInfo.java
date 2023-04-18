@@ -30,8 +30,8 @@ public class NodeInfo {
         content="";
         contentColor=context.getColor(R.color.black);
         contentSize=20;
-        importance="";
-        labelColor=context.getColor(R.color.red);
+        importance="其他";
+        labelColor=context.getColor(R.color.grey);
         backgroundColor= context.getColor(R.color.transparent);
         remind=context.getString(R.string.notRemind);
         requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);

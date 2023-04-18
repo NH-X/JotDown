@@ -27,19 +27,20 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(SQLiteDatabase db) {
         createSQL="create table if not exists Nodes(" +
                 "_id integer primary key autoincrement not null," +
                 "title varchar not null,titleColor integer,titleSize integer," +
                 "content varchar not null,contentColor integer,contentSize integer," +
                 "importance varchar not null,labelColor integer,backgroundColor varchar," +
-                "remind varchar not null,requestCode integer not null,changeTime not null);";
+                "remind varchar not null,requestCode integer not null,changeTime varchar not null);";
         Log.d(TAG, "onCreate: createSQL="+createSQL);
-        sqLiteDatabase.execSQL(createSQL);
+        db.execSQL(createSQL);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+
     }
 
     @Override
@@ -126,8 +127,8 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public void delete(int rowId) {
-        super.delete(rowId);
+    public void deleteById(int rowId) {
+        super.deleteById(rowId);
     }
 
     @Override

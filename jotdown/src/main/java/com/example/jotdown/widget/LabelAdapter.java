@@ -1,11 +1,10 @@
 package com.example.jotdown.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import com.example.jotdown.utils.ColorUtil;
 
 import java.util.List;
 
-public class LabelAdapter extends BaseAdapter implements OnItemClickListener {
+public class LabelAdapter extends BaseAdapter{
     private static final String TAG="LabelAdapter";
     private Context context;
     private List<LabelInfo> labelArray;
@@ -25,6 +24,7 @@ public class LabelAdapter extends BaseAdapter implements OnItemClickListener {
     public LabelAdapter(Context context,List<LabelInfo> labelArray){
         this.context=context;
         this.labelArray=labelArray;
+        Log.d(TAG, "LabelAdapter: labelArraySize:"+labelArray.size());
     }
 
     //获取元素个数
@@ -60,14 +60,9 @@ public class LabelAdapter extends BaseAdapter implements OnItemClickListener {
         holder.iv_label.setBackground(
                 ColorUtil.settingPNGColor(context,R.drawable.ic_label,labelArray.get(i).labelColor));
         holder.tv_importance.setText(labelArray.get(i).importance);
+        Log.d(TAG, "getView: holder:"+holder);
         return view;
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-    }
-
 
     private class ViewHolder{
         public TextView tv_importance;

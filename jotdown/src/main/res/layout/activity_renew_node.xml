@@ -43,12 +43,13 @@
                     android:text="设置标签"
                     android:textColor="@color/black"
                     android:textSize="15sp"/>
+
                 <Spinner
+                    android:id="@+id/sp_importance"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/linear_item"
-                    android:id="@+id/sp_importance"/>
+                    android:spinnerMode="dropdown"/>
 
             </LinearLayout>
             <LinearLayout

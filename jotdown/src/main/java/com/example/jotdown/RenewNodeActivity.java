@@ -13,13 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.db.LabelDBHelper;
 import com.example.jotdown.db.NodesDBHelper;
 import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.service.ReminderService;
@@ -38,7 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class RenewNodeActivity extends AppCompatActivity implements
-        View.OnClickListener, OnDateSetListener, OnTimeSetListener {
+        OnClickListener, OnDateSetListener, OnTimeSetListener {
     private final static String TAG = "RenewNodeActivity";
 
     private Toolbar tl_head;
@@ -68,7 +69,6 @@ public class RenewNodeActivity extends AppCompatActivity implements
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
         tl_head = findViewById(R.id.tl_head);
-        findViewById(R.id.sp_importance).setOnClickListener(this);
         setSupportActionBar(tl_head);
         Intent intent = getIntent();
 
@@ -81,6 +81,7 @@ public class RenewNodeActivity extends AppCompatActivity implements
         } else {                                               //如果上一个Activity没有传包裹，则创建一个新的对象
             node = new NodeInfo(this);
         }
+        labelArray=MainApplication.getLabelArray();
         initSpinner();
     }
 
@@ -100,6 +101,19 @@ public class RenewNodeActivity extends AppCompatActivity implements
         LabelAdapter adapter = new LabelAdapter(this, labelArray);
         sp_importance.setAdapter(adapter);
         sp_importance.setSelection(0);
+        sp_importance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(RenewNodeActivity.this,i+"", Toast.LENGTH_SHORT).show();
+                node.labelColor=labelArray.get(i).labelColor;
+                node.importance=labelArray.get(i).importance;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -162,6 +176,7 @@ public class RenewNodeActivity extends AppCompatActivity implements
                 intent.putExtra("requestCode", node.requestCode);
                 startService(intent);
             }
+            Toast.makeText(this, node.labelColor+node.importance, Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -173,8 +188,6 @@ public class RenewNodeActivity extends AppCompatActivity implements
         int viewId = view.getId();
         if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
             initColorPickerDialog(viewId);
-        } else if (viewId == R.id.sp_importance) {
-            Toast.makeText(this, "设置标签", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -216,14 +229,12 @@ public class RenewNodeActivity extends AppCompatActivity implements
     }
 
     private NodesDBHelper nodesDBHelper;
-    private LabelDBHelper labelDBHelper;
 
     //重新加载页面
     @Override
     protected void onResume() {
         super.onResume();
         nodesDBHelper = MainApplication.getNodesDBHelper();
-        labelDBHelper=MainApplication.getLabelDBHelper();
     }
 
     //销毁页面
@@ -234,13 +245,9 @@ public class RenewNodeActivity extends AppCompatActivity implements
         if (nodesDBHelper != null) {
             nodesDBHelper.close();
         }
-        if(labelDBHelper != null){
-            labelDBHelper.close();
-        }
     }
 
     private Handler nodeHandler = new Handler();          //创建一个处理器对象
-    private Handler labelHelper = new Handler();          //创建一个处理器对象
 
     private int rowId = 0;
 
@@ -272,17 +279,6 @@ public class RenewNodeActivity extends AppCompatActivity implements
                 nodesDBHelper.getReadDB();
             }
             Toast.makeText(RenewNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    //从数据库中查询Label数据
-    private Runnable queryLabel=new Runnable() {
-        @Override
-        public void run() {
-            if(!labelDBHelper.readIsOpen()){
-                labelDBHelper.getReadDB();
-            }
-            labelArray=labelDBHelper.queryInfoAll();
         }
     };
 
