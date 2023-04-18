@@ -42,14 +42,14 @@ public abstract class DBHelper extends SQLiteOpenHelper {
 
     //删除一行数据
     protected void deleteById(int rowId){
-        String deleteSQL=String.format("deleteById from %s where _id=%d;",tableName,rowId);
+        String deleteSQL=String.format("delete from %s where _id=%d;",tableName,rowId);
         Log.d(TAG, "deleteById: deleteSQL="+deleteSQL);
         writeDB.execSQL(deleteSQL);
     }
 
     //删除所有数据
     protected void deleteAll(){
-        String deleteSQL=String.format("deleteById from %s;",tableName);
+        String deleteSQL=String.format("delete from %s;",tableName);
         Log.d(TAG, "deleteAll: deleteSQL="+deleteSQL);
         writeDB.execSQL(deleteSQL);
     }

@@ -9,12 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FFFF0000</color>
     <color name="green">#00FF00</color>
-    <color name="青色">#FF00FFFF</color>
-    <color name="紫色">#FFFF00FF</color>
+    <color name="cyan_blue">#FF00FFFF</color>
     <color name="yellow">#FFFFFF00</color>
     <color name="blue">#299BFF</color>
     <color name="pink">#FFFFC0CB</color>
     <color name="grey">#D1D1D1</color>
+    <color name="orange">#FF8800</color>
+    <color name="purple">#FF00FF</color>
     <color name="transparent">#0000FFFF</color>
 
     <color name="background_color">#FFFFF7DA</color>
