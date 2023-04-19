@@ -245,11 +245,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             if(nodesArray!=null) {
                 Log.d(TAG, "fuzzyQuery: nodesArray size:" + nodesArray.size());
             }
-            Snackbar.make(cl_main,"查询条件为："+fuzzyQueryStr+"符合条数为："+nodesArray.size(),Snackbar.LENGTH_LONG).show();
+            Snackbar.make(cl_main,"查询条件为：\""+fuzzyQueryStr+"\"符合条数为："+nodesArray.size(),Snackbar.LENGTH_LONG).show();
 
             if(nodesArray.size()<=0) {
                 tv_fuzzy_query.setVisibility(View.VISIBLE);
-                tv_fuzzy_query.setText(String.format("没有%s的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索",fuzzyQueryStr));
+                tv_fuzzy_query.setText(String.format("没有\"%s\"的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索",fuzzyQueryStr));
             }
             else {
                 adapter.dataSet(nodesArray);
