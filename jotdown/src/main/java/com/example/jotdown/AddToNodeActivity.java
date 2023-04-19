@@ -135,7 +135,8 @@ public class AddToNodeActivity extends AppCompatActivity implements
             return true;
         } else if (id == R.id.menu_send) {                //点击了完成图标
             Log.d(TAG, "onOptionsItemSelected: newRemindTime:" +
-                    ("{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ? oldRemindTime : newRemindTime));
+                    ("{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
+                            getResources().getString(R.string.notRemind) : newRemindTime));
 
             if (null == node) {
                 node = new NodeInfo(this);
@@ -145,7 +146,8 @@ public class AddToNodeActivity extends AppCompatActivity implements
             node.content = et_content.getText().toString();
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
-            node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ? oldRemindTime : newRemindTime;
+            node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
+                    getResources().getString(R.string.notRemind) : newRemindTime;
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
             node.changeTime = DateUtil.getNowDateTime();
             nodeHandler.post(updateOrCreate);

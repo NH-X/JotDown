@@ -155,7 +155,6 @@ public class ModifyNodeActivity extends AppCompatActivity implements
         sp_importance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                //Toast.makeText(RenewNodeActivity.this,position+"", Toast.LENGTH_SHORT).show();
                 node.labelColor=labelArray.get(position).labelColor;
                 node.importance=labelArray.get(position).importance;
                 importancePosition=position;
