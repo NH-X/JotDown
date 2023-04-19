@@ -72,38 +72,11 @@ public class AddToNodeActivity extends AppCompatActivity implements
         view_background_color.setOnClickListener(this);
         tl_head = findViewById(R.id.tl_head);
         setSupportActionBar(tl_head);
-        //Intent intent = getIntent();
 
-//        if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
-//            //上一个Activity传入了包裹
-//            Bundle bundle = intent.getExtras();
-//            //进行更改数据操作
-//            rowId = bundle.getInt("_id");
-//            nodeHandler.post(queryNode);
-//        } else {                                               //如果上一个Activity没有传包裹，则创建一个新的对象
-            node = new NodeInfo(this);
-            labelArray=MainApplication.getLabelArray();
-            initSpinner();
-        //}
+        node = new NodeInfo(this);
+        labelArray=MainApplication.getLabelArray();
+        initSpinner();
     }
-
-//    private void initPage() {
-//        et_title.setText(node.title);
-//        et_content.setText(node.content);
-//        titleColor = node.titleColor;
-//        contentColor = node.contentColor;
-//        backgroundColor = node.backgroundColor;
-//        view_title_color.setBackgroundColor(titleColor);
-//        view_content_color.setBackgroundColor(contentColor);
-//        view_background_color.setBackgroundColor(backgroundColor);
-//
-//        for(int i=0;i<labelArray.size();i++){
-//            if(labelArray.get(i).importance.equals(node.importance)){
-//                importancePosition=i;
-//                break;
-//            }
-//        }
-//    }
 
     private void initSpinner() {
         sp_importance = findViewById(R.id.sp_importance);
@@ -113,7 +86,6 @@ public class AddToNodeActivity extends AppCompatActivity implements
         sp_importance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                //Toast.makeText(RenewNodeActivity.this,position+"", Toast.LENGTH_SHORT).show();
                 node.labelColor=labelArray.get(position).labelColor;
                 node.importance=labelArray.get(position).importance;
                 importancePosition=position;
@@ -258,26 +230,6 @@ public class AddToNodeActivity extends AppCompatActivity implements
     }
 
     private Handler nodeHandler = new Handler();          //创建一个处理器对象
-
-    //private int rowId = 0;
-
-//    //从数据库中查询Node数据
-//    private Runnable queryNode = new Runnable() {
-//        @Override
-//        public void run() {
-//            if (!nodesDBHelper.readIsOpen()) {
-//                nodesDBHelper.getReadDB();
-//            }
-//            node = nodesDBHelper.queryInfoById(rowId).get(0);
-//            //Toast.makeText(RenewNodeActivity.this, node.toString(), Toast.LENGTH_SHORT).show();
-//            if (!node.remind.equals(getString(R.string.notRemind))) {
-//                oldRemindTime = node.remind;
-//            }
-//            labelArray=MainApplication.getLabelArray();
-//            initPage();                                 //初始化页面
-//            initSpinner();
-//        }
-//    };
 
     //往数据库中添加数据或更新数据
     private Runnable updateOrCreate = new Runnable() {
