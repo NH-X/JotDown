@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.fab_btn){
-            Intent intent=new Intent(this,RenewNodeActivity.class);
+            Intent intent=new Intent(this, AddToNodeActivity.class);
             startActivity(intent);
         }
     }
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                     DateUtil.getNowDateTime("yyyy/MM/dd HH:mm:ss"), Snackbar.LENGTH_LONG).show();
             tv_fuzzy_query.setVisibility(View.GONE);
             refresh.post(queryAll);
-            Toast.makeText(this, "数据库数据条数："+nodesArray.size(), Toast.LENGTH_SHORT).show();
             return true;
         }
         else if(id==R.id.menu_about){           //点击了关于菜单项
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         Log.d(TAG, "onItemClick: id="+nodesArray.get(position)._id);
         Bundle bundle=new Bundle();                 //创建一个包裹
         bundle.putInt("_id",nodesArray.get(position)._id);
-        Intent intent=new Intent(this,RenewNodeActivity.class);
+        Intent intent=new Intent(this,ModifyNodeActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);                      //跳转到修改页面
     }
@@ -262,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             nodesArray=helper.queryInfoAll();
             Log.d(TAG, "run: nodesArray is null? "+(nodesArray==null));
             Log.d(TAG, "run: nodeArraySize:"+nodesArray.size());
+            Toast.makeText(MainActivity.this, "数据库数据条数："+nodesArray.size(), Toast.LENGTH_SHORT).show();
             initRecyclerDynamic();
         }
     };

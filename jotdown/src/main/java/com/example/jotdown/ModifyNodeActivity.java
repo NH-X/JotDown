@@ -1,10 +1,5 @@
 package com.example.jotdown;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +13,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
@@ -38,39 +38,42 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import java.util.Calendar;
 import java.util.List;
 
-public class RenewNodeActivity extends AppCompatActivity implements
-        OnClickListener, OnDateSetListener, OnTimeSetListener {
-    private final static String TAG = "RenewNodeActivity";
+/**
+* 更改备忘录
+* @author XN-H
+* */
+public class ModifyNodeActivity extends AppCompatActivity implements
+        OnClickListener ,OnDateSetListener, OnTimeSetListener {
+    private static final String TAG="ModifyActivity";
 
     private Toolbar tl_head;
     private EditText et_title;
     private EditText et_content;
+    private Spinner sp_importance;
     private View view_title_color;
     private View view_background_color;
     private View view_content_color;
 
-    private NodeInfo node;
-    private List<LabelInfo> labelArray;
-
-    int titleColor = 0;
-    int contentColor = 0;
-    int backgroundColor = 0;
+    private int titleColor = 0;
+    private int contentColor = 0;
+    private int backgroundColor = 0;
+    private int importancePosition=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
-        et_title = findViewById(R.id.et_title);
-        et_content = findViewById(R.id.et_content);
-        view_content_color = findViewById(R.id.view_content_color);
-        view_title_color = findViewById(R.id.view_title_color);
-        view_background_color = findViewById(R.id.view_background_color);
+        tl_head=findViewById(R.id.tl_head);
+        setSupportActionBar(tl_head);
+        et_title=findViewById(R.id.et_title);
+        et_content=findViewById(R.id.et_content);
+        view_title_color=findViewById(R.id.view_title_color);
+        view_background_color=findViewById(R.id.view_background_color);
+        view_content_color=findViewById(R.id.view_content_color);
         view_title_color.setOnClickListener(this);
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
-        tl_head = findViewById(R.id.tl_head);
-        setSupportActionBar(tl_head);
-        Intent intent = getIntent();
+        Intent intent=getIntent();
 
         if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
             //上一个Activity传入了包裹
@@ -78,11 +81,52 @@ public class RenewNodeActivity extends AppCompatActivity implements
             //进行更改数据操作
             rowId = bundle.getInt("_id");
             nodeHandler.post(queryNode);
-        } else {                                               //如果上一个Activity没有传包裹，则创建一个新的对象
-            node = new NodeInfo(this);
         }
-        labelArray=MainApplication.getLabelArray();
-        initSpinner();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int viewId = view.getId();
+        if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
+            initColorPickerDialog(viewId);
+        }
+    }
+
+    private void setLayoutColor(ColorEnvelope envelope, int viewId) {                     //设置颜色
+        if (viewId == R.id.view_title_color) {
+            titleColor = envelope.getColor();
+            view_title_color.setBackgroundColor(titleColor);
+        } else if (viewId == R.id.view_content_color) {
+            contentColor = envelope.getColor();
+            view_content_color.setBackgroundColor(contentColor);
+        } else if (viewId == R.id.view_background_color) {
+            backgroundColor = envelope.getColor();
+            view_background_color.setBackgroundColor(backgroundColor);
+        }
+    }
+
+    private void initColorPickerDialog(int viewId) {                                     //初始化颜色选择器
+        AlertDialog dialog = new ColorPickerDialog.Builder(this)
+                .setTitle("设置颜色")
+                .setPreferenceName("MyColorPickerDialog")
+                .setPositiveButton(getString(R.string.confirm),
+                        new ColorEnvelopeListener() {
+                            @Override
+                            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                                setLayoutColor(envelope, viewId);
+                            }
+                        })
+                .setNegativeButton(getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                .attachAlphaSlideBar(true)          // the default value is true.
+                .attachBrightnessSlideBar(true)     // the default value is true.
+                .setBottomSpace(12)                        // set a bottom space between the last slidebar and buttons.
+                .show();
     }
 
     private void initPage() {
@@ -94,19 +138,27 @@ public class RenewNodeActivity extends AppCompatActivity implements
         view_title_color.setBackgroundColor(titleColor);
         view_content_color.setBackgroundColor(contentColor);
         view_background_color.setBackgroundColor(backgroundColor);
+
+        for(int i=0;i<labelArray.size();i++){
+            if(labelArray.get(i).importance.equals(node.importance)){
+                importancePosition=i;
+                break;
+            }
+        }
     }
 
     private void initSpinner() {
-        Spinner sp_importance = findViewById(R.id.sp_importance);
+        sp_importance = findViewById(R.id.sp_importance);
         LabelAdapter adapter = new LabelAdapter(this, labelArray);
         sp_importance.setAdapter(adapter);
-        sp_importance.setSelection(0);
+        sp_importance.setSelection(importancePosition);
         sp_importance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(RenewNodeActivity.this,i+"", Toast.LENGTH_SHORT).show();
-                node.labelColor=labelArray.get(i).labelColor;
-                node.importance=labelArray.get(i).importance;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                //Toast.makeText(RenewNodeActivity.this,position+"", Toast.LENGTH_SHORT).show();
+                node.labelColor=labelArray.get(position).labelColor;
+                node.importance=labelArray.get(position).importance;
+                importancePosition=position;
             }
 
             @Override
@@ -182,54 +234,6 @@ public class RenewNodeActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onClick(View view) {
-        int viewId = view.getId();
-        if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
-            initColorPickerDialog(viewId);
-        }
-    }
-
-    private void initColorPickerDialog(int viewId) {                                     //初始化颜色选择器
-        AlertDialog dialog = new ColorPickerDialog.Builder(this)
-                .setTitle("设置颜色")
-                .setPreferenceName("MyColorPickerDialog")
-                .setPositiveButton(getString(R.string.confirm),
-                        new ColorEnvelopeListener() {
-                            @Override
-                            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
-                                setLayoutColor(envelope, viewId);
-                            }
-                        })
-                .setNegativeButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        })
-                .attachAlphaSlideBar(true)          // the default value is true.
-                .attachBrightnessSlideBar(true)     // the default value is true.
-                .setBottomSpace(12)                        // set a bottom space between the last slidebar and buttons.
-                .show();
-    }
-
-    private void setLayoutColor(ColorEnvelope envelope, int viewId) {                     //设置颜色
-        if (viewId == R.id.view_title_color) {
-            titleColor = envelope.getColor();
-            view_title_color.setBackgroundColor(titleColor);
-        } else if (viewId == R.id.view_content_color) {
-            contentColor = envelope.getColor();
-            view_content_color.setBackgroundColor(contentColor);
-        } else if (viewId == R.id.view_background_color) {
-            backgroundColor = envelope.getColor();
-            view_background_color.setBackgroundColor(backgroundColor);
-        }
-    }
-
-    private NodesDBHelper nodesDBHelper;
-
     //重新加载页面
     @Override
     protected void onResume() {
@@ -247,6 +251,9 @@ public class RenewNodeActivity extends AppCompatActivity implements
         }
     }
 
+    private NodeInfo node;
+    private List<LabelInfo> labelArray;
+    private NodesDBHelper nodesDBHelper;
     private Handler nodeHandler = new Handler();          //创建一个处理器对象
 
     private int rowId = 0;
@@ -259,11 +266,13 @@ public class RenewNodeActivity extends AppCompatActivity implements
                 nodesDBHelper.getReadDB();
             }
             node = nodesDBHelper.queryInfoById(rowId).get(0);
-            Toast.makeText(RenewNodeActivity.this, node.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(RenewNodeActivity.this, node.toString(), Toast.LENGTH_SHORT).show();
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 oldRemindTime = node.remind;
             }
+            labelArray=MainApplication.getLabelArray();
             initPage();                                 //初始化页面
+            initSpinner();
         }
     };
 
@@ -278,7 +287,7 @@ public class RenewNodeActivity extends AppCompatActivity implements
             if (!nodesDBHelper.readIsOpen()) {
                 nodesDBHelper.getReadDB();
             }
-            Toast.makeText(RenewNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ModifyNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
         }
     };
 

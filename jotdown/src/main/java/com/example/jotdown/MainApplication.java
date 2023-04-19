@@ -25,18 +25,42 @@ public class MainApplication extends Application {
         Log.d(TAG, "onCreate: nodesDBHelper is null?"+(nodesDBHelper==null));
         labelArray=new ArrayList<>();
 
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.grey),"未知"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.blue),"个人"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.black),"工作"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.cyan_blue),"学习"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.red),"重要"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.red),"红色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.green),"绿色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.blue),"蓝色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.purple),"紫色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.grey),"灰色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.yellow),"黄色"));
-        labelArray.add(new LabelInfo(getInstance().getResources().getColor(R.color.orange),"橙色"));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.grey),
+                getInstance().getResources().getString(R.string.unknown)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.blue),
+                getInstance().getResources().getString(R.string.personal)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.black),
+                getInstance().getResources().getString(R.string.work)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.cyan_blue),
+                getInstance().getResources().getString(R.string.study)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.red),
+                getInstance().getResources().getString(R.string.important)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.red),
+                getInstance().getResources().getString(R.string.red)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.green),
+                getInstance().getResources().getString(R.string.green)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.blue),
+                getInstance().getResources().getString(R.string.blue)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.purple),
+                getInstance().getResources().getString(R.string.purple)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.grey),
+                getInstance().getResources().getString(R.string.grey)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.yellow),
+                getInstance().getResources().getString(R.string.yellow)));
+        labelArray.add(new LabelInfo(
+                getInstance().getResources().getColor(R.color.orange),
+                getInstance().getResources().getString(R.string.orange)));
     }
 
     public static MainApplication getInstance() {
