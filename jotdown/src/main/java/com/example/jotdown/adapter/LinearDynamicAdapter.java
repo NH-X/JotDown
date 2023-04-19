@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -113,6 +114,12 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
             tv_remind=itemView.findViewById(R.id.tv_remind);
             tv_changeDate=itemView.findViewById(R.id.tv_changeDate);
         }
+    }
+
+    public void dataSet(List<NodeInfo> nodesArray){
+        this.nodesArray=nodesArray;
+        Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
+        notifyDataSetChanged();
     }
 
     //声明列表项的点击监听器

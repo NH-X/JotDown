@@ -34,10 +34,11 @@ import com.example.jotdown.widget.RecyclerExtras.OnItemLongClickListener;
 import com.example.jotdown.widget.SpacesItemDecoration;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener,
-        OnItemClickListener ,OnItemLongClickListener{
+        OnItemClickListener ,OnItemLongClickListener {
     private static final String TAG="MainActivity";
     private CoordinatorLayout cl_main;
     private RecyclerView rv_dynamic;
@@ -108,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                tv_fuzzy_query.setVisibility(View.GONE);
                 fuzzyQueryStr=query;
-                refresh.post(fuzzyQuery);
-                return true;
+                return refresh.post(fuzzyQuery);
             }
 
             @Override
@@ -147,13 +148,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     }
 
     private NodesDBHelper helper;               //数据库帮助器
-    private List<NodeInfo> nodesArray;
+    private List<NodeInfo> nodesArray=new ArrayList<>();
 
     //重新加载页面
     @Override
     protected void onResume(){
         super.onResume();
         helper=MainApplication.getNodesDBHelper();
+        initRecyclerDynamic();
         refresh.post(queryAll);                 //分支线程查询数据
     }
 
@@ -240,14 +242,18 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                 nodesArray=helper.queryLikeInfo(fuzzyQueryStr);
             }
             Log.d(TAG, "fuzzyQuery: nodesArray is null? "+(nodesArray==null));
+            if(nodesArray!=null) {
+                Log.d(TAG, "fuzzyQuery: nodesArray size:" + nodesArray.size());
+            }
             Snackbar.make(cl_main,"查询条件为："+fuzzyQueryStr+"符合条数为："+nodesArray.size(),Snackbar.LENGTH_LONG).show();
 
             if(nodesArray.size()<=0) {
                 tv_fuzzy_query.setVisibility(View.VISIBLE);
                 tv_fuzzy_query.setText(String.format("没有%s的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索",fuzzyQueryStr));
             }
-
-            initRecyclerDynamic();
+            else {
+                adapter.dataSet(nodesArray);
+            }
         }
     };
 
@@ -262,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             Log.d(TAG, "run: nodesArray is null? "+(nodesArray==null));
             Log.d(TAG, "run: nodeArraySize:"+nodesArray.size());
             Toast.makeText(MainActivity.this, "数据库数据条数："+nodesArray.size(), Toast.LENGTH_SHORT).show();
-            initRecyclerDynamic();
+            adapter.dataSet(nodesArray);
         }
     };
 }
