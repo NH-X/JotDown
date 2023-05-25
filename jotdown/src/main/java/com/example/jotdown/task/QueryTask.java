@@ -11,7 +11,6 @@ import com.example.jotdown.bean.QueryProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QueryTask extends AsyncTask<String,Void,Void> {

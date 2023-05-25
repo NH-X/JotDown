@@ -25,4 +25,16 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<List<NodeInfo>> getNodesArray(){
         return nodesArray;
     }
+
+    public void onResume(){
+
+    }
+
+    public void onStop(){
+
+    }
+
+    public void onDestroy(){
+
+    }
 }
