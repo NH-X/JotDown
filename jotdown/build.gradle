@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -29,9 +28,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
