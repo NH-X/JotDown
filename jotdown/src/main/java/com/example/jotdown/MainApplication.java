@@ -63,6 +63,13 @@ public class MainApplication extends Application {
                 getInstance().getResources().getString(R.string.orange)));
     }
 
+    public void onTerminate(){
+        super.onTerminate();
+        if(nodesDBHelper!=null){
+            nodesDBHelper.close();
+        }
+    }
+
     public static MainApplication getInstance() {
         Log.d(TAG, "getInstance: myApp is null?" + (null == myApp));
         return myApp;
