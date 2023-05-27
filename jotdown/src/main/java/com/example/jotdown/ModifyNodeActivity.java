@@ -7,10 +7,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.example.jotdown.service.ReminderService;
 import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
 import com.example.jotdown.utils.MenuUtil;
+import com.example.jotdown.widget.AudioRecorder;
 import com.example.jotdown.widget.ChooseDateDialog;
 import com.example.jotdown.widget.ChooseDateDialog.OnDateSetListener;
 import com.example.jotdown.widget.ChooseDateDialog.OnTimeSetListener;
@@ -42,10 +46,11 @@ import java.util.List;
 * 更改备忘录
 * @author XN-H
 * */
-public class ModifyNodeActivity extends AppCompatActivity implements
-        OnClickListener ,OnDateSetListener, OnTimeSetListener {
+public class ModifyNodeActivity extends AppCompatActivity
+        implements OnClickListener,OnTouchListener ,OnDateSetListener, OnTimeSetListener {
     private static final String TAG="ModifyActivity";
 
+    private AudioRecorder audioRecorder;
     private Toolbar tl_head;
     private EditText et_title;
     private EditText et_content;
@@ -53,6 +58,7 @@ public class ModifyNodeActivity extends AppCompatActivity implements
     private View view_title_color;
     private View view_background_color;
     private View view_content_color;
+    private ImageView iv_recording;
 
     private int titleColor = 0;
     private int contentColor = 0;
@@ -63,6 +69,20 @@ public class ModifyNodeActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
+        audioRecorder=new AudioRecorder();
+        Intent intent=getIntent();
+
+        if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
+            //上一个Activity传入了包裹
+            Bundle bundle = intent.getExtras();
+            //进行更改数据操作
+            rowId = bundle.getInt("_id");
+            nodeHandler.post(queryNode);
+        }
+        initFindView();
+    }
+
+    private void initFindView(){
         tl_head=findViewById(R.id.tl_head);
         setSupportActionBar(tl_head);
         et_title=findViewById(R.id.et_title);
@@ -73,15 +93,8 @@ public class ModifyNodeActivity extends AppCompatActivity implements
         view_title_color.setOnClickListener(this);
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
-        Intent intent=getIntent();
-
-        if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
-            //上一个Activity传入了包裹
-            Bundle bundle = intent.getExtras();
-            //进行更改数据操作
-            rowId = bundle.getInt("_id");
-            nodeHandler.post(queryNode);
-        }
+        iv_recording=findViewById(R.id.iv_recording);
+        iv_recording.setOnTouchListener(this);
     }
 
     @Override
@@ -90,6 +103,20 @@ public class ModifyNodeActivity extends AppCompatActivity implements
         if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
             initColorPickerDialog(viewId);
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        int viewId=view.getId();
+
+        if(viewId==R.id.iv_recording) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                startRecording();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                stopRecording();
+            }
+        }
+        return true;
     }
 
     private void setLayoutColor(ColorEnvelope envelope, int viewId) {                     //设置颜色
@@ -233,6 +260,17 @@ public class ModifyNodeActivity extends AppCompatActivity implements
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startRecording() {
+        audioRecorder.startRecording();
+        Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
+    }
+
+    private void stopRecording() {
+        String outputFile = audioRecorder.stopRecording();
+        node.audioFilePath=outputFile;
+        Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
 
     //重新加载页面

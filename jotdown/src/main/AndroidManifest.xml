@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <!--录音-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!--重启时启动闹钟-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 

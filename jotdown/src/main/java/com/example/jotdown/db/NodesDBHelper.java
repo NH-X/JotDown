@@ -23,7 +23,7 @@ public class NodesDBHelper extends DBHelper{
         selectSQL=String.format("select _id,title,titleColor,titleSize," +
                 "content,contentColor,contentSize," +
                 "importance,labelColor,backgroundColor," +
-                "remind,requestCode,changeTime from %s ",tableName);
+                "remind,requestCode,changeTime,audioFilePath from %s ",tableName);
     }
 
     @Override
@@ -33,7 +33,8 @@ public class NodesDBHelper extends DBHelper{
                 "title varchar not null,titleColor integer,titleSize integer," +
                 "content varchar not null,contentColor integer,contentSize integer," +
                 "importance varchar not null,labelColor integer,backgroundColor varchar," +
-                "remind varchar not null,requestCode integer not null,changeTime varchar not null);";
+                "remind varchar not null,requestCode integer not null," +
+                "changeTime varchar not null,audioFilePath varchar not null);";
         Log.d(TAG, "onCreate: createSQL="+createSQL);
         db.execSQL(createSQL);
     }
@@ -64,6 +65,7 @@ public class NodesDBHelper extends DBHelper{
             info.remind=cursor.getString(10);
             info.requestCode=cursor.getInt(11);
             info.changeTime=cursor.getString(12);
+            info.audioFilePath=cursor.getString(13);
 
             nodeArray.add(info);
         }
@@ -102,6 +104,7 @@ public class NodesDBHelper extends DBHelper{
             cv.put("remind", info.remind);
             cv.put("requestCode",info.requestCode);
             cv.put("changeTime", info.changeTime);
+            cv.put("audioFilePath",info.audioFilePath);
             result=writeDB.insert(tableName,"",cv);
             Log.d(TAG, "add: result="+result);
         }
@@ -115,9 +118,10 @@ public class NodesDBHelper extends DBHelper{
         @SuppressLint("DefaultLocale")
         String updateSQL=String.format("update %s set title='%s',titleColor='%d',titleSize='%d'," +
                 "content='%s',contentColor='%s',contentSize='%d',importance='%s',labelColor='%d'," +
-                "backgroundColor='%d',remind='%s',requestCode='%d',changeTime='%s' where ",tableName,info.title,info.titleColor,
-                info.titleSize,info.content,info.contentColor,info.contentSize,info.importance,info.labelColor,
-                info.backgroundColor,info.remind,info.requestCode,info.changeTime);
+                "backgroundColor='%d',remind='%s',requestCode='%d',changeTime='%s',audioFilePath='%s' where ",
+                tableName,info.title,info.titleColor, info.titleSize,info.content,info.contentColor,
+                info.contentSize,info.importance,info.labelColor, info.backgroundColor,info.remind,
+                info.requestCode,info.changeTime,info.audioFilePath);
 
         if(info._id>-1){
             updateSQL=String.format("%s _id=%d;",updateSQL,info._id);

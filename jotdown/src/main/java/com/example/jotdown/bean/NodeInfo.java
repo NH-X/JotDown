@@ -22,6 +22,8 @@ public class NodeInfo {
     public int requestCode;             //请求唯一标识符
     public String changeTime;           //最后更改事件
 
+    public String audioFilePath;        //音频放置位置
+
     public NodeInfo(Context context){
         _id=-1;
         title="";
@@ -36,5 +38,6 @@ public class NodeInfo {
         remind=context.getString(R.string.notRemind);
         requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);
         changeTime= DateUtil.getNowDateTime();
+        audioFilePath="";
     }
 }

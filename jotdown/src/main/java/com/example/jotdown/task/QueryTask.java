@@ -28,7 +28,7 @@ public class QueryTask extends AsyncTask<String,Void,Void> {
     @Override
     protected Void doInBackground(String... strings) {
         String query=strings[0];
-        List<NodeInfo> nodesArray;
+        List<NodeInfo> nodesArray=null;
 
         if(!helper.readIsOpen()){
             Log.d(TAG, "doInBackground: readDB is close");
@@ -38,7 +38,7 @@ public class QueryTask extends AsyncTask<String,Void,Void> {
             nodesArray=helper.queryInfoAll();
             if(nodesArray==null){
                 mRequestSchedule.postValue(new Resource<>(
-                        null,
+                        nodesArray,
                         QueryProcessType.query_failing,
                         "查询失败"
                 ));
@@ -49,6 +49,7 @@ public class QueryTask extends AsyncTask<String,Void,Void> {
                         QueryProcessType.query_successful,
                         "数据库数据条数：" + nodesArray.size()
                 ));
+                Log.d(TAG, "doInBackground: first is run");
             }
         }
         else{
@@ -75,6 +76,7 @@ public class QueryTask extends AsyncTask<String,Void,Void> {
                             QueryProcessType.query_successful,
                             "数据库数据条数：" + nodesArray.size()
                     ));
+                    Log.d(TAG, "doInBackground: second is run");
                 }
             }
         }

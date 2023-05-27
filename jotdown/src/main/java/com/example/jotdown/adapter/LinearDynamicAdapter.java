@@ -38,7 +38,13 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         ItemHolder itemHolder= (ItemHolder) view.getTag();
         int position=itemHolder.position;
         Log.d(TAG, "onClick: position="+position);
-        onItemClickListener.onItemClick(view, position);
+        if(view.getId()==R.id.ll_background) {
+            onItemClickListener.onItemClick(view, position);
+        }
+        else if(view.getId()==R.id.iv_listen){
+            Log.d(TAG, "onClick: audioFilePath is "+nodesArray.get(position).audioFilePath);
+            onItemPlayListener.onItemPlayerClick(nodesArray.get(position).audioFilePath);
+        }
     }
 
     @Override
@@ -66,8 +72,8 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         NodeInfo item=nodesArray.get(position);
         ItemHolder itemHolder= (ItemHolder) holder;
 
-        itemHolder.ll_item.setOnClickListener(this);
-        itemHolder.ll_item.setOnLongClickListener(this);
+        itemHolder.ll_background.setOnClickListener(this);
+        itemHolder.ll_background.setOnLongClickListener(this);
 
         itemHolder.iv_mark.setImageDrawable(ColorUtil.settingPNGColor(context,
                 R.drawable.ic_label,item.labelColor));
@@ -81,7 +87,15 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         itemHolder.tv_remind.setText(item.remind);
         itemHolder.tv_changeDate.setText(item.changeTime);
         itemHolder.position=position;
-        itemHolder.ll_item.setTag(itemHolder);
+        itemHolder.ll_background.setTag(itemHolder);
+        if(!nodesArray.get(position).audioFilePath.equals("")) {
+            itemHolder.iv_listen.setVisibility(View.VISIBLE);
+            itemHolder.iv_listen.setOnClickListener(this);
+            itemHolder.iv_listen.setTag(itemHolder);
+        }
+        else{
+            itemHolder.iv_listen.setVisibility(View.GONE);
+        }
         Log.d(TAG, "onBindViewHolder: title="+itemHolder.tv_title.getText());
     }
 
@@ -95,6 +109,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
     private class ItemHolder extends RecyclerView.ViewHolder{
         public LinearLayout ll_item;
         public ImageView iv_mark;
+        private ImageView iv_listen;
         public LinearLayout ll_background;
         public TextView tv_title;
         public TextView tv_content;
@@ -107,6 +122,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             ll_item=itemView.findViewById(R.id.ll_item);
             iv_mark=itemView.findViewById(R.id.iv_mark);
+            iv_listen=itemView.findViewById(R.id.iv_listen);
             ll_background=itemView.findViewById(R.id.ll_background);
             tv_title =itemView.findViewById(R.id.tv_title);
             tv_content=itemView.findViewById(R.id.tv_content);
@@ -140,5 +156,12 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setOnItemDeleteClickListener(RecyclerExtras.OnItemDeleteClickListener listener){
         this.onItemDeleteClickListener=listener;
+    }
+
+    //声明列表项的点击监听器
+    private RecyclerExtras.OnItemPlayListener onItemPlayListener;
+
+    public void setOnItemPlayListener(RecyclerExtras.OnItemPlayListener listener){
+        this.onItemPlayListener=listener;
     }
 }

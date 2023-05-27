@@ -17,4 +17,9 @@ public class RecyclerExtras {
     public interface OnItemDeleteClickListener{
         void onItemDeleteClick(View view,int position);
     }
+
+    //定义一个循环视图列表的播放监听器
+    public interface OnItemPlayListener{
+        void onItemPlayerClick(String audioFilePath);
+    }
 }

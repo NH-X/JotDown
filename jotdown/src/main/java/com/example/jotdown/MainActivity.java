@@ -1,8 +1,11 @@
 package com.example.jotdown;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,22 +34,27 @@ import com.example.jotdown.bean.Resource;
 import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
+import com.example.jotdown.utils.PermissionUtil;
 import com.example.jotdown.viewmodel.MainViewModel;
 import com.example.jotdown.widget.RecyclerExtras.OnItemClickListener;
 import com.example.jotdown.widget.RecyclerExtras.OnItemLongClickListener;
+import com.example.jotdown.widget.RecyclerExtras.OnItemPlayListener;
 import com.example.jotdown.widget.SpacesItemDecoration;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener,
-        OnItemClickListener ,OnItemLongClickListener {
+public class MainActivity extends AppCompatActivity
+        implements OnClickListener, OnItemClickListener ,OnItemLongClickListener ,OnItemPlayListener {
     private static final String TAG="MainActivity";
     private CoordinatorLayout cl_main;
     private RecyclerView rv_dynamic;
     private Toolbar tl_head;
     private TextView tv_fuzzy_query;
+    private MediaPlayer mediaPlayer;
 
     private SpacesItemDecoration decoration;                //item之间的间距
 
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkPermissions();
         initFindView();
         mMainViewModel=new ViewModelProvider(this).get(MainViewModel.class);
         mMainViewModel.init();
@@ -73,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                         adapter.dataSet(listResource.getData());
                         adapter.notifyDataSetChanged();
                         Snackbar.make(cl_main,"目标总数："+listResource.getData().size(),Snackbar.LENGTH_LONG).show();
+                        Log.d(TAG, "onChanged: getQueryAllSchedule().observer() is run");
                     }
                 }
             });
@@ -110,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         adapter.setOnItemClickListener(this);
         //设置线性列表的长按监听器
         adapter.setOnItemLongClickListener(this);
+        adapter.setOnItemPlayListener(this);
         //给rv_dynamic设置笔记列表的线性适配器
         rv_dynamic.setAdapter(adapter);
         //设置rv_dynamic的默认动画效果
@@ -196,6 +207,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
     protected void onDestroy() {
         super.onDestroy();
         mMainViewModel.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override
@@ -228,6 +243,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                 adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
                 adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
 
+                if(!info.audioFilePath.equals("")){
+                    deleteAudioFile(info.audioFilePath);
+                }
                 if(!info.remind.equals(getString(R.string.notRemind))) {            //如果该备忘录有设置提醒时间
                     CancellationNotifyUtil.deleteReminder(
                             MainActivity.this,AlarmReceiver.class,info.requestCode);       //取消该备忘录的提醒
@@ -243,5 +261,101 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             }
         });
         dialog.show();
+    }
+
+    private void deleteAudioFile(String audioFilePath) {
+        File audioFile = new File(audioFilePath);
+        if (audioFile.exists()) {
+            boolean deleted = audioFile.delete();
+            if (deleted) {
+                Toast.makeText(this, "录音文件已删除", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "无法删除录音文件", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "录音文件不存在", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private static boolean playerStopFlag =true;
+
+    @Override
+    public void onItemPlayerClick(String audioFilePath) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            // 正在播放，暂停播放
+            pausePlaying();
+        } else if (mediaPlayer != null && !playerStopFlag) {
+            // 已播放完毕，重新播放
+            mediaPlayer.seekTo(0);  // 将播放进度设置为0，重新开始播放
+            mediaPlayer.start();
+        } else {
+            // 播放音频
+            startPlaying(audioFilePath);
+        }
+        Log.d(TAG, "onItemPlayerClick: audioFilePath is "+audioFilePath);
+    }
+
+    // 开始播放音频
+    private void startPlaying(String audioFilePath) {
+        mediaPlayer = new MediaPlayer();
+        Toast.makeText(this, audioFilePath, Toast.LENGTH_SHORT).show();
+
+        try {
+            mediaPlayer.setDataSource(audioFilePath);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 暂停播放音频
+    private void pausePlaying() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    // 停止播放音频
+    private void stopPlaying() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
+
+    //检查应用所需要的权限
+    private void checkPermissions(){
+        String[] permissions={
+                Manifest.permission.POST_NOTIFICATIONS,
+                Manifest.permission.SET_ALARM,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                Manifest.permission.VIBRATE,
+                android.Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        if(PermissionUtil.checkMultiPermission(this,permissions,0)){
+        }
+    }
+
+    // 权限请求回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0) {
+            boolean allPermissionsGranted = true;
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+            if (allPermissionsGranted) {
+                // 已获取到所有权限，继续应用的正常逻辑
+            } else {
+                // 未完全启用权限，向用户解释为何应用需要这些权限，并提供引导用户手动打开权限的选项
+                //finish();
+            }
+        }
     }
 }

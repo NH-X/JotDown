@@ -19,6 +19,7 @@
     <color name="transparent">#0000FFFF</color>
 
     <color name="background_color">#FFFFF7DA</color>
+    <color name="semi_transparent">#80FFF2F2</color>
 
     <color name="custom_color">#FFFF0000</color>
     <color name="blue_light">#FFAAAAFF</color>

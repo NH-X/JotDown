@@ -83,5 +83,14 @@
                     android:id="@+id/tv_changeDate"/>
             </RelativeLayout>
         </LinearLayout>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/iv_listen"
+            android:src="@mipmap/listen"
+            android:scaleType="fitCenter"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"/>
     </RelativeLayout>
 </LinearLayout>

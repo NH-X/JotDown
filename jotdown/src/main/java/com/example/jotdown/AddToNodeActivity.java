@@ -1,10 +1,5 @@
 package com.example.jotdown;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +7,20 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
@@ -27,6 +30,7 @@ import com.example.jotdown.service.ReminderService;
 import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
 import com.example.jotdown.utils.MenuUtil;
+import com.example.jotdown.widget.AudioRecorder;
 import com.example.jotdown.widget.ChooseDateDialog;
 import com.example.jotdown.widget.ChooseDateDialog.OnDateSetListener;
 import com.example.jotdown.widget.ChooseDateDialog.OnTimeSetListener;
@@ -39,9 +43,10 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddToNodeActivity extends AppCompatActivity implements
-        OnClickListener, OnDateSetListener, OnTimeSetListener {
+        OnClickListener, OnTouchListener, OnDateSetListener, OnTimeSetListener {
     private final static String TAG = "RenewNodeActivity";
 
+    private AudioRecorder audioRecorder;
     private Toolbar tl_head;
     private EditText et_title;
     private EditText et_content;
@@ -49,6 +54,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
     private View view_title_color;
     private View view_background_color;
     private View view_content_color;
+    private ImageView iv_recording;
 
     private NodeInfo node;
     private List<LabelInfo> labelArray;
@@ -62,6 +68,15 @@ public class AddToNodeActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
+
+        node = new NodeInfo(this);
+        labelArray=MainApplication.getLabelArray();
+        audioRecorder = new AudioRecorder();
+        initSpinner();
+        initFindView();
+    }
+
+    private void initFindView(){
         et_title = findViewById(R.id.et_title);
         et_content = findViewById(R.id.et_content);
         view_content_color = findViewById(R.id.view_content_color);
@@ -71,11 +86,9 @@ public class AddToNodeActivity extends AppCompatActivity implements
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
         tl_head = findViewById(R.id.tl_head);
+        iv_recording=findViewById(R.id.iv_recording);
+        iv_recording.setOnTouchListener(this);
         setSupportActionBar(tl_head);
-
-        node = new NodeInfo(this);
-        labelArray=MainApplication.getLabelArray();
-        initSpinner();
     }
 
     private void initSpinner() {
@@ -175,6 +188,20 @@ public class AddToNodeActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        int viewId=view.getId();
+
+        if(viewId==R.id.iv_recording) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                startRecording();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                stopRecording();
+            }
+        }
+        return true;
+    }
+
     private void initColorPickerDialog(int viewId) {                                     //初始化颜色选择器
         AlertDialog dialog = new ColorPickerDialog.Builder(this)
                 .setTitle("设置颜色")
@@ -210,6 +237,17 @@ public class AddToNodeActivity extends AppCompatActivity implements
             backgroundColor = envelope.getColor();
             view_background_color.setBackgroundColor(backgroundColor);
         }
+    }
+
+    private void startRecording() {
+        audioRecorder.startRecording();
+        Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
+    }
+
+    private void stopRecording() {
+        String outputFile = audioRecorder.stopRecording();
+        node.audioFilePath=outputFile;
+        Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
 
     private NodesDBHelper nodesDBHelper;
