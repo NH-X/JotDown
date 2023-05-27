@@ -88,8 +88,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
     //获取列表项个数
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: nodeArraySize:"+nodesArray.size());
-        return nodesArray.size();
+        return nodesArray==null?0:nodesArray.size();
     }
 
     //定义列表项的视图持有者

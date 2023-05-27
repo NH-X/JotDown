@@ -16,6 +16,8 @@ public class NodesRepository {
     private static QueryTask queryTask;
     private static DeleteTask deleteTask;
 
+    private MutableLiveData<List<NodeInfo>> nodesArray=new MutableLiveData<>();
+
     public static NodesRepository instance;
 
     public static NodesRepository getInstance(){
@@ -26,11 +28,11 @@ public class NodesRepository {
     }
 
     public MutableLiveData<List<NodeInfo>> getNodesArray(){
-        return null;
+        return nodesArray;
     }
 
     public void startQuery(MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule,String query){
-        mRequestSchedule.postValue(new Resource<>(
+        mRequestSchedule.setValue(new Resource<>(
                 null,
                 QueryProcessType.query_executing,
                 "查询中"
@@ -39,9 +41,9 @@ public class NodesRepository {
         queryTask.execute(query);
     }
 
-    public void startDelete(MutableLiveData<Resource<Boolean>> mRequestSchedule,int rowId){
-        mRequestSchedule.postValue(new Resource<>(
-                false,
+    public void startDelete(MutableLiveData<Resource<Integer>> mRequestSchedule,int rowId){
+        mRequestSchedule.setValue(new Resource<>(
+                -1,
                 QueryProcessType.query_executing,
                 "删除中"
         ));

@@ -15,9 +15,9 @@ public class DeleteTask extends AsyncTask<Integer,Void,Void> {
 
     private NodesDBHelper helper;                       //数据库帮助器
 
-    private MutableLiveData<Resource<Boolean>> mRequestSchedule;
+    private MutableLiveData<Resource<Integer>> mRequestSchedule;
 
-    public DeleteTask(MutableLiveData<Resource<Boolean>> requestSchedule){
+    public DeleteTask(MutableLiveData<Resource<Integer>> requestSchedule){
         this.mRequestSchedule=requestSchedule;
         helper= MainApplication.getNodesDBHelper();
     }
@@ -30,9 +30,8 @@ public class DeleteTask extends AsyncTask<Integer,Void,Void> {
             Log.d(TAG, "doInBackground: writeDB is close");
             helper.getWriteDB();
         }
-        helper.deleteById(_id);
         mRequestSchedule.postValue(new Resource<>(
-                true,
+                helper.deleteById(_id),
                 QueryProcessType.query_successful,
                 "成功"
         ));

@@ -41,10 +41,11 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     public abstract void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion);
 
     //删除一行数据
-    protected void deleteById(int rowId){
-        String deleteSQL=String.format("delete from %s where _id=%d;",tableName,rowId);
-        Log.d(TAG, "deleteById: deleteSQL="+deleteSQL);
-        writeDB.execSQL(deleteSQL);
+    protected int deleteById(int rowId) {
+        String whereClause = "_id = ?";
+        String[] whereArgs = new String[] { String.valueOf(rowId) };
+        int deletedRows = writeDB.delete(tableName, whereClause, whereArgs);
+        return deletedRows > 0 ? rowId : -1;
     }
 
     //删除所有数据

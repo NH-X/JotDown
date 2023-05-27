@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,16 +18,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jotdown.adapter.LinearDynamicAdapter;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.db.NodesDBHelper;
+import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.Resource;
 import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
+import com.example.jotdown.viewmodel.MainViewModel;
 import com.example.jotdown.widget.RecyclerExtras.OnItemClickListener;
 import com.example.jotdown.widget.RecyclerExtras.OnItemLongClickListener;
 import com.example.jotdown.widget.SpacesItemDecoration;
@@ -49,17 +52,31 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
 
     private LinearDynamicAdapter adapter;
 
+    private MainViewModel mMainViewModel;
+    private String fuzzyQueryStr="";                            //模糊查询参数
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cl_main=findViewById(R.id.cl_main);
-        findViewById(R.id.fab_btn).setOnClickListener(this);
-        tl_head=findViewById(R.id.tl_head);
-        tv_fuzzy_query = findViewById(R.id.tv_fuzzy_query);
 
-        setSupportActionBar(tl_head);
+        initFindView();
+        mMainViewModel=new ViewModelProvider(this).get(MainViewModel.class);
+        mMainViewModel.init();
+        if(!mMainViewModel.getQueryAllSchedule().hasObservers()){
+            mMainViewModel.getQueryAllSchedule().observe(MainActivity.this, new Observer<Resource<List<NodeInfo>>>() {
+                @Override
+                public void onChanged(Resource<List<NodeInfo>> listResource) {
+                    if(listResource.getType() == QueryProcessType.query_successful){
+                        nodesArray=listResource.getData();
+                        adapter.dataSet(listResource.getData());
+                        adapter.notifyDataSetChanged();
+                        Snackbar.make(cl_main,"目标总数："+listResource.getData().size(),Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -68,6 +85,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             Intent intent=new Intent(this, AddToNodeActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void initFindView(){
+        cl_main=findViewById(R.id.cl_main);
+        findViewById(R.id.fab_btn).setOnClickListener(this);
+        tl_head=findViewById(R.id.tl_head);
+        tv_fuzzy_query = findViewById(R.id.tv_fuzzy_query);
+
+        setSupportActionBar(tl_head);
     }
 
     //初始化动态线性布局的循环视图
@@ -111,7 +137,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             public boolean onQueryTextSubmit(String query) {
                 tv_fuzzy_query.setVisibility(View.GONE);
                 fuzzyQueryStr=query;
-                return refresh.post(fuzzyQuery);
+                mMainViewModel.queryNodes(fuzzyQueryStr);
+                return true;
             }
 
             @Override
@@ -137,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
             Snackbar.make(cl_main, "刷新成功，时间：" +
                     DateUtil.getNowDateTime("yyyy/MM/dd HH:mm:ss"), Snackbar.LENGTH_LONG).show();
             tv_fuzzy_query.setVisibility(View.GONE);
-            refresh.post(queryAll);
+            mMainViewModel.queryNodes(null);
             return true;
         }
         else if(id==R.id.menu_about){           //点击了关于菜单项
@@ -147,31 +174,28 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         return super.onOptionsItemSelected(item);
     }
 
-    private NodesDBHelper helper;               //数据库帮助器
     private List<NodeInfo> nodesArray=new ArrayList<>();
 
     //重新加载页面
     @Override
     protected void onResume(){
         super.onResume();
-        helper=MainApplication.getNodesDBHelper();
+        mMainViewModel.onResume();
         initRecyclerDynamic();
-        refresh.post(queryAll);                 //分支线程查询数据
     }
 
     //暂停页面
     @Override
     protected void onStop() {
         super.onStop();
+        mMainViewModel.onStop();
     }
 
     //销毁页面
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(helper!=null){
-            helper.close();                         //关闭数据库
-        }
+        mMainViewModel.onDestroy();
     }
 
     @Override
@@ -198,10 +222,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                 Log.d(TAG, "onClick: nodesArray.size()="+nodesArray.size());
                 NodeInfo info = nodesArray.get(position);       // 获取要删除的元素
 
-                if(!helper.writeIsOpen()){                      //如果写数据库没有打开，进行打开写数据库
-                    helper.getWriteDB();
-                }
-                helper.deleteById(info._id);                        // 删除数据库中对应的记录
+                mMainViewModel.deleteNode(info._id);            // 删除数据库中对应的记录
+                Log.d(TAG, "onClick: position is "+position);
                 nodesArray.remove(position);                    // 删除列表中对应的元素
                 adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
                 adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
@@ -212,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
                 }
 
                 Snackbar.make(cl_main, "成功删除：" + info.title, Snackbar.LENGTH_LONG).show(); // 页面提醒用户
-                Log.d(TAG, "onClick: position="+position);
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {      //取消删除
@@ -223,52 +244,4 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,
         });
         dialog.show();
     }
-
-    private Handler refresh=new Handler();                      //创建一个处理器对象
-
-    private String fuzzyQueryStr="";                            //模糊查询参数
-
-    private Runnable fuzzyQuery=new Runnable() {                //模糊查询
-        @Override
-        public void run() {
-            if(!helper.readIsOpen()){
-                Log.d(TAG, "run: readDB is close");
-                helper.getReadDB();
-            }
-            if(fuzzyQueryStr.equals("")){                       //如果查询参数为空，则获取全部数据。
-                nodesArray=helper.queryInfoAll();
-            }
-            else{
-                nodesArray=helper.queryLikeInfo(fuzzyQueryStr);
-            }
-            Log.d(TAG, "fuzzyQuery: nodesArray is null? "+(nodesArray==null));
-            if(nodesArray!=null) {
-                Log.d(TAG, "fuzzyQuery: nodesArray size:" + nodesArray.size());
-            }
-            Snackbar.make(cl_main,"查询条件为：\""+fuzzyQueryStr+"\"符合条数为："+nodesArray.size(),Snackbar.LENGTH_LONG).show();
-
-            if(nodesArray.size()<=0) {
-                tv_fuzzy_query.setVisibility(View.VISIBLE);
-                tv_fuzzy_query.setText(String.format("没有\"%s\"的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索",fuzzyQueryStr));
-            }
-            else {
-                adapter.dataSet(nodesArray);
-            }
-        }
-    };
-
-    private Runnable queryAll=new Runnable() {                  //查询所有
-        @Override
-        public void run() {
-            if(!helper.readIsOpen()){
-                Log.d(TAG, "run: readDB is close");
-                helper.getReadDB();
-            }
-            nodesArray=helper.queryInfoAll();
-            Log.d(TAG, "run: nodesArray is null? "+(nodesArray==null));
-            Log.d(TAG, "run: nodeArraySize:"+nodesArray.size());
-            Toast.makeText(MainActivity.this, "数据库数据条数："+nodesArray.size(), Toast.LENGTH_SHORT).show();
-            adapter.dataSet(nodesArray);
-        }
-    };
 }

@@ -127,8 +127,8 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public void deleteById(int rowId) {
-        super.deleteById(rowId);
+    public int deleteById(int rowId) {
+        return super.deleteById(rowId);
     }
 
     @Override

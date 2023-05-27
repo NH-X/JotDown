@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
 import com.example.jotdown.bean.Resource;
+import com.example.jotdown.db.NodesDBHelper;
 import com.example.jotdown.repositories.NodesRepository;
 
 import java.util.List;
@@ -13,16 +15,18 @@ import java.util.List;
 public class MainViewModel extends ViewModel {
     private static final String TAG="MainViewModel";
 
+    private NodesDBHelper helper;               //数据库帮助器
     private NodesRepository nodesRepo;
     private MutableLiveData<List<NodeInfo>> nodesArray;
 
     private MutableLiveData<Resource<List<NodeInfo>>> mQueryAllSchedule=new MutableLiveData<>();
-    private MutableLiveData<Resource<Boolean>> mDeleteSchedule =new MutableLiveData<>();
+    private MutableLiveData<Resource<Integer>> mDeleteSchedule =new MutableLiveData<>();
 
     public void init(){
         if(nodesRepo!=null){
             return;
         }
+        helper= MainApplication.getNodesDBHelper();
         nodesRepo=NodesRepository.getInstance();
         nodesArray=nodesRepo.getNodesArray();
     }
@@ -31,7 +35,7 @@ public class MainViewModel extends ViewModel {
         return nodesArray;
     }
 
-    public LiveData<Resource<Boolean>> getDeleteSchedule(){
+    public LiveData<Resource<Integer>> getDeleteSchedule(){
         return mDeleteSchedule;
     }
 
@@ -43,6 +47,10 @@ public class MainViewModel extends ViewModel {
         nodesRepo.startDelete(mDeleteSchedule,rowId);
     }
 
+    public void queryNodes(String query){
+        nodesRepo.startQuery(mQueryAllSchedule,query);
+    }
+
     public void onResume(){
         nodesRepo.startQuery(mQueryAllSchedule,"");
     }
@@ -52,6 +60,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onDestroy(){
-
+        if(helper!=null){
+            helper.close();                         //关闭数据库
+        }
     }
 }
