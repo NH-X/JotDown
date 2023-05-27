@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -43,7 +44,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AddToNodeActivity extends AppCompatActivity implements
-        OnClickListener, OnTouchListener, OnDateSetListener, OnTimeSetListener {
+        OnClickListener,OnLongClickListener, OnTouchListener, OnDateSetListener, OnTimeSetListener {
     private final static String TAG = "RenewNodeActivity";
 
     private AudioRecorder audioRecorder;
@@ -87,6 +88,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
         view_background_color.setOnClickListener(this);
         tl_head = findViewById(R.id.tl_head);
         iv_recording=findViewById(R.id.iv_recording);
+        iv_recording.setOnLongClickListener(this);
         iv_recording.setOnTouchListener(this);
         setSupportActionBar(tl_head);
     }
@@ -137,7 +139,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             }
             finish();
         } else if (id == R.id.menu_remind) {              //点击了提醒图标
-            Toast.makeText(this, "点击了提醒图标", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "点击了提醒图标", Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             //弹出自定义的提醒时间选择对话框
             ChooseDateDialog dialog = new ChooseDateDialog(this);
@@ -173,7 +175,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
                 intent.putExtra("requestCode", node.requestCode);
                 startService(intent);
             }
-            Toast.makeText(this, node.labelColor+node.importance, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -186,6 +188,11 @@ public class AddToNodeActivity extends AppCompatActivity implements
         if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
             initColorPickerDialog(viewId);
         }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        return true;
     }
 
     @Override
@@ -247,7 +254,8 @@ public class AddToNodeActivity extends AppCompatActivity implements
     private void stopRecording() {
         String outputFile = audioRecorder.stopRecording();
         node.audioFilePath=outputFile;
-        Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Recording ended", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
 
     private NodesDBHelper nodesDBHelper;
@@ -282,7 +290,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             if (!nodesDBHelper.readIsOpen()) {
                 nodesDBHelper.getReadDB();
             }
-            Toast.makeText(AddToNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(AddToNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
         }
     };
 

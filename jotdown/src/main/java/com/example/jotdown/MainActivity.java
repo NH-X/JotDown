@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemLongClick(View view, int position) {
-        Toast.makeText(this, ""+position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+position, Toast.LENGTH_SHORT).show();
         AlertDialog.Builder dialog=new AlertDialog.Builder(this,
                 android.R.style.Theme_Material_Light_Dialog);           //创建一个浅色的提示对话框
         dialog.setTitle("注意！");                                         //设置对话框标题文字
@@ -268,12 +268,12 @@ public class MainActivity extends AppCompatActivity
         if (audioFile.exists()) {
             boolean deleted = audioFile.delete();
             if (deleted) {
-                Toast.makeText(this, "录音文件已删除", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "录音文件已删除", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "无法删除录音文件", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "无法删除录音文件", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "录音文件不存在", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "录音文件不存在", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity
     // 开始播放音频
     private void startPlaying(String audioFilePath) {
         mediaPlayer = new MediaPlayer();
-        Toast.makeText(this, audioFilePath, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, audioFilePath, Toast.LENGTH_SHORT).show();
 
         try {
             mediaPlayer.setDataSource(audioFilePath);

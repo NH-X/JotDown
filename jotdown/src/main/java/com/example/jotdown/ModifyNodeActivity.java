@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+//import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -220,7 +221,7 @@ public class ModifyNodeActivity extends AppCompatActivity
             }
             finish();
         } else if (id == R.id.menu_remind) {              //点击了提醒图标
-            Toast.makeText(this, "点击了提醒图标", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "点击了提醒图标", Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             //弹出自定义的提醒时间选择对话框
             ChooseDateDialog dialog = new ChooseDateDialog(this);
@@ -256,7 +257,7 @@ public class ModifyNodeActivity extends AppCompatActivity
                 intent.putExtra("requestCode", node.requestCode);
                 startService(intent);
             }
-            Toast.makeText(this, node.labelColor+node.importance, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -270,7 +271,8 @@ public class ModifyNodeActivity extends AppCompatActivity
     private void stopRecording() {
         String outputFile = audioRecorder.stopRecording();
         node.audioFilePath=outputFile;
-        Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Recording ended", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
 
     //重新加载页面
@@ -326,7 +328,7 @@ public class ModifyNodeActivity extends AppCompatActivity
             if (!nodesDBHelper.readIsOpen()) {
                 nodesDBHelper.getReadDB();
             }
-            Toast.makeText(ModifyNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ModifyNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
         }
     };
 

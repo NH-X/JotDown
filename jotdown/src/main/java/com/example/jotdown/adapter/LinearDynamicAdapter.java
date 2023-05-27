@@ -78,10 +78,10 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         itemHolder.iv_mark.setImageDrawable(ColorUtil.settingPNGColor(context,
                 R.drawable.ic_label,item.labelColor));
         ColorUtil.settingShapeColor(itemHolder.ll_background,new float[]{0, 0, 0, 0, 98, 98, 0, 0},item.backgroundColor);
-        itemHolder.tv_title.setText(item.title);
+        itemHolder.tv_title.setText(item.title.length()>15?item.title.substring(0,15)+"...":item.title);
         itemHolder.tv_title.setTextColor(item.titleColor);
         itemHolder.tv_title.setTextSize(item.titleSize);
-        itemHolder.tv_content.setText(item.content);
+        itemHolder.tv_content.setText(item.content.length()>95?item.content.substring(0,95)+"...":item.content);
         itemHolder.tv_content.setTextColor(item.contentColor);
         itemHolder.tv_content.setTextSize(item.contentSize);
         itemHolder.tv_remind.setText(item.remind);
@@ -133,7 +133,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void dataSet(List<NodeInfo> nodesArray){
         this.nodesArray=nodesArray;
-        Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
         notifyDataSetChanged();
     }
 
