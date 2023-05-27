@@ -133,7 +133,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             dialog.show();
 
             return true;
-        } else if (id == R.id.menu_send) {                //点击了完成图标
+        } else if (id == R.id.menu_save) {                //点击了完成图标
             Log.d(TAG, "onOptionsItemSelected: newRemindTime:" +
                     ("{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
                             getResources().getString(R.string.notRemind) : newRemindTime));

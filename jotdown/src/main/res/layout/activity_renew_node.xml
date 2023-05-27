@@ -10,6 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/blue_light"
         app:navigationIcon="@drawable/ic_return"
+        android:paddingEnd="10dp"
         android:id="@+id/tl_head"/>
     <LinearLayout
         android:layout_width="match_parent"

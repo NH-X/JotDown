@@ -8,4 +8,20 @@
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <style name="MenuIconStyle">
+        <item name="android:layout_width">44dp</item>   <!-- 设置图标的宽度 -->
+        <item name="android:layout_height">24dp</item>  <!-- 设置图标的高度 -->
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="MenuIconStyle.Save">
+        <item name="android:src">@drawable/ic_save</item>
+    </style>
+    <style name="MenuIconStyle.Remind">
+        <item name="android:src">@drawable/ic_remind</item>
+    </style>
+
 </resources>
