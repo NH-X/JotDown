@@ -10,7 +10,7 @@ import com.example.jotdown.task.QueryTask;
 
 import java.util.List;
 
-public class NodesRepository {
+public class QueryNodesRepository {
     private static final String TAG="NodesRepository";
 
     private static QueryTask queryTask;
@@ -18,11 +18,11 @@ public class NodesRepository {
 
     private MutableLiveData<List<NodeInfo>> nodesArray=new MutableLiveData<>();
 
-    public static NodesRepository instance;
+    public static QueryNodesRepository instance;
 
-    public static NodesRepository getInstance(){
+    public static QueryNodesRepository getInstance(){
         if(instance==null){
-            instance=new NodesRepository();
+            instance=new QueryNodesRepository();
         }
         return instance;
     }
@@ -44,7 +44,7 @@ public class NodesRepository {
     public void startDelete(MutableLiveData<Resource<Integer>> mRequestSchedule,int rowId){
         mRequestSchedule.setValue(new Resource<>(
                 -1,
-                QueryProcessType.query_executing,
+                QueryProcessType.delete_executing,
                 "删除中"
         ));
         deleteTask=new DeleteTask(mRequestSchedule);

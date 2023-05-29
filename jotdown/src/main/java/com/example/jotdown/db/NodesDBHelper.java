@@ -1,6 +1,5 @@
 package com.example.jotdown.db;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -113,21 +112,30 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public void update(Object obj) {
+    public int update(Object obj) {
         NodeInfo info=(NodeInfo) obj;
-        @SuppressLint("DefaultLocale")
-        String updateSQL=String.format("update %s set title='%s',titleColor='%d',titleSize='%d'," +
-                "content='%s',contentColor='%s',contentSize='%d',importance='%s',labelColor='%d'," +
-                "backgroundColor='%d',remind='%s',requestCode='%d',changeTime='%s',audioFilePath='%s' where ",
-                tableName,info.title,info.titleColor, info.titleSize,info.content,info.contentColor,
-                info.contentSize,info.importance,info.labelColor, info.backgroundColor,info.remind,
-                info.requestCode,info.changeTime,info.audioFilePath);
 
-        if(info._id>-1){
-            updateSQL=String.format("%s _id=%d;",updateSQL,info._id);
+        ContentValues values=new ContentValues();
+        values.put("title",info.title);
+        values.put("titleColor",info.titleColor);
+        values.put("titleSize",info.titleSize);
+        values.put("content",info.content);
+        values.put("contentColor",info.contentColor);
+        values.put("contentSize",info.contentSize);
+        values.put("importance",info.importance);
+        values.put("labelColor",info.labelColor);
+        values.put("backgroundColor",info.backgroundColor);
+        values.put("remind",info.remind);
+        values.put("requestCode",info.requestCode);
+        values.put("changeTime",info.changeTime);
+        values.put("audioFilePath",info.audioFilePath);
+        if (info._id > -1) {
+            String whereClause = "_id = ?";
+            String[] whereArgs = { String.valueOf(info._id) };
+
+            return writeDB.update(tableName, values, whereClause, whereArgs);
         }
-        Log.d(TAG, "update: updateSQL="+updateSQL);
-        writeDB.execSQL(updateSQL);
+        return -1;
     }
 
     @Override

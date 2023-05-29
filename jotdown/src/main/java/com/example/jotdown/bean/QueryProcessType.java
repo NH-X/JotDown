@@ -3,5 +3,13 @@ package com.example.jotdown.bean;
 public enum QueryProcessType {
     query_executing,
     query_failing,
-    query_successful
+    query_successful,
+
+    delete_executing,
+    delete_failing,
+    delete_successful,
+
+    update_executing,
+    update_successful,
+    update_failing
 }

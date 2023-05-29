@@ -8,7 +8,7 @@ import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
-import com.example.jotdown.repositories.NodesRepository;
+import com.example.jotdown.repositories.QueryNodesRepository;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class MainViewModel extends ViewModel {
     private static final String TAG="MainViewModel";
 
     private NodesDBHelper helper;               //数据库帮助器
-    private NodesRepository nodesRepo;
+    private QueryNodesRepository nodesRepo;
     private MutableLiveData<List<NodeInfo>> nodesArray;
 
     private MutableLiveData<Resource<List<NodeInfo>>> mQueryAllSchedule=new MutableLiveData<>();
@@ -27,7 +27,7 @@ public class MainViewModel extends ViewModel {
             return;
         }
         helper= MainApplication.getNodesDBHelper();
-        nodesRepo=NodesRepository.getInstance();
+        nodesRepo= QueryNodesRepository.getInstance();
         nodesArray=nodesRepo.getNodesArray();
     }
     

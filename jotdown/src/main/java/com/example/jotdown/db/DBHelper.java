@@ -71,7 +71,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     protected abstract long add(Object obj);
 
     //修改一行数据
-    protected abstract void update(Object obj);
+    protected abstract int update(Object obj);
 
     //判断写数据库是否打开
     public boolean writeIsOpen(){

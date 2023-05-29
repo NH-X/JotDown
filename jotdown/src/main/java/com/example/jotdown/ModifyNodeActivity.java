@@ -22,15 +22,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
+import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.service.ReminderService;
 import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
 import com.example.jotdown.utils.MenuUtil;
+import com.example.jotdown.viewmodel.MainViewModel;
+import com.example.jotdown.viewmodel.UpdateViewModel;
 import com.example.jotdown.widget.AudioRecorder;
 import com.example.jotdown.widget.ChooseDateDialog;
 import com.example.jotdown.widget.ChooseDateDialog.OnDateSetListener;
@@ -66,6 +71,8 @@ public class ModifyNodeActivity extends AppCompatActivity
     private int backgroundColor = 0;
     private int importancePosition=0;
 
+    private UpdateViewModel mUpdateViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +88,16 @@ public class ModifyNodeActivity extends AppCompatActivity
             nodeHandler.post(queryNode);
         }
         initFindView();
+        mUpdateViewModel=new ViewModelProvider(this).get(UpdateViewModel.class);
+        mUpdateViewModel.init();
+        if(!mUpdateViewModel.getUpdateSchedule().hasObservers()){
+            mUpdateViewModel.getUpdateSchedule().observe(ModifyNodeActivity.this, new Observer<Resource<Boolean>>() {
+                @Override
+                public void onChanged(Resource<Boolean> booleanResource) {
+
+                }
+            });
+        }
     }
 
     private void initFindView(){
@@ -247,7 +264,7 @@ public class ModifyNodeActivity extends AppCompatActivity
                     getResources().getString(R.string.notRemind) : newRemindTime;
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
             node.changeTime = DateUtil.getNowDateTime();
-            nodeHandler.post(updateOrCreate);
+            mUpdateViewModel.updateNode(node);
 
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 Intent intent = new Intent(this, ReminderService.class);
@@ -314,21 +331,6 @@ public class ModifyNodeActivity extends AppCompatActivity
             labelArray=MainApplication.getLabelArray();
             initPage();                                 //初始化页面
             initSpinner();
-        }
-    };
-
-    //往数据库中添加数据或更新数据
-    private Runnable updateOrCreate = new Runnable() {
-        @Override
-        public void run() {
-            if (!nodesDBHelper.writeIsOpen()) {
-                nodesDBHelper.getWriteDB();
-            }
-            node._id = (int) nodesDBHelper.add(node);
-            if (!nodesDBHelper.readIsOpen()) {
-                nodesDBHelper.getReadDB();
-            }
-            //Toast.makeText(ModifyNodeActivity.this, "数据库数据条数：" + nodesDBHelper.queryCount(), Toast.LENGTH_SHORT).show();
         }
     };
 

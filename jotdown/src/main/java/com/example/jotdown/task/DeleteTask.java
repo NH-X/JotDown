@@ -30,11 +30,21 @@ public class DeleteTask extends AsyncTask<Integer,Void,Void> {
             Log.d(TAG, "doInBackground: writeDB is close");
             helper.getWriteDB();
         }
-        mRequestSchedule.postValue(new Resource<>(
-                helper.deleteById(_id),
-                QueryProcessType.query_successful,
-                "成功"
-        ));
+
+        if(helper.deleteById(_id)!=-1) {
+            mRequestSchedule.postValue(new Resource<>(
+                    _id,
+                    QueryProcessType.delete_successful,
+                    "成功"
+            ));
+        }
+        else {
+            mRequestSchedule.postValue(new Resource<>(
+                    -1,
+                    QueryProcessType.delete_failing,
+                    "失败"
+            ));
+        }
         return null;
     }
 }
