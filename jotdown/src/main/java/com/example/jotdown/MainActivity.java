@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkPermissions();
+        checkPermissions();                 //检查权限
         initFindView();
         mMainViewModel=new ViewModelProvider(this).get(MainViewModel.class);
         mMainViewModel.init();
