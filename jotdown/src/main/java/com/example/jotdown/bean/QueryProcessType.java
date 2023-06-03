@@ -11,5 +11,9 @@ public enum QueryProcessType {
 
     update_executing,
     update_successful,
-    update_failing
+    update_failing,
+
+    insert_executing,
+    insert_successful,
+    insert_failing
 }
