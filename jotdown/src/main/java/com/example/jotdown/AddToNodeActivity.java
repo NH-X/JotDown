@@ -57,6 +57,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
     private View view_content_color;
     private ImageView iv_recording;
 
+    private MainApplication myApp;
     private NodeInfo node;
     private List<LabelInfo> labelArray;
 
@@ -70,8 +71,9 @@ public class AddToNodeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
 
+        myApp=MainApplication.getInstance();
         node = new NodeInfo(this);
-        labelArray=MainApplication.getLabelArray();
+        labelArray=myApp.getLabelArray();
         audioRecorder = new AudioRecorder();
         initSpinner();
         initFindView();
@@ -264,7 +266,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        nodesDBHelper = MainApplication.getNodesDBHelper();
+        nodesDBHelper = myApp.getNodesDBHelper();
     }
 
     //销毁页面

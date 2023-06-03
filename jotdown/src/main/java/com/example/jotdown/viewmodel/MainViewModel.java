@@ -15,6 +15,7 @@ import java.util.List;
 public class MainViewModel extends ViewModel {
     private static final String TAG="MainViewModel";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;               //数据库帮助器
     private QueryNodesRepository nodesRepo;
     private MutableLiveData<List<NodeInfo>> nodesArray;
@@ -26,7 +27,8 @@ public class MainViewModel extends ViewModel {
         if(nodesRepo!=null){
             return;
         }
-        helper= MainApplication.getNodesDBHelper();
+        myApp=MainApplication.getInstance();
+        helper= myApp.getNodesDBHelper();
         nodesRepo= QueryNodesRepository.getInstance();
         nodesArray=nodesRepo.getNodesArray();
     }

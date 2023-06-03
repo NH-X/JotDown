@@ -16,13 +16,15 @@ import java.util.List;
 public class QueryTask extends AsyncTask<String,Void,Void> {
     private static final String TAG="QueryTask";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
 
     private MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule;
 
     public QueryTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule){
+        this.myApp=MainApplication.getInstance();
         this.mRequestSchedule=requestSchedule;
-        helper= MainApplication.getNodesDBHelper();
+        helper= myApp.getNodesDBHelper();
     }
 
     @Override

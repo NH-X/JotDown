@@ -14,13 +14,15 @@ import com.example.jotdown.db.NodesDBHelper;
 public class UpdateTask extends AsyncTask<NodeInfo,Void,Void> {
     private static final String TAG = "UpdateTask";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
 
     private MutableLiveData<Resource<Boolean>> mRequestSchedule;
 
     public UpdateTask(MutableLiveData<Resource<Boolean>> requestSchedule) {
+        this.myApp=MainApplication.getInstance();
         this.mRequestSchedule = requestSchedule;
-        this.helper = MainApplication.getNodesDBHelper();
+        this.helper = myApp.getNodesDBHelper();
     }
 
     @Override

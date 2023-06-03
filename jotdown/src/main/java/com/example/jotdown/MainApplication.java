@@ -75,14 +75,14 @@ public class MainApplication extends Application {
         return myApp;
     }
 
-    public static NodesDBHelper getNodesDBHelper() {
+    public NodesDBHelper getNodesDBHelper() {
         if (nodesDBHelper == null) {
             nodesDBHelper = new NodesDBHelper(getInstance(), null, null, 1);
         }
         return nodesDBHelper;
     }
 
-    public static List<LabelInfo> getLabelArray(){
+    public List<LabelInfo> getLabelArray(){
         if(labelArray==null){
             labelArray=new ArrayList<>();
         }

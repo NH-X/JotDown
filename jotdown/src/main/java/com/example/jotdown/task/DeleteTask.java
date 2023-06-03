@@ -13,13 +13,15 @@ import com.example.jotdown.db.NodesDBHelper;
 public class DeleteTask extends AsyncTask<Integer,Void,Void> {
     private static final String TAG="DeleteTask";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
 
     private MutableLiveData<Resource<Integer>> mRequestSchedule;
 
     public DeleteTask(MutableLiveData<Resource<Integer>> requestSchedule){
+        this.myApp=MainApplication.getInstance();
         this.mRequestSchedule=requestSchedule;
-        helper= MainApplication.getNodesDBHelper();
+        helper= myApp.getNodesDBHelper();
     }
 
     @Override

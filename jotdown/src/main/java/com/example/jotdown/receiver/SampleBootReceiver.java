@@ -17,10 +17,14 @@ import java.util.List;
 
 public class SampleBootReceiver extends BroadcastReceiver {
     private Context context;
+
+    private MainApplication myApp;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
             this.context=context;
+            myApp=MainApplication.getInstance();
             handler.post(runnable);
         }
     }
@@ -41,7 +45,7 @@ public class SampleBootReceiver extends BroadcastReceiver {
 
     //private List<NodeInfo> nodes=new ArrayList<>();
     private Handler handler=new Handler();              //创建一个处理器对象
-    private NodesDBHelper helper= MainApplication.getNodesDBHelper();
+    private NodesDBHelper helper= myApp.getNodesDBHelper();
 
     private Runnable runnable=new Runnable() {
         @Override

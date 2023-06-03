@@ -71,6 +71,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     private int backgroundColor = 0;
     private int importancePosition=0;
 
+    private MainApplication myApp;
     private UpdateViewModel mUpdateViewModel;
 
     @Override
@@ -78,6 +79,7 @@ public class ModifyNodeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
         audioRecorder=new AudioRecorder();
+        myApp=MainApplication.getInstance();
         Intent intent=getIntent();
 
         if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
@@ -296,7 +298,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        nodesDBHelper = MainApplication.getNodesDBHelper();
+        nodesDBHelper = myApp.getNodesDBHelper();
     }
 
     //销毁页面
@@ -328,7 +330,7 @@ public class ModifyNodeActivity extends AppCompatActivity
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 oldRemindTime = node.remind;
             }
-            labelArray=MainApplication.getLabelArray();
+            labelArray=myApp.getLabelArray();
             initPage();                                 //初始化页面
             initSpinner();
         }

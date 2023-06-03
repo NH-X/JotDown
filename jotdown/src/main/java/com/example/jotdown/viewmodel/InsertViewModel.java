@@ -10,11 +10,13 @@ import com.example.jotdown.db.NodesDBHelper;
 public class InsertViewModel extends ViewModel {
     private static final String TAG="InsertViewModel";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
 
     private MutableLiveData<Resource<Boolean>> mInsertSchedule=new MutableLiveData<>();
 
     public void init(){
-        helper= MainApplication.getNodesDBHelper();
+        myApp=MainApplication.getInstance();
+        helper= myApp.getNodesDBHelper();
     }
 }

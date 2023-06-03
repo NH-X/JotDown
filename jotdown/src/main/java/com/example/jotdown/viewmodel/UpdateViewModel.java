@@ -13,6 +13,7 @@ import com.example.jotdown.repositories.UpDateNodeRepository;
 public class UpdateViewModel extends ViewModel {
     private static final String TAG="UpdateViewModel";
 
+    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
     private static UpDateNodeRepository updateNodeRepo;
 
@@ -22,7 +23,8 @@ public class UpdateViewModel extends ViewModel {
         if(updateNodeRepo!=null){
             return;
         }
-        helper= MainApplication.getNodesDBHelper();
+        myApp=MainApplication.getInstance();
+        helper= myApp.getNodesDBHelper();
         updateNodeRepo=UpDateNodeRepository.getInstance();
     }
 
