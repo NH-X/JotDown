@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="ChooseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="MenuIconStyle">
+        <item name="android:layout_width">44dp</item>   <!-- 设置图标的宽度 -->
+        <item name="android:layout_height">24dp</item>  <!-- 设置图标的高度 -->
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="MenuIconStyle.Save">
+        <item name="android:src">@drawable/ic_save</item>
+    </style>
+    <style name="MenuIconStyle.Remind">
+        <item name="android:src">@drawable/ic_remind</item>
+    </style>
+
+</resources>
