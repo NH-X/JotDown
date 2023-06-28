@@ -17,8 +17,7 @@
             android:scaleType="fitCenter"
             android:layout_alignParentLeft="true"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/HeightWrapContent"
             android:minHeight="100dp"
             android:layout_toRightOf="@id/iv_mark"
             android:layout_marginStart="10dp"
@@ -28,18 +27,15 @@
             android:orientation="vertical"
             android:id="@+id/ll_background">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/HeightWidthMatchParent"
                 android:orientation="vertical">
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/HeightWrapContent"
                     android:maxLength="20"
                     android:ellipsize="end"
                     android:id="@+id/tv_title"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/HeightWrapContent"
                     android:layout_toRightOf="@id/iv_mark"
                     android:maxLength="100"
                     android:ellipsize="end"
@@ -52,17 +48,14 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"/>
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/HeightWrapContent"
                 android:layout_gravity="center_vertical">
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/HeightWidthWrapContent"
                     android:orientation="horizontal"
                     android:gravity="center">
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/HeightWidthWrapContent"
                         android:src="@drawable/ic_remind"
                         android:scaleType="fitCenter"/>
                     <TextView android:layout_width="wrap_content"
@@ -73,8 +66,7 @@
                         android:id="@+id/tv_remind"/>
                 </LinearLayout>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/HeightWidthWrapContent"
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="15dp"
