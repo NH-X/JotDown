@@ -78,12 +78,22 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         itemHolder.iv_mark.setImageDrawable(ColorUtil.settingPNGColor(context,
                 R.drawable.ic_label,item.labelColor));
         ColorUtil.settingShapeColor(itemHolder.ll_background,new float[]{0, 0, 0, 0, 98, 98, 0, 0},item.backgroundColor);
-        itemHolder.tv_title.setText(item.title.length()>15?item.title.substring(0,15)+"...":item.title);
-        itemHolder.tv_title.setTextColor(item.titleColor);
-        itemHolder.tv_title.setTextSize(item.titleSize);
-        itemHolder.tv_content.setText(item.content.length()>95?item.content.substring(0,95)+"...":item.content);
-        itemHolder.tv_content.setTextColor(item.contentColor);
-        itemHolder.tv_content.setTextSize(item.contentSize);
+        if (item.title==null){                                  //如果标题为空，则不显示标题
+            itemHolder.tv_title.setVisibility(View.GONE);
+        }
+        else {
+            itemHolder.tv_title.setText(item.title.length() > 15 ? item.title.substring(0, 15) + "..." : item.title);
+            itemHolder.tv_title.setTextColor(item.titleColor);
+            itemHolder.tv_title.setTextSize(item.titleSize);
+        }
+        if(item.content==null){                                 //如果内容为空，则不显示内容
+            itemHolder.tv_content.setVisibility(View.GONE);
+        }
+        else {
+            itemHolder.tv_content.setText(item.content.length() > 95 ? item.content.substring(0, 95) + "..." : item.content);
+            itemHolder.tv_content.setTextColor(item.contentColor);
+            itemHolder.tv_content.setTextSize(item.contentSize);
+        }
         itemHolder.tv_remind.setText(item.remind);
         itemHolder.tv_changeDate.setText(item.changeTime);
         itemHolder.position=position;

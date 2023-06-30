@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">jot down</string>
+    <string name="app_name">记下</string>
     <string name="edit_title">输入标题</string>
     <string name="edit_content">输入内容</string>
 
