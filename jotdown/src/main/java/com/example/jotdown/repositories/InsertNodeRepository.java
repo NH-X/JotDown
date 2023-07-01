@@ -10,8 +10,6 @@ import com.example.jotdown.task.InsertTask;
 public class InsertNodeRepository {
     private static final String TAG="InsertNodeRepository";
 
-    private static InsertTask insertTask;
-
     private static InsertNodeRepository instance;
 
     public static InsertNodeRepository getInstance(){
@@ -27,7 +25,6 @@ public class InsertNodeRepository {
                 QueryProcessType.insert_executing,
                 "插入中"
         ));
-        insertTask=new InsertTask(mRequestSchedule);
-        insertTask.execute(node);
+        new InsertTask(mRequestSchedule).execute(node);
     }
 }

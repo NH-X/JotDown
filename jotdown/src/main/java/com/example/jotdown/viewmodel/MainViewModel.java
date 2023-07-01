@@ -21,7 +21,7 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<List<NodeInfo>> nodesArray;
 
     private MutableLiveData<Resource<List<NodeInfo>>> mQueryAllSchedule=new MutableLiveData<>();
-    private MutableLiveData<Resource<Integer>> mDeleteSchedule =new MutableLiveData<>();
+    private MutableLiveData<Resource<Long>> mDeleteSchedule =new MutableLiveData<>();
 
     public void init(){
         if(nodesRepo!=null){
@@ -37,7 +37,7 @@ public class MainViewModel extends ViewModel {
         return nodesArray;
     }
 
-    public LiveData<Resource<Integer>> getDeleteSchedule(){
+    public LiveData<Resource<Long>> getDeleteSchedule(){
         return mDeleteSchedule;
     }
 
@@ -45,7 +45,7 @@ public class MainViewModel extends ViewModel {
         return mQueryAllSchedule;
     }
 
-    public void deleteNode(int rowId){
+    public void deleteNode(long rowId){
         nodesRepo.startDelete(mDeleteSchedule,rowId);
     }
 

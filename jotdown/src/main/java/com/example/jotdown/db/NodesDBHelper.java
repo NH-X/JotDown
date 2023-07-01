@@ -112,7 +112,7 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public int update(Object obj) {
+    public long update(Object obj) {
         NodeInfo info=(NodeInfo) obj;
 
         ContentValues values=new ContentValues();
@@ -135,11 +135,11 @@ public class NodesDBHelper extends DBHelper{
 
             return writeDB.update(tableName, values, whereClause, whereArgs);
         }
-        return -1;
+        return -1l;
     }
 
     @Override
-    public int deleteById(int rowId) {
+    public long deleteById(long rowId) {
         return super.deleteById(rowId);
     }
 

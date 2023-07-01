@@ -49,7 +49,7 @@ import java.util.List;
 
 public class AddToNodeActivity extends AppCompatActivity implements
         OnClickListener,OnLongClickListener, OnTouchListener, OnDateSetListener, OnTimeSetListener {
-    private final static String TAG = "RenewNodeActivity";
+    private final static String TAG = "AddToNodeActivity";
 
     private AudioRecorder audioRecorder;
     private Toolbar tl_head;
@@ -174,8 +174,10 @@ public class AddToNodeActivity extends AppCompatActivity implements
                 node = new NodeInfo(this);
             }
             node.title = et_title.getText().toString();
+            Log.d(TAG, "onOptionsItemSelected: title is "+node.title);
             node.titleColor = titleColor;
             node.content = et_content.getText().toString();
+            Log.d(TAG, "onOptionsItemSelected: node content is "+node.content);
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
@@ -184,6 +186,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             node.changeTime = DateUtil.getNowDateTime();
 
             mInsertViewModel.insertNode(node);
+            Log.d(TAG, "onOptionsItemSelected: node id is "+node._id);
 
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 Intent intent = new Intent(this, ReminderService.class);

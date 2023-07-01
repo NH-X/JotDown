@@ -6,7 +6,7 @@ import com.example.jotdown.R;
 import com.example.jotdown.utils.DateUtil;
 
 public class NodeInfo {
-    public int _id;
+    public long _id;
     public String title;                //标题
     public int titleColor;              //标题文字颜色
     public int titleSize;               //标题文字大小

@@ -33,8 +33,9 @@ public class InsertTask extends AsyncTask<NodeInfo,Void,Void> {
             Log.d(TAG, "doInBackground: writeDB is close");
             helper.getWriteDB();
         }
-        if(helper.add(node) != -1){
-
+        long result=helper.add(node);
+        if(result != -1){
+            node._id= result;
             mRequestSchedule.postValue(new Resource<>(
                     true,
                     QueryProcessType.insert_successful,

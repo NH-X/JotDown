@@ -41,7 +41,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     public abstract void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion);
 
     //删除一行数据
-    protected int deleteById(int rowId) {
+    protected long deleteById(long rowId) {
         String whereClause = "_id = ?";
         String[] whereArgs = new String[] { String.valueOf(rowId) };
         int deletedRows = writeDB.delete(tableName, whereClause, whereArgs);
@@ -71,7 +71,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     protected abstract long add(Object obj);
 
     //修改一行数据
-    protected abstract int update(Object obj);
+    protected abstract long update(Object obj);
 
     //判断写数据库是否打开
     public boolean writeIsOpen(){

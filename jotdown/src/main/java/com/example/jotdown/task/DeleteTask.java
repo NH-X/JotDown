@@ -10,23 +10,23 @@ import com.example.jotdown.bean.QueryProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
-public class DeleteTask extends AsyncTask<Integer,Void,Void> {
+public class DeleteTask extends AsyncTask<Long,Void,Void> {
     private static final String TAG="DeleteTask";
 
-    private MainApplication myApp;
-    private NodesDBHelper helper;                       //数据库帮助器
+    private final MainApplication myApp;
+    private final NodesDBHelper helper;                       //数据库帮助器
 
-    private MutableLiveData<Resource<Integer>> mRequestSchedule;
+    private MutableLiveData<Resource<Long>> mRequestSchedule;
 
-    public DeleteTask(MutableLiveData<Resource<Integer>> requestSchedule){
+    public DeleteTask(MutableLiveData<Resource<Long>> requestSchedule){
         this.myApp=MainApplication.getInstance();
         this.mRequestSchedule=requestSchedule;
         helper= myApp.getNodesDBHelper();
     }
 
     @Override
-    protected Void doInBackground(Integer... integers) {
-        int _id=integers[0];
+    protected Void doInBackground(Long... integers) {
+        long _id=integers[0];
 
         if(!helper.writeIsOpen()){
             Log.d(TAG, "doInBackground: writeDB is close");
@@ -42,7 +42,7 @@ public class DeleteTask extends AsyncTask<Integer,Void,Void> {
         }
         else {
             mRequestSchedule.postValue(new Resource<>(
-                    -1,
+                    -1l,
                     QueryProcessType.delete_failing,
                     "失败"
             ));

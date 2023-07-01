@@ -13,9 +13,6 @@ import java.util.List;
 public class QueryNodesRepository {
     private static final String TAG="NodesRepository";
 
-    private static QueryTask queryTask;
-    private static DeleteTask deleteTask;
-
     private MutableLiveData<List<NodeInfo>> nodesArray=new MutableLiveData<>();
 
     public static QueryNodesRepository instance;
@@ -37,17 +34,15 @@ public class QueryNodesRepository {
                 QueryProcessType.query_executing,
                 "查询中"
         ));
-        queryTask=new QueryTask(mRequestSchedule);
-        queryTask.execute(query);
+        new QueryTask(mRequestSchedule).execute(query);
     }
 
-    public void startDelete(MutableLiveData<Resource<Integer>> mRequestSchedule,int rowId){
+    public void startDelete(MutableLiveData<Resource<Long>> mRequestSchedule,long rowId){
         mRequestSchedule.setValue(new Resource<>(
-                -1,
+                -1l,
                 QueryProcessType.delete_executing,
                 "删除中"
         ));
-        deleteTask=new DeleteTask(mRequestSchedule);
-        deleteTask.execute(rowId);
+        new DeleteTask(mRequestSchedule).execute(rowId);
     }
 }
