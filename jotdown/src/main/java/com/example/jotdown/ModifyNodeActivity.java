@@ -54,7 +54,7 @@ import java.util.List;
 * */
 public class ModifyNodeActivity extends AppCompatActivity
         implements OnClickListener,OnTouchListener ,OnDateSetListener, OnTimeSetListener {
-    private static final String TAG="ModifyActivity";
+    private static final String TAG="ModifyNodeActivity";
 
     private AudioRecorder audioRecorder;
     private Toolbar tl_head;
@@ -86,7 +86,8 @@ public class ModifyNodeActivity extends AppCompatActivity
             //上一个Activity传入了包裹
             Bundle bundle = intent.getExtras();
             //进行更改数据操作
-            rowId = bundle.getInt("_id");
+            rowId = bundle.getLong("_id");
+            Log.d(TAG, "onCreate: rowID is "+rowId);
             nodeHandler.post(queryNode);
         }
         initFindView();
@@ -257,9 +258,13 @@ public class ModifyNodeActivity extends AppCompatActivity
             if (null == node) {
                 node = new NodeInfo(this);
             }
-            node.title = et_title.getText().toString();
+            String title=et_title.getText().toString();
+            node.title = title.equals("")?null:title;
+            Log.d(TAG, "onOptionsItemSelected: title is "+title);
             node.titleColor = titleColor;
-            node.content = et_content.getText().toString();
+            String content=et_content.getText().toString();
+            node.content = content.equals("")?null:content;
+            Log.d(TAG, "onOptionsItemSelected: node content is "+content);
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
@@ -316,7 +321,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     private NodesDBHelper nodesDBHelper;
     private Handler nodeHandler = new Handler();          //创建一个处理器对象
 
-    private int rowId = 0;
+    private long rowId = 0;
 
     //从数据库中查询Node数据
     private Runnable queryNode = new Runnable() {

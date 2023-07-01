@@ -59,7 +59,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     protected abstract List<?> queryInfo(String sql);
 
     //查询某一列数据
-    protected List<?> queryInfoById(int id){
+    protected List<?> queryInfoById(long id){
         String sql=String.format("%s where _id=%d;",selectSQL,id);
         return queryInfo(sql);
     }

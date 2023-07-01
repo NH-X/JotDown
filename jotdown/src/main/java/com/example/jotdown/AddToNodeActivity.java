@@ -173,11 +173,13 @@ public class AddToNodeActivity extends AppCompatActivity implements
             if (null == node) {
                 node = new NodeInfo(this);
             }
-            node.title = et_title.getText().toString();
-            Log.d(TAG, "onOptionsItemSelected: title is "+node.title);
+            String title=et_title.getText().toString();
+            node.title = title.equals("")?null:title;
+            Log.d(TAG, "onOptionsItemSelected: title is "+title);
             node.titleColor = titleColor;
-            node.content = et_content.getText().toString();
-            Log.d(TAG, "onOptionsItemSelected: node content is "+node.content);
+            String content=et_content.getText().toString();
+            node.content = content.equals("")?null:content;
+            Log.d(TAG, "onOptionsItemSelected: node content is "+content);
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?

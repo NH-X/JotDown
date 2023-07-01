@@ -24,7 +24,7 @@ import java.util.List;
 public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements View.OnClickListener, View.OnLongClickListener {
     private final static String TAG="LinearDynamicAdapter";
-    private Context context;                    //声明一个上下文对象
+    private final Context context;                    //声明一个上下文对象
 
     private List<NodeInfo> nodesArray;
 
@@ -82,6 +82,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
             itemHolder.tv_title.setVisibility(View.GONE);
         }
         else {
+            itemHolder.tv_title.setVisibility(View.VISIBLE);
             itemHolder.tv_title.setText(item.title.length() > 15 ? item.title.substring(0, 15) + "..." : item.title);
             itemHolder.tv_title.setTextColor(item.titleColor);
             itemHolder.tv_title.setTextSize(item.titleSize);
@@ -90,6 +91,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
             itemHolder.tv_content.setVisibility(View.GONE);
         }
         else {
+            itemHolder.tv_content.setVisibility(View.VISIBLE);
             itemHolder.tv_content.setText(item.content.length() > 95 ? item.content.substring(0, 95) + "..." : item.content);
             itemHolder.tv_content.setTextColor(item.contentColor);
             itemHolder.tv_content.setTextSize(item.contentSize);
@@ -116,7 +118,7 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     //定义列表项的视图持有者
-    private class ItemHolder extends RecyclerView.ViewHolder{
+    private static class ItemHolder extends RecyclerView.ViewHolder{
         public LinearLayout ll_item;
         public ImageView iv_mark;
         private ImageView iv_listen;

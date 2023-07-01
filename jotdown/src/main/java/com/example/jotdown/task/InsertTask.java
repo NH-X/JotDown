@@ -14,10 +14,10 @@ import com.example.jotdown.db.NodesDBHelper;
 public class InsertTask extends AsyncTask<NodeInfo,Void,Void> {
     private static final String TAG="InsertTask";
 
-    private MainApplication myApp;
-    private NodesDBHelper helper;                           //数据库帮助器
+    private final MainApplication myApp;
+    private final NodesDBHelper helper;                           //数据库帮助器
 
-    private MutableLiveData<Resource<Boolean>> mRequestSchedule;
+    private final MutableLiveData<Resource<Boolean>> mRequestSchedule;
 
     public InsertTask(MutableLiveData<Resource<Boolean>> requestSchedule){
         this.myApp=MainApplication.getInstance();

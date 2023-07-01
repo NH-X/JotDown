@@ -239,6 +239,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onItemClick: id="+nodesArray.get(position)._id);
         Bundle bundle=new Bundle();                 //创建一个包裹
         bundle.putLong("_id",nodesArray.get(position)._id);
+        Log.d(TAG, "onItemClick: _id is "+nodesArray.get(position)._id);
         Intent intent=new Intent(this,ModifyNodeActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);                      //跳转到修改页面

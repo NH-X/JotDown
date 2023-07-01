@@ -29,8 +29,8 @@ public class NodesDBHelper extends DBHelper{
     public void onCreate(SQLiteDatabase db) {
         createSQL="create table if not exists Nodes(" +
                 "_id integer primary key autoincrement not null," +
-                "title varchar not null,titleColor integer,titleSize integer," +
-                "content varchar not null,contentColor integer,contentSize integer," +
+                "title varchar,titleColor integer,titleSize integer," +
+                "content varchar,contentColor integer,contentSize integer," +
                 "importance varchar not null,labelColor integer,backgroundColor varchar," +
                 "remind varchar not null,requestCode integer not null," +
                 "changeTime varchar not null,audioFilePath varchar not null);";
@@ -40,7 +40,11 @@ public class NodesDBHelper extends DBHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        // Drop the old table if it exists
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Nodes");
 
+        // Call onCreate to create the new table
+        onCreate(sqLiteDatabase);
     }
 
     @Override
@@ -149,7 +153,7 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public List<NodeInfo> queryInfoById(int id) {
+    public List<NodeInfo> queryInfoById(long id) {
         return (List<NodeInfo>) super.queryInfoById(id);
     }
 

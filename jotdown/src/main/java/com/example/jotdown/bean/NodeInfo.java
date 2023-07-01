@@ -26,10 +26,10 @@ public class NodeInfo {
 
     public NodeInfo(Context context){
         _id=-1;
-        title="";
+        title=null;
         titleColor=context.getResources().getColor(R.color.red);
         titleSize=35;
-        content="";
+        content=null;
         contentColor=context.getResources().getColor(R.color.black);
         contentSize=20;
         importance="其他";

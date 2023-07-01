@@ -21,45 +21,45 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         myApp = this;
-        nodesDBHelper = new NodesDBHelper(this, null, null, 1);
+        nodesDBHelper = new NodesDBHelper(this, null, null, 2);
         Log.d(TAG, "onCreate: nodesDBHelper is null?"+(nodesDBHelper==null));
         labelArray=new ArrayList<>();
 
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.grey),
+                getInstance().getColor(R.color.grey),
                 getInstance().getResources().getString(R.string.unknown)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.blue),
+                getInstance().getColor(R.color.blue),
                 getInstance().getResources().getString(R.string.personal)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.black),
+                getInstance().getColor(R.color.black),
                 getInstance().getResources().getString(R.string.work)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.cyan_blue),
+                getInstance().getColor(R.color.cyan_blue),
                 getInstance().getResources().getString(R.string.study)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.red),
+                getInstance().getColor(R.color.red),
                 getInstance().getResources().getString(R.string.important)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.red),
+                getInstance().getColor(R.color.red),
                 getInstance().getResources().getString(R.string.red)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.green),
+                getInstance().getColor(R.color.green),
                 getInstance().getResources().getString(R.string.green)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.blue),
+                getInstance().getColor(R.color.blue),
                 getInstance().getResources().getString(R.string.blue)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.purple),
+                getInstance().getColor(R.color.purple),
                 getInstance().getResources().getString(R.string.purple)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.grey),
+                getInstance().getColor(R.color.grey),
                 getInstance().getResources().getString(R.string.grey)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.yellow),
+                getInstance().getColor(R.color.yellow),
                 getInstance().getResources().getString(R.string.yellow)));
         labelArray.add(new LabelInfo(
-                getInstance().getResources().getColor(R.color.orange),
+                getInstance().getColor(R.color.orange),
                 getInstance().getResources().getString(R.string.orange)));
     }
 
@@ -77,7 +77,7 @@ public class MainApplication extends Application {
 
     public NodesDBHelper getNodesDBHelper() {
         if (nodesDBHelper == null) {
-            nodesDBHelper = new NodesDBHelper(getInstance(), null, null, 1);
+            nodesDBHelper = new NodesDBHelper(getInstance(), null, null, 2);
         }
         return nodesDBHelper;
     }
