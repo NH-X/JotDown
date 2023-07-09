@@ -5,17 +5,13 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +82,7 @@ public class MainActivity extends AppCompatActivity
                         nodesArray=listResource.getData();
                         adapter.dataSet(listResource.getData());
                         adapter.notifyDataSetChanged();
-                        Snackbar.make(cl_main,"目标总数："+listResource.getData().size(),Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,"目标总数："+listResource.getData().size(),Toast.LENGTH_LONG).show();
                         Log.d(TAG, "onChanged: getQueryAllSchedule().observer() is run");
                     }
                 }
@@ -193,8 +189,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
         if(id==R.id.menu_refresh) {              //点击了刷新图标
-            Snackbar.make(cl_main, "刷新成功，时间：" +
-                    DateUtil.getNowDateTime("yyyy/MM/dd HH:mm:ss"), Snackbar.LENGTH_LONG).show();
+            Toast.makeText(this, "刷新成功，时间：" +
+                    DateUtil.getNowDateTime("yyyy/MM/dd HH:mm:ss"), Toast.LENGTH_LONG).show();
             tv_fuzzy_query.setVisibility(View.GONE);
             mMainViewModel.queryNodes(null);
             return true;
