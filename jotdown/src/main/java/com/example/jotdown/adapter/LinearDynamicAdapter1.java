@@ -5,30 +5,33 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.example.jotdown.R;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.utils.ColorUtil;
 import com.example.jotdown.widget.RecyclerExtras;
 
 import java.util.List;
 
-public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements View.OnClickListener, View.OnLongClickListener {
+public class LinearDynamicAdapter1 extends Adapter<ViewHolder>
+implements OnClickListener, OnLongClickListener {
     private final static String TAG="LinearDynamicAdapter";
-    private final Context context;                    //声明一个上下文对象
+
+    private final Context context;                      // 声明一个上下文对象
 
     private List<NodeInfo> nodesArray;
 
-    public LinearDynamicAdapter(Context context, List<NodeInfo> nodesArray){
+    public LinearDynamicAdapter1(Context context,List<NodeInfo> nodesArray){
         this.context=context;
         this.nodesArray=nodesArray;
     }
@@ -36,70 +39,65 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onClick(View view) {
         ItemHolder itemHolder= (ItemHolder) view.getTag();
-        int position=itemHolder.position;
-        Log.d(TAG, "onClick: position="+position);
-        if(view.getId()==R.id.ll_background) {
-            onItemClickListener.onItemClick(view, position);
+        int position=itemHolder.currentPosition;
+        if(view.getId()==R.id.ll_item){
+            onItemClickListener.onItemClick(view,position);
         }
         else if(view.getId()==R.id.iv_listen){
-            Log.d(TAG, "onClick: audioFilePath is "+nodesArray.get(position).audioFilePath);
             onItemPlayListener.onItemPlayerClick(nodesArray.get(position).audioFilePath);
         }
     }
 
     @Override
     public boolean onLongClick(View view) {
-        int position=((ItemHolder)view.getTag()).position;
-        if(onItemLongClickListener!=null){
-            Log.d(TAG, "onLongClick: OnLongClick:position="+position);
+        int position=((ItemHolder)view.getTag()).currentPosition;
+        if(onItemLongClickListener != null){
             onItemLongClickListener.onItemLongClick(view,position);
         }
         return true;
     }
 
-    //创建列表项的视图持有者
+    // 创建列表项的视图持有者
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //根据布局文件item_linear.xml生成视图对象
-        View v= LayoutInflater.from(context).inflate(R.layout.item_detail,parent,false);
+        // 根据布局文件item_linear.xml生成视图对象
+        View v = LayoutInflater.from(context).inflate(R.layout.item_detail1,parent,false);
         return new ItemHolder(v);
     }
 
     //绑定列表项视图持有者
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        NodeInfo item=nodesArray.get(position);
-        ItemHolder itemHolder= (ItemHolder) holder;
+        NodeInfo item = nodesArray.get(position);
+        ItemHolder itemHolder = (ItemHolder) holder;
 
-        itemHolder.ll_background.setOnClickListener(this);
-        itemHolder.ll_background.setOnLongClickListener(this);
+        itemHolder.ll_item.setOnClickListener(this);
+        itemHolder.ll_item.setOnLongClickListener(this);
 
-        itemHolder.iv_mark.setImageDrawable(ColorUtil.settingPNGColor(context,
-                R.drawable.ic_label,item.labelColor));
-        ColorUtil.settingShapeColor(itemHolder.ll_background,new float[]{0, 0, 0, 0, 98, 98, 0, 0},item.backgroundColor);
-        if (item.title==null){                                  //如果标题为空，则不显示标题
+        if(item.title==null){
             itemHolder.tv_title.setVisibility(View.GONE);
         }
         else {
             itemHolder.tv_title.setVisibility(View.VISIBLE);
             itemHolder.tv_title.setText(item.title);
-            itemHolder.tv_title.setTextColor(item.titleColor);
-            itemHolder.tv_title.setTextSize(item.titleSize);
         }
-        if(item.content==null){                                 //如果内容为空，则不显示内容
+        if(item.content==null){
             itemHolder.tv_content.setVisibility(View.GONE);
         }
         else {
             itemHolder.tv_content.setVisibility(View.VISIBLE);
             itemHolder.tv_content.setText(item.content);
-            itemHolder.tv_content.setTextColor(item.contentColor);
-            itemHolder.tv_content.setTextSize(item.contentSize);
         }
-        itemHolder.tv_remind.setText(item.remind);
-        itemHolder.tv_changeDate.setText(item.changeTime);
-        itemHolder.position=position;
-        itemHolder.ll_background.setTag(itemHolder);
+        if(item.remind==null) {
+            itemHolder.ll_remind.setVisibility(View.GONE);
+        }
+        else {
+            itemHolder.ll_remind.setVisibility(View.VISIBLE);
+            itemHolder.tv_remind.setText(item.remind);
+        }
+        itemHolder.currentPosition =position;
+        itemHolder.ll_item.setTag(itemHolder);
         if(!nodesArray.get(position).audioFilePath.equals("")) {
             itemHolder.iv_listen.setVisibility(View.VISIBLE);
             itemHolder.iv_listen.setOnClickListener(this);
@@ -111,40 +109,32 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<RecyclerView.View
         Log.d(TAG, "onBindViewHolder: title="+itemHolder.tv_title.getText());
     }
 
-    //获取列表项个数
     @Override
     public int getItemCount() {
-        return nodesArray==null?0:nodesArray.size();
+        return nodesArray == null ? 0 : nodesArray.size();
     }
 
-    //定义列表项的视图持有者
-    private static class ItemHolder extends RecyclerView.ViewHolder{
-        public ImageView iv_mark;
-        private ImageView iv_listen;
-        public LinearLayout ll_background;
+    // 定义列表项的视图持有者
+    private static class ItemHolder extends ViewHolder{
+        public LinearLayout ll_item;
+        public LinearLayout ll_remind;
+        public ImageView iv_listen;
         public TextView tv_title;
         public TextView tv_content;
         public TextView tv_remind;
-        public TextView tv_changeDate;
+        public RecyclerView rv_label;
+        public int currentPosition;                        //数组下标
 
-        public int position;                            //数组下标
-
-        public ItemHolder(View itemView){
+        public ItemHolder(@NonNull View itemView) {
             super(itemView);
-            iv_mark=itemView.findViewById(R.id.iv_mark);
+            ll_item=itemView.findViewById(R.id.ll_item);
+            ll_remind=itemView.findViewById(R.id.ll_remind);
             iv_listen=itemView.findViewById(R.id.iv_listen);
-            ll_background=itemView.findViewById(R.id.ll_background);
-            tv_title =itemView.findViewById(R.id.tv_title);
+            tv_title=itemView.findViewById(R.id.tv_text);
             tv_content=itemView.findViewById(R.id.tv_content);
             tv_remind=itemView.findViewById(R.id.tv_remind);
-            tv_changeDate=itemView.findViewById(R.id.tv_changeDate);
+            rv_label=itemView.findViewById(R.id.rv_label);
         }
-    }
-
-    public void dataSet(List<NodeInfo> nodesArray){
-        this.nodesArray=nodesArray;
-        //Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
-        notifyDataSetChanged();
     }
 
     //声明列表项的点击监听器
