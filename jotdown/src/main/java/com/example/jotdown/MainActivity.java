@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jotdown.adapter.LinearDynamicAdapter;
-import com.example.jotdown.adapter.LinearDynamicAdapter1;
 import com.example.jotdown.bean.NodeInfo;
 import com.example.jotdown.bean.QueryProcessType;
 import com.example.jotdown.bean.Resource;
@@ -59,8 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     private SpacesItemDecoration decoration;                //item之间的间距
 
-    //private LinearDynamicAdapter adapter;
-    private LinearDynamicAdapter1 adapter;
+    private LinearDynamicAdapter adapter;
 
     private MainViewModel mMainViewModel;
     private String fuzzyQueryStr="";                            //模糊查询参数
@@ -134,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         //设置循环视图的布局管理器
         rv_dynamic.setLayoutManager(manager);
         //构建一个笔记列表的线性适配器
-        adapter=new LinearDynamicAdapter1(this,nodesArray);
+        adapter=new LinearDynamicAdapter(this,nodesArray);
         //设置线性列表的点击监听器
         adapter.setOnItemClickListener(this);
         //设置线性列表的长按监听器
