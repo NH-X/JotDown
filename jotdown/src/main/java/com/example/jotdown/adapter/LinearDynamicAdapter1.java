@@ -89,7 +89,7 @@ implements OnClickListener, OnLongClickListener {
             itemHolder.tv_content.setVisibility(View.VISIBLE);
             itemHolder.tv_content.setText(item.content);
         }
-        if(item.remind==null) {
+        if(item.remind==null || item.remind.equals(context.getString(R.string.notRemind))) {
             itemHolder.ll_remind.setVisibility(View.GONE);
         }
         else {
