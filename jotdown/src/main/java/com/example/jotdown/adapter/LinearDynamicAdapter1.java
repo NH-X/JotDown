@@ -130,11 +130,17 @@ implements OnClickListener, OnLongClickListener {
             ll_item=itemView.findViewById(R.id.ll_item);
             ll_remind=itemView.findViewById(R.id.ll_remind);
             iv_listen=itemView.findViewById(R.id.iv_listen);
-            tv_title=itemView.findViewById(R.id.tv_text);
+            tv_title=itemView.findViewById(R.id.tv_title);
             tv_content=itemView.findViewById(R.id.tv_content);
             tv_remind=itemView.findViewById(R.id.tv_remind);
             rv_label=itemView.findViewById(R.id.rv_label);
         }
+    }
+
+    public void dataSet(List<NodeInfo> nodesArray){
+        this.nodesArray=nodesArray;
+        //Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
+        notifyDataSetChanged();
     }
 
     //声明列表项的点击监听器
