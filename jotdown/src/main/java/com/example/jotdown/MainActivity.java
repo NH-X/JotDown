@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity
         if(decoration!=null){
             rv_dynamic.removeItemDecoration(decoration);
         }
-        decoration=new SpacesItemDecoration(50);
-        rv_dynamic.addItemDecoration(decoration);
+        decoration=new SpacesItemDecoration(0);
+        //rv_dynamic.addItemDecoration(decoration);
     }
 
     //根据菜单项初始化搜索框
