@@ -22,7 +22,7 @@ public class NodesDBHelper extends DBHelper{
         selectSQL=String.format("select _id,title,titleColor,titleSize," +
                 "content,contentColor,contentSize," +
                 "importance,labelColor,backgroundColor," +
-                "remind,requestCode,changeTime,audioFilePath from %s ",tableName);
+                "remind,requestCode,audioFilePath from %s ",tableName);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class NodesDBHelper extends DBHelper{
                 "content varchar,contentColor integer,contentSize integer," +
                 "importance varchar not null,labelColor integer,backgroundColor varchar," +
                 "remind varchar not null,requestCode integer not null," +
-                "changeTime varchar not null,audioFilePath varchar not null);";
+                "audioFilePath varchar not null);";
         Log.d(TAG, "onCreate: createSQL="+createSQL);
         db.execSQL(createSQL);
     }
@@ -67,8 +67,7 @@ public class NodesDBHelper extends DBHelper{
             info.backgroundColor=cursor.getInt(9);
             info.remind=cursor.getString(10);
             info.requestCode=cursor.getInt(11);
-            info.changeTime=cursor.getString(12);
-            info.audioFilePath=cursor.getString(13);
+            info.audioFilePath=cursor.getString(12);
 
             nodeArray.add(info);
         }
@@ -106,7 +105,6 @@ public class NodesDBHelper extends DBHelper{
             cv.put("backgroundColor", info.backgroundColor);
             cv.put("remind", info.remind);
             cv.put("requestCode",info.requestCode);
-            cv.put("changeTime", info.changeTime);
             cv.put("audioFilePath",info.audioFilePath);
             result=writeDB.insert(tableName,"",cv);
             Log.d(TAG, "add: result="+result);
@@ -131,7 +129,6 @@ public class NodesDBHelper extends DBHelper{
         values.put("backgroundColor",info.backgroundColor);
         values.put("remind",info.remind);
         values.put("requestCode",info.requestCode);
-        values.put("changeTime",info.changeTime);
         values.put("audioFilePath",info.audioFilePath);
         if (info._id > -1) {
             String whereClause = "_id = ?";

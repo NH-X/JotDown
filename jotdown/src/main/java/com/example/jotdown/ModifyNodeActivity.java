@@ -270,7 +270,6 @@ public class ModifyNodeActivity extends AppCompatActivity
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
                     getResources().getString(R.string.notRemind) : newRemindTime;
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
-            node.changeTime = DateUtil.getNowDateTime();
             mUpdateViewModel.updateNode(node);
 
             if (!node.remind.equals(getString(R.string.notRemind))) {

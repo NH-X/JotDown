@@ -69,7 +69,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
     private int titleColor = 0;
     private int contentColor = 0;
     private int backgroundColor = 0;
-    private int importancePosition=0;
+    private int importancePosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +169,6 @@ public class AddToNodeActivity extends AppCompatActivity implements
             Log.d(TAG, "onOptionsItemSelected: newRemindTime:" +
                     ("{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
                             getResources().getString(R.string.notRemind) : newRemindTime));
-
             if (null == node) {
                 node = new NodeInfo(this);
             }
@@ -185,7 +184,6 @@ public class AddToNodeActivity extends AppCompatActivity implements
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
                     getResources().getString(R.string.notRemind) : newRemindTime;
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
-            node.changeTime = DateUtil.getNowDateTime();
 
             mInsertViewModel.insertNode(node);
             Log.d(TAG, "onOptionsItemSelected: node id is "+node._id);

@@ -20,7 +20,6 @@ public class NodeInfo {
 
     public String remind;               //闹钟提醒
     public int requestCode;             //请求唯一标识符
-    public String changeTime;           //最后更改事件
 
     public String audioFilePath;        //音频放置位置
 
@@ -37,7 +36,6 @@ public class NodeInfo {
         backgroundColor= context.getResources().getColor(R.color.transparent);
         remind=context.getString(R.string.notRemind);
         requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);
-        changeTime= DateUtil.getNowDateTime();
         audioFilePath="";
     }
 }

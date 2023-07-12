@@ -13,6 +13,7 @@ public class MainApplication extends Application {
     private static final String TAG = "MainApplication";
     private static MainApplication myApp;
 
+    private static final int DATABASE_VERSION=3;
     private static NodesDBHelper nodesDBHelper;
 
     private static List<LabelInfo> labelArray;
@@ -21,7 +22,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         myApp = this;
-        nodesDBHelper = new NodesDBHelper(this, null, null, 2);
+        nodesDBHelper = new NodesDBHelper(this, null, null, DATABASE_VERSION);
         Log.d(TAG, "onCreate: nodesDBHelper is null?"+(nodesDBHelper==null));
         labelArray=new ArrayList<>();
 
@@ -77,7 +78,7 @@ public class MainApplication extends Application {
 
     public NodesDBHelper getNodesDBHelper() {
         if (nodesDBHelper == null) {
-            nodesDBHelper = new NodesDBHelper(getInstance(), null, null, 2);
+            nodesDBHelper = new NodesDBHelper(getInstance(), null, null, DATABASE_VERSION);
         }
         return nodesDBHelper;
     }
