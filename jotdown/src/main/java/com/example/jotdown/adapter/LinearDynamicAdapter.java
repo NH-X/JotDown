@@ -25,34 +25,33 @@ import java.util.List;
 
 public class LinearDynamicAdapter extends Adapter<ViewHolder>
 implements OnClickListener, OnLongClickListener {
-    private final static String TAG="LinearDynamicAdapter";
+    private final static String TAG = "LinearDynamicAdapter";
 
     private final Context context;                      // 声明一个上下文对象
 
     private List<NodeInfo> nodesArray;
 
-    public LinearDynamicAdapter(Context context, List<NodeInfo> nodesArray){
-        this.context=context;
-        this.nodesArray=nodesArray;
+    public LinearDynamicAdapter(Context context, List<NodeInfo> nodesArray) {
+        this.context = context;
+        this.nodesArray = nodesArray;
     }
 
     @Override
     public void onClick(View view) {
-        ItemHolder itemHolder= (ItemHolder) view.getTag();
-        int position=itemHolder.currentPosition;
-        if(view.getId()==R.id.ll_item){
-            onItemClickListener.onItemClick(view,position);
-        }
-        else if(view.getId()==R.id.iv_listen){
+        ItemHolder itemHolder = (ItemHolder) view.getTag();
+        int position = itemHolder.currentPosition;
+        if (view.getId() == R.id.ll_item) {
+            onItemClickListener.onItemClick(view, position);
+        } else if (view.getId() == R.id.iv_listen) {
             onItemPlayListener.onItemPlayerClick(nodesArray.get(position).audioFilePath);
         }
     }
 
     @Override
     public boolean onLongClick(View view) {
-        int position=((ItemHolder)view.getTag()).currentPosition;
-        if(onItemLongClickListener != null){
-            onItemLongClickListener.onItemLongClick(view,position);
+        int position = ((ItemHolder) view.getTag()).currentPosition;
+        if (onItemLongClickListener != null) {
+            onItemLongClickListener.onItemLongClick(view, position);
         }
         return true;
     }
@@ -62,7 +61,8 @@ implements OnClickListener, OnLongClickListener {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // 根据布局文件item_linear.xml生成视图对象
-        View v = LayoutInflater.from(context).inflate(R.layout.item_detail,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_detail, parent, false);
+
         return new ItemHolder(v);
     }
 
@@ -75,38 +75,35 @@ implements OnClickListener, OnLongClickListener {
         itemHolder.ll_item.setOnClickListener(this);
         itemHolder.ll_item.setOnLongClickListener(this);
 
-        if(item.title==null){
+        if (item.title == null) {
             itemHolder.tv_title.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             itemHolder.tv_title.setVisibility(View.VISIBLE);
             itemHolder.tv_title.setText(item.title);
         }
-        if(item.content==null){
+        if (item.content == null) {
             itemHolder.tv_content.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             itemHolder.tv_content.setVisibility(View.VISIBLE);
             itemHolder.tv_content.setText(item.content);
         }
-        if(item.remind==null || item.remind.equals(context.getString(R.string.notRemind))) {
+        if (item.remind == null || item.remind.equals(context.getString(R.string.notRemind))) {
             itemHolder.ll_remind.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             itemHolder.ll_remind.setVisibility(View.VISIBLE);
             itemHolder.tv_remind.setText(item.remind);
         }
-        itemHolder.currentPosition =position;
+        itemHolder.currentPosition = position;
         itemHolder.ll_item.setTag(itemHolder);
-        if(!nodesArray.get(position).audioFilePath.equals("")) {
+        if (!nodesArray.get(position).audioFilePath.equals("")) {
             itemHolder.iv_listen.setVisibility(View.VISIBLE);
             itemHolder.iv_listen.setOnClickListener(this);
             itemHolder.iv_listen.setTag(itemHolder);
-        }
-        else{
+        } else {
             itemHolder.iv_listen.setVisibility(View.GONE);
         }
-        Log.d(TAG, "onBindViewHolder: title="+itemHolder.tv_title.getText());
+
+        Log.d(TAG, "onBindViewHolder: title=" + itemHolder.tv_title.getText());
     }
 
     @Override
@@ -115,7 +112,7 @@ implements OnClickListener, OnLongClickListener {
     }
 
     // 定义列表项的视图持有者
-    private static class ItemHolder extends ViewHolder{
+    private static class ItemHolder extends ViewHolder {
         public LinearLayout ll_item;
         public LinearLayout ll_remind;
         public ImageView iv_listen;
@@ -127,18 +124,18 @@ implements OnClickListener, OnLongClickListener {
 
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
-            ll_item=itemView.findViewById(R.id.ll_item);
-            ll_remind=itemView.findViewById(R.id.ll_remind);
-            iv_listen=itemView.findViewById(R.id.iv_listen);
-            tv_title=itemView.findViewById(R.id.tv_title);
-            tv_content=itemView.findViewById(R.id.tv_content);
-            tv_remind=itemView.findViewById(R.id.tv_remind);
-            rv_label=itemView.findViewById(R.id.rv_label);
+            ll_item = itemView.findViewById(R.id.ll_item);
+            ll_remind = itemView.findViewById(R.id.ll_remind);
+            iv_listen = itemView.findViewById(R.id.iv_listen);
+            tv_title = itemView.findViewById(R.id.tv_title);
+            tv_content = itemView.findViewById(R.id.tv_content);
+            tv_remind = itemView.findViewById(R.id.tv_remind);
+            rv_label = itemView.findViewById(R.id.rv_label);
         }
     }
 
-    public void dataSet(List<NodeInfo> nodesArray){
-        this.nodesArray=nodesArray;
+    public void dataSet(List<NodeInfo> nodesArray) {
+        this.nodesArray = nodesArray;
         //Toast.makeText(context, "dataSet: nodesArray size:"+nodesArray.size(), Toast.LENGTH_SHORT).show();
         notifyDataSetChanged();
     }
@@ -146,28 +143,28 @@ implements OnClickListener, OnLongClickListener {
     //声明列表项的点击监听器
     private RecyclerExtras.OnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(RecyclerExtras.OnItemClickListener listener){
-        this.onItemClickListener=listener;
+    public void setOnItemClickListener(RecyclerExtras.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     //声明列表项的长按监听器对象
     private RecyclerExtras.OnItemLongClickListener onItemLongClickListener;
 
-    public void setOnItemLongClickListener(RecyclerExtras.OnItemLongClickListener listener){
-        this.onItemLongClickListener=listener;
+    public void setOnItemLongClickListener(RecyclerExtras.OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
     }
 
     //声明列表项的删除监听器
     private RecyclerExtras.OnItemDeleteClickListener onItemDeleteClickListener;
 
-    public void setOnItemDeleteClickListener(RecyclerExtras.OnItemDeleteClickListener listener){
-        this.onItemDeleteClickListener=listener;
+    public void setOnItemDeleteClickListener(RecyclerExtras.OnItemDeleteClickListener listener) {
+        this.onItemDeleteClickListener = listener;
     }
 
     //声明列表项的点击监听器
     private RecyclerExtras.OnItemPlayListener onItemPlayListener;
 
-    public void setOnItemPlayListener(RecyclerExtras.OnItemPlayListener listener){
-        this.onItemPlayListener=listener;
+    public void setOnItemPlayListener(RecyclerExtras.OnItemPlayListener listener) {
+        this.onItemPlayListener = listener;
     }
 }

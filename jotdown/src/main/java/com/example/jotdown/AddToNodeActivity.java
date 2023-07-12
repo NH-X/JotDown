@@ -76,15 +76,15 @@ public class AddToNodeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
 
-        myApp=MainApplication.getInstance();
+        myApp = MainApplication.getInstance();
         node = new NodeInfo(this);
-        labelArray=myApp.getLabelArray();
+        labelArray = myApp.getLabelArray();
         audioRecorder = new AudioRecorder();
         initSpinner();
         initFindView();
-        mInsertViewModel=new ViewModelProvider(this).get(InsertViewModel.class);
+        mInsertViewModel = new ViewModelProvider(this).get(InsertViewModel.class);
         mInsertViewModel.init();
-        if(!mInsertViewModel.getInsertSchedule().hasObservers()){
+        if (!mInsertViewModel.getInsertSchedule().hasObservers()) {
             mInsertViewModel.getInsertSchedule().observe(AddToNodeActivity.this, new Observer<Resource<Boolean>>() {
                 @Override
                 public void onChanged(Resource<Boolean> booleanResource) {
@@ -94,7 +94,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
         }
     }
 
-    private void initFindView(){
+    private void initFindView() {
         et_title = findViewById(R.id.et_title);
         et_content = findViewById(R.id.et_content);
         view_content_color = findViewById(R.id.view_content_color);
@@ -104,7 +104,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
         view_content_color.setOnClickListener(this);
         view_background_color.setOnClickListener(this);
         tl_head = findViewById(R.id.tl_head);
-        iv_recording=findViewById(R.id.iv_recording);
+        iv_recording = findViewById(R.id.iv_recording);
         iv_recording.setOnLongClickListener(this);
         iv_recording.setOnTouchListener(this);
         setSupportActionBar(tl_head);
@@ -118,9 +118,9 @@ public class AddToNodeActivity extends AppCompatActivity implements
         sp_importance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                node.labelColor=labelArray.get(position).labelColor;
-                node.importance=labelArray.get(position).importance;
-                importancePosition=position;
+                node.labelColor = labelArray.get(position).labelColor;
+                node.importance = labelArray.get(position).importance;
+                importancePosition = position;
             }
 
             @Override
@@ -172,13 +172,13 @@ public class AddToNodeActivity extends AppCompatActivity implements
             if (null == node) {
                 node = new NodeInfo(this);
             }
-            String title=et_title.getText().toString();
-            node.title = title.equals("")?null:title;
-            Log.d(TAG, "onOptionsItemSelected: title is "+title);
+            String title = et_title.getText().toString();
+            node.title = title.equals("") ? null : title;
+            Log.d(TAG, "onOptionsItemSelected: title is " + title);
             node.titleColor = titleColor;
-            String content=et_content.getText().toString();
-            node.content = content.equals("")?null:content;
-            Log.d(TAG, "onOptionsItemSelected: node content is "+content);
+            String content = et_content.getText().toString();
+            node.content = content.equals("") ? null : content;
+            Log.d(TAG, "onOptionsItemSelected: node content is " + content);
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
@@ -186,7 +186,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
             mInsertViewModel.insertNode(node);
-            Log.d(TAG, "onOptionsItemSelected: node id is "+node._id);
+            Log.d(TAG, "onOptionsItemSelected: node id is " + node._id);
 
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 Intent intent = new Intent(this, ReminderService.class);
@@ -218,9 +218,9 @@ public class AddToNodeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        int viewId=view.getId();
+        int viewId = view.getId();
 
-        if(viewId==R.id.iv_recording) {
+        if (viewId == R.id.iv_recording) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 startRecording();
             } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -274,7 +274,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
 
     private void stopRecording() {
         String outputFile = audioRecorder.stopRecording();
-        node.audioFilePath=outputFile;
+        node.audioFilePath = outputFile;
         Toast.makeText(this, "Recording ended", Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
@@ -297,7 +297,7 @@ public class AddToNodeActivity extends AppCompatActivity implements
             nodesDBHelper.close();
         }
     }
-    
+
     String newRemindTime = "{year}-{month}-{day} {hour}:{minute}";
 
     @Override

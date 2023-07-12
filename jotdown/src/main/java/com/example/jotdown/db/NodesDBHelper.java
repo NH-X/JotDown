@@ -72,6 +72,7 @@ public class NodesDBHelper extends DBHelper{
             nodeArray.add(info);
         }
         cursor.close();
+
         return nodeArray;
     }
 
@@ -88,9 +89,10 @@ public class NodesDBHelper extends DBHelper{
     public long add(Object node) {
         NodeInfo info=(NodeInfo) node;
         long result;
+
         if(info._id>-1){
             result= info._id;
-            update(node);
+            update(info);
         }
         else {
             ContentValues cv = new ContentValues();
@@ -109,14 +111,12 @@ public class NodesDBHelper extends DBHelper{
             result=writeDB.insert(tableName,"",cv);
             Log.d(TAG, "add: result="+result);
         }
-
         return result;
     }
 
     @Override
     public long update(Object obj) {
         NodeInfo info=(NodeInfo) obj;
-
         ContentValues values=new ContentValues();
         values.put("title",info.title);
         values.put("titleColor",info.titleColor);
@@ -130,6 +130,7 @@ public class NodesDBHelper extends DBHelper{
         values.put("remind",info.remind);
         values.put("requestCode",info.requestCode);
         values.put("audioFilePath",info.audioFilePath);
+
         if (info._id > -1) {
             String whereClause = "_id = ?";
             String[] whereArgs = { String.valueOf(info._id) };

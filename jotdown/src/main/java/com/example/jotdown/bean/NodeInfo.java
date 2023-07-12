@@ -23,19 +23,19 @@ public class NodeInfo {
 
     public String audioFilePath;        //音频放置位置
 
-    public NodeInfo(Context context){
-        _id=-1;
-        title=null;
-        titleColor=context.getResources().getColor(R.color.red);
-        titleSize=35;
-        content=null;
-        contentColor=context.getResources().getColor(R.color.black);
-        contentSize=20;
-        importance="其他";
-        labelColor=context.getResources().getColor(R.color.grey);
-        backgroundColor= context.getResources().getColor(R.color.transparent);
-        remind=context.getString(R.string.notRemind);
-        requestCode= (int) (System.currentTimeMillis()%Integer.MAX_VALUE);
-        audioFilePath="";
+    public NodeInfo(Context context) {
+        _id = -1;
+        title = null;
+        titleColor = context.getResources().getColor(R.color.red);
+        titleSize = 35;
+        content = null;
+        contentColor = context.getResources().getColor(R.color.black);
+        contentSize = 20;
+        importance = "其他";
+        labelColor = context.getResources().getColor(R.color.grey);
+        backgroundColor = context.getResources().getColor(R.color.transparent);
+        remind = context.getString(R.string.notRemind);
+        requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
+        audioFilePath = "";
     }
 }
