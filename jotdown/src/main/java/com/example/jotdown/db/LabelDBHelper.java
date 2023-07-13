@@ -64,6 +64,11 @@ public class LabelDBHelper extends DBHelper {
     }
 
     @Override
+    public List<LabelInfo> queryInfoById(long id){
+        return (List<LabelInfo>) super.queryInfoById(id);
+    }
+
+    @Override
     protected List<LabelInfo> queryInfoAll() {
         return queryInfo(selectSQL+";");
     }
@@ -101,5 +106,25 @@ public class LabelDBHelper extends DBHelper {
             return writeDB.update(tableName,cv,whereClause,whereArgs);
         }
         return -1;
+    }
+
+    @Override
+    public long deleteById(long rowId){
+        return super.deleteById(rowId);
+    }
+
+    @Override
+    public void deleteAll(){
+        super.deleteAll();
+    }
+
+    // 查询数据库中数据行数
+    public int queryCount(){
+        Cursor cursor= readDB.rawQuery(selectSQL,null);
+        int count=cursor.getCount();
+        cursor.close();
+        Log.d(TAG, "queryCount: count is "+count);
+
+        return count;
     }
 }
