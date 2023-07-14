@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.jotdown.MainApplication;
 import com.example.jotdown.R;
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
@@ -18,14 +19,17 @@ import java.util.List;
 public class LabelDBHelper extends DBHelper {
     private static final String TAG = "LabelDBHelper";
 
-    protected LabelDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public LabelDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-        tableName = "Labels";
+        this.tableName="Labels";
+        Log.d(TAG, "LabelDBHelper: tableName is "+tableName);
         selectSQL = String.format("select _id,importance from %s ", tableName);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        this.tableName="Labels";
+        Log.d(TAG, "onCreate: tableName is "+tableName);
         createSQL=String.format(
                 "create table if not exists %s(" +
                         "_id integer primary key autoincrement not null," +

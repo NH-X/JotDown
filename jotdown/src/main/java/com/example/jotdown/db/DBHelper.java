@@ -15,7 +15,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
 
     protected int version;                                //数据库版本号
     protected String tableName;                           //表名
-    protected static String dbName="nodes.sqlite";        //数据库名
+    protected String dbName;                                //数据库名
 
     protected SQLiteDatabase readDB;
     protected SQLiteDatabase writeDB;
@@ -25,13 +25,15 @@ public abstract class DBHelper extends SQLiteOpenHelper {
 
     //数据库帮助器的构造器
     protected DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, dbName, factory, version);
+        super(context, name, factory, version);
         this.context=context;
+        this.dbName=name;
         this.version=version;
         this.readDB=getReadableDatabase();
         this.writeDB=getWritableDatabase();
         Log.d(TAG, "DBHelper: version:"+version);
     }
+
     // onCreate方法
     @Override
     public abstract void onCreate(SQLiteDatabase db);

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
 
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ public class NodesDBHelper extends DBHelper{
     public NodesDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         tableName="Nodes";
-        selectSQL=String.format("select _id,title,titleColor,titleSize," +
+        Log.d(TAG, "NodesDBHelper: tableName is "+tableName);
+        this.selectSQL=String.format("select _id,title,titleColor,titleSize," +
                 "content,contentColor,contentSize," +
                 "importance,labelColor,backgroundColor," +
                 "remind,requestCode,audioFilePath from %s ",tableName);
@@ -27,13 +29,18 @@ public class NodesDBHelper extends DBHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createSQL="create table if not exists Nodes(" +
-                "_id integer primary key autoincrement not null," +
-                "title varchar,titleColor integer,titleSize integer," +
-                "content varchar,contentColor integer,contentSize integer," +
-                "importance varchar not null,labelColor integer,backgroundColor varchar," +
-                "remind varchar not null,requestCode integer not null," +
-                "audioFilePath varchar not null);";
+        tableName="Nodes";
+        Log.d(TAG, "onCreate: tableName is "+tableName);
+        createSQL=String.format(
+                "create table if not exists %s(" +
+                        "_id integer primary key autoincrement not null," +
+                        "title varchar,titleColor integer,titleSize integer," +
+                        "content varchar,contentColor integer,contentSize integer," +
+                        "importance varchar not null,labelColor integer,backgroundColor varchar," +
+                        "remind varchar not null,requestCode integer not null," +
+                        "audioFilePath varchar not null);"
+                ,tableName
+        );
         Log.d(TAG, "onCreate: createSQL="+createSQL);
         db.execSQL(createSQL);
     }

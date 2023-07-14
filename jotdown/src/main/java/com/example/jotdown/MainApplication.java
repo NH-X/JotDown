@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.jotdown.bean.LabelInfo;
+import com.example.jotdown.db.LabelDBHelper;
 import com.example.jotdown.db.NodesDBHelper;
 
 import java.util.ArrayList;
@@ -13,8 +14,15 @@ public class MainApplication extends Application {
     private static final String TAG = "MainApplication";
     private static MainApplication myApp;
 
-    private static final int DATABASE_VERSION=3;
+    private static final String NODE_DATABASE_NAME="nodes.sqlite";
+    private static final String LABEL_DATABASE_NAME="label.sqlite";
+    private static final int NODE_DATABASE_VERSION =3;
+    private static final String NODE_TABLE_NAME="Nodes";
+    private static final int LABEL_DATABASE_VERSION = 1;
+    private static final String LABEL_TABLE_NAME="Labels";
+
     private static NodesDBHelper nodesDBHelper;
+    private static LabelDBHelper labelDBHelper;
 
     private static List<LabelInfo> labelArray;
 
@@ -22,7 +30,17 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         myApp = this;
-        nodesDBHelper = new NodesDBHelper(this, null, null, DATABASE_VERSION);
+        nodesDBHelper = new NodesDBHelper(
+                this,
+                NODE_DATABASE_NAME,
+                null,
+                NODE_DATABASE_VERSION
+        );
+        labelDBHelper=new LabelDBHelper(
+                this,
+                LABEL_DATABASE_NAME,
+                null,
+                LABEL_DATABASE_VERSION);
         Log.d(TAG, "onCreate: nodesDBHelper is null?"+(nodesDBHelper==null));
         labelArray=new ArrayList<>();
 
@@ -78,9 +96,25 @@ public class MainApplication extends Application {
 
     public NodesDBHelper getNodesDBHelper() {
         if (nodesDBHelper == null) {
-            nodesDBHelper = new NodesDBHelper(getInstance(), null, null, DATABASE_VERSION);
+            nodesDBHelper = new NodesDBHelper(
+                    this,
+                    NODE_DATABASE_NAME,
+                    null,
+                    NODE_DATABASE_VERSION
+            );
         }
         return nodesDBHelper;
+    }
+
+    public LabelDBHelper getLabelDBHelper(){
+        if(labelDBHelper == null){
+            labelDBHelper=new LabelDBHelper(
+                    this,
+                    LABEL_DATABASE_NAME,
+                    null,
+                    LABEL_DATABASE_VERSION);
+        }
+        return labelDBHelper;
     }
 
     public List<LabelInfo> getLabelArray(){
@@ -88,5 +122,14 @@ public class MainApplication extends Application {
             labelArray=new ArrayList<>();
         }
         return labelArray;
+    }
+
+    public String getNodeTableName(){
+        Log.d(TAG, "getNodeTableName: NodeTableName is "+NODE_TABLE_NAME);
+        return NODE_TABLE_NAME;
+    }
+
+    public String getLabelTableName(){
+        return LABEL_TABLE_NAME;
     }
 }
