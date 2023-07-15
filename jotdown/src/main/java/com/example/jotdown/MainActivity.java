@@ -255,19 +255,12 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onClick: nodesArray.size()=" + nodesArray.size());
                 NodeInfo info = nodesArray.get(position);       // 获取要删除的元素
 
-                mMainViewModel.deleteNode(info);            // 删除数据库中对应的记录
+                mMainViewModel.deleteNode(info);                // 删除备忘录
                 Log.d(TAG, "onClick: position is " + position);
                 nodesArray.remove(position);                    // 删除列表中对应的元素
                 adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
                 adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
 
-                if (info.audioFilePath != null && !info.audioFilePath.equals("")) {
-                    new DeleteAudioThread(info.audioFilePath).run();
-                }
-                if (!info.remind.equals(getString(R.string.notRemind))) {            //如果该备忘录有设置提醒时间
-                    CancellationNotifyUtil.deleteReminder(
-                            MainActivity.this, AlarmReceiver.class, info.requestCode);       //取消该备忘录的提醒
-                }
                 Snackbar.make(cl_main, "成功删除：" + info.title, Snackbar.LENGTH_LONG).show(); // 页面提醒用户
             }
         });

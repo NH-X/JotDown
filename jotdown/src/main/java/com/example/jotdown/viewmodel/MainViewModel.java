@@ -67,7 +67,7 @@ public class MainViewModel extends AndroidViewModel {
         if (info.audioFilePath != null && !info.audioFilePath.equals("")) {     //如果该备忘录有录音文件，删除录音文件
             new DeleteAudioThread(info.audioFilePath).run();
         }
-        if (!info.remind.equals(context.getString(R.string.notRemind))) {            //如果该备忘录有设置提醒时间
+        if (!info.remind.equals(context.getString(R.string.notRemind))) {       //如果该备忘录有设置提醒时间
             CancellationNotifyUtil.deleteReminder(
                     context,
                     AlarmReceiver.class,
