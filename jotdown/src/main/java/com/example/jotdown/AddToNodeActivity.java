@@ -1,9 +1,7 @@
 package com.example.jotdown;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -40,9 +37,6 @@ import com.example.jotdown.widget.ChooseDateDialog;
 import com.example.jotdown.widget.ChooseDateDialog.OnDateSetListener;
 import com.example.jotdown.widget.ChooseDateDialog.OnTimeSetListener;
 import com.example.jotdown.widget.LabelAdapter;
-import com.skydoves.colorpickerview.ColorEnvelope;
-import com.skydoves.colorpickerview.ColorPickerDialog;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.util.Calendar;
 import java.util.List;
