@@ -21,9 +21,9 @@ public class NodesDBHelper extends DBHelper{
         super(context, name, factory, version);
         tableName="Nodes";
         Log.d(TAG, "NodesDBHelper: tableName is "+tableName);
-        this.selectSQL=String.format("select _id,title,titleColor,titleSize," +
-                "content,contentColor,contentSize," +
-                "importance,labelColor,backgroundColor," +
+        this.selectSQL=String.format("select _id,title,titleSize," +
+                "content,contentSize," +
+                "importance,labelColor," +
                 "remind,requestCode,audioFilePath from %s ",tableName);
     }
 
@@ -34,9 +34,9 @@ public class NodesDBHelper extends DBHelper{
         createSQL=String.format(
                 "create table if not exists %s(" +
                         "_id integer primary key autoincrement not null," +
-                        "title varchar,titleColor integer,titleSize integer," +
-                        "content varchar,contentColor integer,contentSize integer," +
-                        "importance varchar not null,labelColor integer,backgroundColor varchar," +
+                        "title varchar,titleSize integer," +
+                        "content varchar, contentSize integer," +
+                        "importance varchar not null,labelColor integer," +
                         "remind varchar not null,requestCode integer not null," +
                         "audioFilePath varchar not null);"
                 ,tableName
@@ -64,17 +64,14 @@ public class NodesDBHelper extends DBHelper{
             NodeInfo info=new NodeInfo(context);
             info._id=cursor.getInt(0);
             info.title=cursor.getString(1);
-            info.titleColor=cursor.getInt(2);
-            info.titleSize=cursor.getInt(3);
-            info.content=cursor.getString(4);
-            info.contentColor=cursor.getInt(5);
-            info.contentSize=cursor.getInt(6);
-            info.importance=cursor.getString(7);
-            info.labelColor=cursor.getInt(8);
-            info.backgroundColor=cursor.getInt(9);
-            info.remind=cursor.getString(10);
-            info.requestCode=cursor.getInt(11);
-            info.audioFilePath=cursor.getString(12);
+            info.titleSize=cursor.getInt(2);
+            info.content=cursor.getString(3);
+            info.contentSize=cursor.getInt(4);
+            info.importance=cursor.getString(5);
+            info.labelColor=cursor.getInt(6);
+            info.remind=cursor.getString(7);
+            info.requestCode=cursor.getInt(8);
+            info.audioFilePath=cursor.getString(9);
 
             nodeArray.add(info);
         }
@@ -104,14 +101,11 @@ public class NodesDBHelper extends DBHelper{
         else {
             ContentValues cv = new ContentValues();
             cv.put("title", info.title);
-            cv.put("titleColor", info.titleColor);
             cv.put("titleSize", info.titleSize);
             cv.put("content", info.content);
-            cv.put("contentColor", info.contentColor);
             cv.put("contentSize", info.contentSize);
             cv.put("importance", info.importance);
             cv.put("labelColor", info.labelColor);
-            cv.put("backgroundColor", info.backgroundColor);
             cv.put("remind", info.remind);
             cv.put("requestCode",info.requestCode);
             cv.put("audioFilePath",info.audioFilePath);
@@ -126,14 +120,11 @@ public class NodesDBHelper extends DBHelper{
         NodeInfo info=(NodeInfo) obj;
         ContentValues values=new ContentValues();
         values.put("title",info.title);
-        values.put("titleColor",info.titleColor);
         values.put("titleSize",info.titleSize);
         values.put("content",info.content);
-        values.put("contentColor",info.contentColor);
         values.put("contentSize",info.contentSize);
         values.put("importance",info.importance);
         values.put("labelColor",info.labelColor);
-        values.put("backgroundColor",info.backgroundColor);
         values.put("remind",info.remind);
         values.put("requestCode",info.requestCode);
         values.put("audioFilePath",info.audioFilePath);
@@ -144,7 +135,7 @@ public class NodesDBHelper extends DBHelper{
 
             return writeDB.update(tableName, values, whereClause, whereArgs);
         }
-        return -1l;
+        return -1;
     }
 
     @Override

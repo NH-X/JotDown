@@ -15,14 +15,14 @@ public class MainApplication extends Application {
     private static MainApplication myApp;
 
     private static final String NODE_DATABASE_NAME = "nodes.sqlite";
-    private static final int NODE_DATABASE_VERSION = 1;
+    private static final int NODE_DATABASE_VERSION = 2;
     //private static final String LABEL_DATABASE_NAME="label.sqlite";
     //private static final int LABEL_DATABASE_VERSION = 1;
     private static final String NODE_TABLE_NAME = "Nodes";
     private static final String LABEL_TABLE_NAME = "Labels";
 
-    private static NodesDBHelper nodesDBHelper;
-    private static LabelDBHelper labelDBHelper;
+    private NodesDBHelper nodesDBHelper;
+    private LabelDBHelper labelDBHelper;
 
     private static List<LabelInfo> labelArray;
 

@@ -61,14 +61,8 @@ public class ModifyNodeActivity extends AppCompatActivity
     private EditText et_title;
     private EditText et_content;
     private Spinner sp_importance;
-    private View view_title_color;
-    private View view_background_color;
-    private View view_content_color;
     private ImageView iv_recording;
 
-    private int titleColor = 0;
-    private int contentColor = 0;
-    private int backgroundColor = 0;
     private int importancePosition=0;
 
     private MainApplication myApp;
@@ -109,12 +103,6 @@ public class ModifyNodeActivity extends AppCompatActivity
         setSupportActionBar(tl_head);
         et_title=findViewById(R.id.et_title);
         et_content=findViewById(R.id.et_content);
-        view_title_color=findViewById(R.id.view_title_color);
-        view_background_color=findViewById(R.id.view_background_color);
-        view_content_color=findViewById(R.id.view_content_color);
-        view_title_color.setOnClickListener(this);
-        view_content_color.setOnClickListener(this);
-        view_background_color.setOnClickListener(this);
         iv_recording=findViewById(R.id.iv_recording);
         iv_recording.setOnTouchListener(this);
     }
@@ -122,9 +110,6 @@ public class ModifyNodeActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
-        if (viewId == R.id.view_title_color || viewId == R.id.view_content_color || viewId == R.id.view_background_color) {
-            initColorPickerDialog(viewId);
-        }
     }
 
     @Override
@@ -141,52 +126,9 @@ public class ModifyNodeActivity extends AppCompatActivity
         return true;
     }
 
-    private void setLayoutColor(ColorEnvelope envelope, int viewId) {                     //设置颜色
-        if (viewId == R.id.view_title_color) {
-            titleColor = envelope.getColor();
-            view_title_color.setBackgroundColor(titleColor);
-        } else if (viewId == R.id.view_content_color) {
-            contentColor = envelope.getColor();
-            view_content_color.setBackgroundColor(contentColor);
-        } else if (viewId == R.id.view_background_color) {
-            backgroundColor = envelope.getColor();
-            view_background_color.setBackgroundColor(backgroundColor);
-        }
-    }
-
-    private void initColorPickerDialog(int viewId) {                                     //初始化颜色选择器
-        AlertDialog dialog = new ColorPickerDialog.Builder(this)
-                .setTitle("设置颜色")
-                .setPreferenceName("MyColorPickerDialog")
-                .setPositiveButton(getString(R.string.confirm),
-                        new ColorEnvelopeListener() {
-                            @Override
-                            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
-                                setLayoutColor(envelope, viewId);
-                            }
-                        })
-                .setNegativeButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        })
-                .attachAlphaSlideBar(true)          // the default value is true.
-                .attachBrightnessSlideBar(true)     // the default value is true.
-                .setBottomSpace(12)                        // set a bottom space between the last slidebar and buttons.
-                .show();
-    }
-
     private void initPage() {
         et_title.setText(node.title);
         et_content.setText(node.content);
-        titleColor = node.titleColor;
-        contentColor = node.contentColor;
-        backgroundColor = node.backgroundColor;
-        view_title_color.setBackgroundColor(titleColor);
-        view_content_color.setBackgroundColor(contentColor);
-        view_background_color.setBackgroundColor(backgroundColor);
 
         for(int i=0;i<labelArray.size();i++){
             if(labelArray.get(i).importance.equals(node.importance)){
@@ -262,12 +204,9 @@ public class ModifyNodeActivity extends AppCompatActivity
             String title=et_title.getText().toString();
             node.title = title.equals("")?null:title;
             Log.d(TAG, "onOptionsItemSelected: title is "+title);
-            node.titleColor = titleColor;
             String content=et_content.getText().toString();
             node.content = content.equals("")?null:content;
             Log.d(TAG, "onOptionsItemSelected: node content is "+content);
-            node.contentColor = contentColor;
-            node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
                     oldRemindTime : newRemindTime;
             Log.d(TAG, "onOptionsItemSelected: remind time is "+node.remind);
