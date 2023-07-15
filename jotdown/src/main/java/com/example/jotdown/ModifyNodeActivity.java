@@ -78,6 +78,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_renew_node);
+        oldRemindTime = getString(R.string.notRemind);
         audioRecorder=new AudioRecorder();
         myApp=MainApplication.getInstance();
         Intent intent=getIntent();
@@ -268,7 +269,8 @@ public class ModifyNodeActivity extends AppCompatActivity
             node.contentColor = contentColor;
             node.backgroundColor = backgroundColor;
             node.remind = "{year}-{month}-{day} {hour}:{minute}".equals(newRemindTime) ?
-                    getResources().getString(R.string.notRemind) : newRemindTime;
+                    oldRemindTime : newRemindTime;
+            Log.d(TAG, "onOptionsItemSelected: remind time is "+node.remind);
             node.requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
             mUpdateViewModel.updateNode(node);
 
@@ -334,13 +336,14 @@ public class ModifyNodeActivity extends AppCompatActivity
             if (!node.remind.equals(getString(R.string.notRemind))) {
                 oldRemindTime = node.remind;
             }
+            Log.d(TAG, "run: remind time is "+node.remind);
             labelArray=myApp.getLabelArray();
             initPage();                                 //初始化页面
             initSpinner();
         }
     };
 
-    String oldRemindTime = "不提醒";
+    String oldRemindTime = "";
     String newRemindTime = "{year}-{month}-{day} {hour}:{minute}";
 
     @Override

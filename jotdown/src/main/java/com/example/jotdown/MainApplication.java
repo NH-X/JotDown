@@ -14,12 +14,12 @@ public class MainApplication extends Application {
     private static final String TAG = "MainApplication";
     private static MainApplication myApp;
 
-    private static final String NODE_DATABASE_NAME="nodes.sqlite";
-    private static final String LABEL_DATABASE_NAME="label.sqlite";
-    private static final int NODE_DATABASE_VERSION =3;
-    private static final String NODE_TABLE_NAME="Nodes";
-    private static final int LABEL_DATABASE_VERSION = 1;
-    private static final String LABEL_TABLE_NAME="Labels";
+    private static final String NODE_DATABASE_NAME = "nodes.sqlite";
+    private static final int NODE_DATABASE_VERSION = 1;
+    //private static final String LABEL_DATABASE_NAME="label.sqlite";
+    //private static final int LABEL_DATABASE_VERSION = 1;
+    private static final String NODE_TABLE_NAME = "Nodes";
+    private static final String LABEL_TABLE_NAME = "Labels";
 
     private static NodesDBHelper nodesDBHelper;
     private static LabelDBHelper labelDBHelper;
@@ -36,13 +36,13 @@ public class MainApplication extends Application {
                 null,
                 NODE_DATABASE_VERSION
         );
-        labelDBHelper=new LabelDBHelper(
+        labelDBHelper = new LabelDBHelper(
                 this,
-                LABEL_DATABASE_NAME,
+                NODE_DATABASE_NAME,
                 null,
-                LABEL_DATABASE_VERSION);
-        Log.d(TAG, "onCreate: nodesDBHelper is null?"+(nodesDBHelper==null));
-        labelArray=new ArrayList<>();
+                NODE_DATABASE_VERSION);
+        Log.d(TAG, "onCreate: nodesDBHelper is null?" + (nodesDBHelper == null));
+        labelArray = new ArrayList<>();
 
         labelArray.add(new LabelInfo(
                 getInstance().getColor(R.color.grey),
@@ -82,9 +82,9 @@ public class MainApplication extends Application {
                 getInstance().getResources().getString(R.string.orange)));
     }
 
-    public void onTerminate(){
+    public void onTerminate() {
         super.onTerminate();
-        if(nodesDBHelper!=null){
+        if (nodesDBHelper != null) {
             nodesDBHelper.close();
         }
     }
@@ -106,30 +106,30 @@ public class MainApplication extends Application {
         return nodesDBHelper;
     }
 
-    public LabelDBHelper getLabelDBHelper(){
-        if(labelDBHelper == null){
-            labelDBHelper=new LabelDBHelper(
+    public LabelDBHelper getLabelDBHelper() {
+        if (labelDBHelper == null) {
+            labelDBHelper = new LabelDBHelper(
                     this,
-                    LABEL_DATABASE_NAME,
+                    NODE_DATABASE_NAME,
                     null,
-                    LABEL_DATABASE_VERSION);
+                    NODE_DATABASE_VERSION);
         }
         return labelDBHelper;
     }
 
-    public List<LabelInfo> getLabelArray(){
-        if(labelArray==null){
-            labelArray=new ArrayList<>();
+    public List<LabelInfo> getLabelArray() {
+        if (labelArray == null) {
+            labelArray = new ArrayList<>();
         }
         return labelArray;
     }
 
-    public String getNodeTableName(){
-        Log.d(TAG, "getNodeTableName: NodeTableName is "+NODE_TABLE_NAME);
+    public String getNodeTableName() {
+        Log.d(TAG, "getNodeTableName: NodeTableName is " + NODE_TABLE_NAME);
         return NODE_TABLE_NAME;
     }
 
-    public String getLabelTableName(){
+    public String getLabelTableName() {
         return LABEL_TABLE_NAME;
     }
 }
