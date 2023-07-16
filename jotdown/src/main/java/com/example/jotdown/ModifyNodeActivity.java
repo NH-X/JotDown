@@ -70,17 +70,32 @@ public class ModifyNodeActivity extends AppCompatActivity
         myApp=MainApplication.getInstance();
         Intent intent=getIntent();
 
+        mUpdateViewModel=new ViewModelProvider(this).get(UpdateViewModel.class);
+        mUpdateViewModel.init();
         if (intent.hasExtra("_id")) {                 //如果上一个Activity传入了包裹，则拆包进行查询数据库
             //上一个Activity传入了包裹
             Bundle bundle = intent.getExtras();
             //进行更改数据操作
             rowId = bundle.getLong("_id");
             Log.d(TAG, "onCreate: rowID is "+rowId);
-            nodeHandler.post(queryNode);
+            mUpdateViewModel.queryNode(rowId);
         }
         initFindView();
-        mUpdateViewModel=new ViewModelProvider(this).get(UpdateViewModel.class);
-        mUpdateViewModel.init();
+        if(!mUpdateViewModel.getQuerySchedule().hasObservers()){
+            mUpdateViewModel.getQuerySchedule().observe(ModifyNodeActivity.this, new Observer<Resource<NodeInfo>>() {
+                @Override
+                public void onChanged(Resource<NodeInfo> nodeInfoResource) {
+                    node=nodeInfoResource.getData();
+                    if (!node.remind.equals(getString(R.string.notRemind))) {
+                        oldRemindTime = node.remind;
+                    }
+                    Log.d(TAG, "run: remind time is "+node.remind);
+                    labelArray=myApp.getLabelArray();
+                    initPage();                                 //初始化页面
+                    initSpinner();
+                }
+            });
+        }
         if(!mUpdateViewModel.getUpdateSchedule().hasObservers()){
             mUpdateViewModel.getUpdateSchedule().observe(ModifyNodeActivity.this, new Observer<Resource<Boolean>>() {
                 @Override
@@ -252,28 +267,8 @@ public class ModifyNodeActivity extends AppCompatActivity
     private NodeInfo node;
     private List<LabelInfo> labelArray;
     private NodesDBHelper nodesDBHelper;
-    private final Handler nodeHandler = new Handler();          //创建一个处理器对象
 
     private long rowId = 0;
-
-    //从数据库中查询Node数据
-    private final Runnable queryNode = new Runnable() {
-        @Override
-        public void run() {
-            if (!nodesDBHelper.readIsOpen()) {
-                nodesDBHelper.getReadDB();
-            }
-            node = nodesDBHelper.queryInfoById(rowId).get(0);
-            //Toast.makeText(RenewNodeActivity.this, node.toString(), Toast.LENGTH_SHORT).show();
-            if (!node.remind.equals(getString(R.string.notRemind))) {
-                oldRemindTime = node.remind;
-            }
-            Log.d(TAG, "run: remind time is "+node.remind);
-            labelArray=myApp.getLabelArray();
-            initPage();                                 //初始化页面
-            initSpinner();
-        }
-    };
 
     String oldRemindTime = "";
     String newRemindTime = "{year}-{month}-{day} {hour}:{minute}";
