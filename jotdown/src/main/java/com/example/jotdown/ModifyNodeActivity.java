@@ -2,7 +2,6 @@ package com.example.jotdown;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +18,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.jotdown.bean.LabelInfo;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.service.ReminderService;
@@ -50,11 +47,8 @@ public class ModifyNodeActivity extends AppCompatActivity
     private static final String TAG="ModifyNodeActivity";
 
     private AudioRecorder audioRecorder;
-    private Toolbar tl_head;
     private EditText et_title;
     private EditText et_content;
-    private Spinner sp_importance;
-    private ImageView iv_recording;
 
     private int importancePosition=0;
 
@@ -76,48 +70,42 @@ public class ModifyNodeActivity extends AppCompatActivity
             //上一个Activity传入了包裹
             Bundle bundle = intent.getExtras();
             //进行更改数据操作
-            rowId = bundle.getLong("_id");
-            Log.d(TAG, "onCreate: rowID is "+rowId);
+            long rowId = bundle.getLong("_id");
+            Log.d(TAG, "onCreate: rowID is "+ rowId);
             mUpdateViewModel.queryNode(rowId);
         }
         initFindView();
         if(!mUpdateViewModel.getQuerySchedule().hasObservers()){
-            mUpdateViewModel.getQuerySchedule().observe(ModifyNodeActivity.this, new Observer<Resource<NodeInfo>>() {
-                @Override
-                public void onChanged(Resource<NodeInfo> nodeInfoResource) {
-                    node=nodeInfoResource.getData();
-                    if (!node.remind.equals(getString(R.string.notRemind))) {
-                        oldRemindTime = node.remind;
-                    }
-                    Log.d(TAG, "run: remind time is "+node.remind);
-                    labelArray=myApp.getLabelArray();
-                    initPage();                                 //初始化页面
-                    initSpinner();
+            mUpdateViewModel.getQuerySchedule().observe(ModifyNodeActivity.this, nodeInfoResource -> {
+                node=nodeInfoResource.getData();
+                if (!node.remind.equals(getString(R.string.notRemind))) {
+                    oldRemindTime = node.remind;
                 }
+                Log.d(TAG, "run: remind time is "+node.remind);
+                labelArray=myApp.getLabelArray();
+                initPage();                                 //初始化页面
+                initSpinner();
             });
         }
         if(!mUpdateViewModel.getUpdateSchedule().hasObservers()){
-            mUpdateViewModel.getUpdateSchedule().observe(ModifyNodeActivity.this, new Observer<Resource<Boolean>>() {
-                @Override
-                public void onChanged(Resource<Boolean> booleanResource) {
+            mUpdateViewModel.getUpdateSchedule().observe(ModifyNodeActivity.this, booleanResource -> {
 
-                }
             });
         }
     }
 
     private void initFindView(){
-        tl_head=findViewById(R.id.tl_head);
+        Toolbar tl_head = findViewById(R.id.tl_head);
         setSupportActionBar(tl_head);
         et_title=findViewById(R.id.et_title);
         et_content=findViewById(R.id.et_content);
-        iv_recording=findViewById(R.id.iv_recording);
+        ImageView iv_recording = findViewById(R.id.iv_recording);
         iv_recording.setOnTouchListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        int viewId = view.getId();
+
     }
 
     @Override
@@ -147,7 +135,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     }
 
     private void initSpinner() {
-        sp_importance = findViewById(R.id.sp_importance);
+        Spinner sp_importance = findViewById(R.id.sp_importance);
         LabelAdapter adapter = new LabelAdapter(this, labelArray);
         sp_importance.setAdapter(adapter);
         sp_importance.setSelection(importancePosition);
@@ -241,8 +229,7 @@ public class ModifyNodeActivity extends AppCompatActivity
     }
 
     private void stopRecording() {
-        String outputFile = audioRecorder.stopRecording();
-        node.audioFilePath=outputFile;
+        node.audioFilePath= audioRecorder.stopRecording();
         Toast.makeText(this, "Recording ended", Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Recording stopped. File saved: " + outputFile, Toast.LENGTH_SHORT).show();
     }
@@ -267,8 +254,6 @@ public class ModifyNodeActivity extends AppCompatActivity
     private NodeInfo node;
     private List<LabelInfo> labelArray;
     private NodesDBHelper nodesDBHelper;
-
-    private long rowId = 0;
 
     String oldRemindTime = "";
     String newRemindTime = "{year}-{month}-{day} {hour}:{minute}";

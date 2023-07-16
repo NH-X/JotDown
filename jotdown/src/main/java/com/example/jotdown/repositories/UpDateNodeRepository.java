@@ -13,8 +13,6 @@ import com.example.jotdown.task.UpdateTask;
 public class UpDateNodeRepository {
     private static final String TAG="UpDateNodeRepository";
 
-    private static UpdateTask updateTask;
-
     private static UpDateNodeRepository instance;
 
     public static UpDateNodeRepository getInstance(){
@@ -30,8 +28,7 @@ public class UpDateNodeRepository {
                 QueryProcessType.update_executing,
                 "更新中"
         ));
-        updateTask=new UpdateTask(mRequestSchedule);
-        updateTask.execute(node);
+        new UpdateTask(mRequestSchedule).execute(node);
     }
 
     public void startQuery(
@@ -43,6 +40,6 @@ public class UpDateNodeRepository {
                 QueryProcessType.query_executing,
                 "查询中"
         ));
-        new QueryNodeThread(rowId,mRequestSchedule).run();
+        new QueryNodeThread(rowId,mRequestSchedule).start();
     }
 }

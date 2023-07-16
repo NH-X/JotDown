@@ -13,7 +13,7 @@ import java.util.List;
 public class QueryNodesRepository {
     private static final String TAG="NodesRepository";
 
-    private MutableLiveData<List<NodeInfo>> nodesArray=new MutableLiveData<>();
+    private final MutableLiveData<List<NodeInfo>> nodesArray=new MutableLiveData<>();
 
     public static QueryNodesRepository instance;
 
@@ -39,7 +39,7 @@ public class QueryNodesRepository {
 
     public void startDelete(MutableLiveData<Resource<Long>> mRequestSchedule,long rowId){
         mRequestSchedule.setValue(new Resource<>(
-                -1l,
+                -1L,
                 QueryProcessType.delete_executing,
                 "删除中"
         ));

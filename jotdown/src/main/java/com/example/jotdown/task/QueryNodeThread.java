@@ -13,11 +13,10 @@ import com.example.jotdown.db.NodesDBHelper;
 public class QueryNodeThread extends Thread {
     private final static String TAG = "QueryNodeThread";
 
-    private MainApplication myApp;
-    private NodesDBHelper helper;                           //数据库帮助器
+    private final NodesDBHelper helper;                           //数据库帮助器
 
-    private MutableLiveData<Resource<NodeInfo>> mRequestSchedule;
-    private long rowId=0;
+    private final MutableLiveData<Resource<NodeInfo>> mRequestSchedule;
+    private long rowId;
 
     public QueryNodeThread(
             long rowId,
@@ -50,7 +49,7 @@ public class QueryNodeThread extends Thread {
             mRequestSchedule.postValue(new Resource<>(
                     info,
                     QueryProcessType.query_successful,
-                    String.format("1")
+                    "1"
             ));
         }
     }
