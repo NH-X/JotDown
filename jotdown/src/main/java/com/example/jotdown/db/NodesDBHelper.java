@@ -154,9 +154,10 @@ public class NodesDBHelper extends DBHelper{
     }
 
     //模糊查询某项数据
+    @Override
     public List<NodeInfo> queryLikeInfo(String linkStr){
         String sql=String.format("%s where title like '%%%s%%';",selectSQL, linkStr);
-        Log.d(TAG, "queryLinkInfo: SQL="+sql);
+        Log.d(TAG, "queryLikeInfo: select sql is "+sql);
 
         return queryInfo(sql);
     }

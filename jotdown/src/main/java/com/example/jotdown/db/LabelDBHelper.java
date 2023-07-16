@@ -8,10 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.jotdown.MainApplication;
-import com.example.jotdown.R;
-import com.example.jotdown.bean.LabelInfo;
-import com.example.jotdown.bean.NodeInfo;
+import com.example.jotdown.bean.LabelBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +47,13 @@ public class LabelDBHelper extends DBHelper {
     }
 
     @Override
-    protected List<LabelInfo> queryInfo(String sql) {
+    protected List<LabelBean> queryInfo(String sql) {
         Log.d(TAG, "queryInfo: sql is "+sql);
-        List<LabelInfo> labelArray=new ArrayList<>();
+        List<LabelBean> labelArray=new ArrayList<>();
         Cursor cursor=readDB.rawQuery(sql,null);
 
         while(cursor.moveToNext()){
-            LabelInfo info=new LabelInfo(context);
+            LabelBean info=new LabelBean();
             info._id=cursor.getInt(0);
             info.importance=cursor.getString(1);
 
@@ -68,18 +65,27 @@ public class LabelDBHelper extends DBHelper {
     }
 
     @Override
-    public List<LabelInfo> queryInfoById(long id){
-        return (List<LabelInfo>) super.queryInfoById(id);
+    public List<LabelBean> queryInfoById(long id){
+        return (List<LabelBean>) super.queryInfoById(id);
+    }
+
+    //模糊查询某项数据
+    @Override
+    public List<LabelBean> queryLikeInfo(String linkStr) {
+        String sql=String.format("%s where importance like '%%%s%%';",selectSQL,linkStr);
+        Log.d(TAG, "queryLikeInfo: select sql is "+sql);
+
+        return queryInfo(sql);
     }
 
     @Override
-    protected List<LabelInfo> queryInfoAll() {
+    public List<LabelBean> queryInfoAll() {
         return queryInfo(selectSQL+";");
     }
 
     @Override
     protected long add(Object obj) {
-        LabelInfo info= (LabelInfo) obj;
+        LabelBean info= (LabelBean) obj;
         long result;
 
         if(info._id>-1){
@@ -98,7 +104,7 @@ public class LabelDBHelper extends DBHelper {
 
     @Override
     protected long update(Object obj) {
-        LabelInfo info= (LabelInfo) obj;
+        LabelBean info= (LabelBean) obj;
         ContentValues cv=new ContentValues();
         cv.put("_id",info._id);
         cv.put("importance",info.importance);

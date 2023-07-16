@@ -66,6 +66,10 @@ public abstract class DBHelper extends SQLiteOpenHelper {
         return queryInfo(sql);
     }
 
+    protected List<?> queryLikeInfo(String linkStr){
+        throw new RuntimeException("Stub!");
+    }
+
     //查询所有数据
     protected abstract List<?> queryInfoAll();
 

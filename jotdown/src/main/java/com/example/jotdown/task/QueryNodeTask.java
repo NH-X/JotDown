@@ -11,41 +11,39 @@ import com.example.jotdown.bean.QueryProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryNodeTask extends AsyncTask<String,Void,Void> {
-    private static final String TAG="QueryTask";
+    private static final String TAG = "QueryTask";
 
-    private MainApplication myApp;
-    private NodesDBHelper helper;                       //数据库帮助器
+    private final NodesDBHelper helper;                       //数据库帮助器
 
     private MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule;
 
-    public QueryNodeTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule){
-        this.myApp=MainApplication.getInstance();
-        this.mRequestSchedule=requestSchedule;
-        helper= myApp.getNodesDBHelper();
+    public QueryNodeTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule) {
+        this.mRequestSchedule = requestSchedule;
+        helper = MainApplication.getInstance().getNodesDBHelper();
     }
 
     @Override
     protected Void doInBackground(String... strings) {
-        String query=strings[0];
-        List<NodeInfo> nodesArray=null;
+        String query = strings[0];
+        List<NodeInfo> nodesArray = null;
 
-        if(!helper.readIsOpen()){
+        if (!helper.readIsOpen()) {
             Log.d(TAG, "doInBackground: readDB is close");
             helper.getReadDB();
         }
-        if(query==null || query.equals("")){
-            nodesArray=helper.queryInfoAll();
-            if(nodesArray==null){
+        if (query == null || query.equals("")) {
+            nodesArray = helper.queryInfoAll();
+            if (nodesArray == null) {
                 mRequestSchedule.postValue(new Resource<>(
                         nodesArray,
                         QueryProcessType.query_failing,
                         "查询失败"
                 ));
-            }
-            else {
+            } else {
                 mRequestSchedule.postValue(new Resource<>(
                         nodesArray,
                         QueryProcessType.query_successful,
@@ -53,26 +51,23 @@ public class QueryNodeTask extends AsyncTask<String,Void,Void> {
                 ));
                 Log.d(TAG, "doInBackground: first is run");
             }
-        }
-        else{
-            nodesArray=helper.queryLikeInfo(query);
-            Log.d(TAG, "doInBackground: nodesArray is null? "+(nodesArray==null));
-            if(nodesArray==null){
+        } else {
+            nodesArray = helper.queryLikeInfo(query);
+            Log.d(TAG, "doInBackground: nodesArray is null? " + (nodesArray == null));
+            if (nodesArray == null) {
                 mRequestSchedule.postValue(new Resource<>(
-                        null,
+                        new ArrayList<>(),
                         QueryProcessType.query_failing,
                         "查询失败"
                 ));
-            }
-            else {
-                if(nodesArray.size()<=0){
+            } else {
+                if (nodesArray.size() <= 0) {
                     mRequestSchedule.postValue(new Resource<>(
                             nodesArray,
                             QueryProcessType.query_successful,
-                            String.format("没有\"%s\"的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索",query)
+                            String.format("没有\"%s\"的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索", query)
                     ));
-                }
-                else {
+                } else {
                     mRequestSchedule.postValue(new Resource<>(
                             nodesArray,
                             QueryProcessType.query_successful,
