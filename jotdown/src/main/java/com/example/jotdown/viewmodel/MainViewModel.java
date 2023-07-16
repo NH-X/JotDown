@@ -8,9 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.jotdown.MainActivity;
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.R;
 import com.example.jotdown.bean.NodeInfo;
@@ -26,8 +24,7 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
     private static final String TAG="MainViewModel";
 
-    private MainApplication myApp;
-    private Context context;
+    private final Context context;
     private NodesDBHelper helper;               //数据库帮助器
     private QueryNodesRepository nodesRepo;
     private MutableLiveData<List<NodeInfo>> nodesArray;
@@ -44,8 +41,7 @@ public class MainViewModel extends AndroidViewModel {
         if(nodesRepo!=null){
             return;
         }
-        myApp=MainApplication.getInstance();
-        helper= myApp.getNodesDBHelper();
+        helper= MainApplication.getInstance().getNodesDBHelper();
         nodesRepo= QueryNodesRepository.getInstance();
         nodesArray=nodesRepo.getNodesArray();
     }
@@ -65,7 +61,7 @@ public class MainViewModel extends AndroidViewModel {
     public void deleteNode(NodeInfo info){
         nodesRepo.startDelete(mDeleteSchedule,info._id);                        //删除数据库中的数据
         if (info.audioFilePath != null && !info.audioFilePath.equals("")) {     //如果该备忘录有录音文件，删除录音文件
-            new DeleteAudioThread(info.audioFilePath).run();
+            new DeleteAudioThread(info.audioFilePath).start();
         }
         if (!info.remind.equals(context.getString(R.string.notRemind))) {       //如果该备忘录有设置提醒时间
             CancellationNotifyUtil.deleteReminder(

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
@@ -18,8 +17,7 @@ import com.example.jotdown.repositories.UpDateNodeRepository;
 public class UpdateViewModel extends AndroidViewModel {
     private static final String TAG="UpdateViewModel";
 
-    private MainApplication myApp;
-    private Context context;
+    private final Context context;
     private NodesDBHelper helper;                       //数据库帮助器
     private static UpDateNodeRepository updateNodeRepo;
 
@@ -35,8 +33,7 @@ public class UpdateViewModel extends AndroidViewModel {
         if(updateNodeRepo!=null){
             return;
         }
-        myApp=MainApplication.getInstance();
-        helper= myApp.getNodesDBHelper();
+        helper= MainApplication.getInstance().getNodesDBHelper();
         updateNodeRepo=UpDateNodeRepository.getInstance();
     }
 

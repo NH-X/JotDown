@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,10 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jotdown.adapter.LinearDynamicAdapter;
 import com.example.jotdown.bean.NodeInfo;
 import com.example.jotdown.bean.QueryProcessType;
-import com.example.jotdown.bean.Resource;
-import com.example.jotdown.receiver.AlarmReceiver;
-import com.example.jotdown.task.DeleteAudioThread;
-import com.example.jotdown.utils.CancellationNotifyUtil;
 import com.example.jotdown.utils.DateUtil;
 import com.example.jotdown.utils.PermissionUtil;
 import com.example.jotdown.viewmodel.MainViewModel;
@@ -43,7 +38,6 @@ import com.example.jotdown.widget.RecyclerExtras.OnItemPlayListener;
 import com.example.jotdown.widget.SpacesItemDecoration;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +46,6 @@ public class MainActivity extends AppCompatActivity
         implements OnClickListener, OnItemClickListener ,OnItemLongClickListener ,OnItemPlayListener {
     private static final String TAG = "MainActivity";
     private CoordinatorLayout cl_main;
-    private RecyclerView rv_dynamic;
-    private Toolbar tl_head;
     private TextView tv_fuzzy_query;
     private MediaPlayer mediaPlayer;
 
@@ -76,36 +68,17 @@ public class MainActivity extends AppCompatActivity
         mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mMainViewModel.init();
         if (!mMainViewModel.getQueryAllSchedule().hasObservers()) {
-            mMainViewModel.getQueryAllSchedule().observe(MainActivity.this, new Observer<Resource<List<NodeInfo>>>() {
-                @Override
-                public void onChanged(Resource<List<NodeInfo>> listResource) {
-                    if (listResource.getType() == QueryProcessType.query_successful) {
-                        nodesArray = listResource.getData();
-                        adapter.dataSet(listResource.getData());
-                        adapter.notifyDataSetChanged();
-                        Toast.makeText(MainActivity.this, "目标总数：" + listResource.getData().size(), Toast.LENGTH_LONG).show();
-                        Log.d(TAG, "onChanged: getQueryAllSchedule().observer() is run");
-                    }
+            mMainViewModel.getQueryAllSchedule().observe(MainActivity.this, listResource -> {
+                if (listResource.getType() == QueryProcessType.query_successful) {
+                    nodesArray = listResource.getData();
+                    adapter.dataSet(listResource.getData());
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(MainActivity.this, "目标总数：" + listResource.getData().size(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "onChanged: getQueryAllSchedule().observer() is run");
                 }
             });
         }
     }
-
-//    private void hideStatusBarNavigationBar(){
-//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-//            Window window=getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//            window.setNavigationBarColor(Color.TRANSPARENT);
-//            return;
-//        }
-//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        }
-//    }
 
     @Override
     public void onClick(View view) {
@@ -118,7 +91,7 @@ public class MainActivity extends AppCompatActivity
     private void initFindView() {
         cl_main = findViewById(R.id.cl_main);
         findViewById(R.id.fab_btn).setOnClickListener(this);
-        tl_head = findViewById(R.id.tl_head);
+        Toolbar tl_head = findViewById(R.id.tl_head);
         tv_fuzzy_query = findViewById(R.id.tv_fuzzy_query);
 
         setSupportActionBar(tl_head);
@@ -127,7 +100,7 @@ public class MainActivity extends AppCompatActivity
     //初始化动态线性布局的循环视图
     private void initRecyclerDynamic() {
         //从布局文件中获取名叫rv_dynamic的循环视图
-        rv_dynamic = findViewById(R.id.rv_dynamic);
+        RecyclerView rv_dynamic = findViewById(R.id.rv_dynamic);
         //创建一个垂直方向的线性布局管理器
         LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         //设置循环视图的布局管理器
@@ -249,20 +222,18 @@ public class MainActivity extends AppCompatActivity
         dialog.setTitle("注意！");                                         //设置对话框标题文字
         dialog.setIcon(R.mipmap.ic_launcher);                           //设置对话框标题图标
         dialog.setMessage(String.format("是否删除“%s”这条备忘录？", nodesArray.get(position).title));
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {      //确定删除
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d(TAG, "onClick: nodesArray.size()=" + nodesArray.size());
-                NodeInfo info = nodesArray.get(position);       // 获取要删除的元素
+        //确定删除
+        dialog.setPositiveButton("确定", (dialogInterface, i) -> {
+            Log.d(TAG, "onClick: nodesArray.size()=" + nodesArray.size());
+            NodeInfo info = nodesArray.get(position);       // 获取要删除的元素
 
-                mMainViewModel.deleteNode(info);                // 删除备忘录
-                Log.d(TAG, "onClick: position is " + position);
-                nodesArray.remove(position);                    // 删除列表中对应的元素
-                adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
-                adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
+            mMainViewModel.deleteNode(info);                // 删除备忘录
+            Log.d(TAG, "onClick: position is " + position);
+            nodesArray.remove(position);                    // 删除列表中对应的元素
+            adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
+            adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
 
-                Snackbar.make(cl_main, "成功删除：" + info.title, Snackbar.LENGTH_LONG).show(); // 页面提醒用户
-            }
+            Snackbar.make(cl_main, "成功删除：" + info.title, Snackbar.LENGTH_LONG).show(); // 页面提醒用户
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {      //取消删除
             @Override
