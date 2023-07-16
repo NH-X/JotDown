@@ -29,30 +29,22 @@
             android:id="@+id/et_title"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="设置标签"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+            <Spinner
+                android:id="@+id/sp_importance"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="设置标签"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"/>
-
-                <Spinner
-                    android:id="@+id/sp_importance"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:spinnerMode="dropdown"/>
-
-            </LinearLayout>
+                android:spinnerMode="dialog"/>
         </LinearLayout>
         <EditText
             android:layout_width="match_parent"
@@ -65,22 +57,11 @@
             android:paddingEnd="8dp"
             android:hint="@string/edit_content"
             android:id="@+id/et_content"/>
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv_recording"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/recording_state"
-                    android:id="@+id/iv_recording"/>
-            </LinearLayout>
-        </LinearLayout>
+            android:src="@drawable/recording_state"/>
     </LinearLayout>
 </LinearLayout>

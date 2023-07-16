@@ -13,7 +13,7 @@ import com.example.jotdown.db.NodesDBHelper;
 
 import java.util.List;
 
-public class QueryTask extends AsyncTask<String,Void,Void> {
+public class QueryNodeTask extends AsyncTask<String,Void,Void> {
     private static final String TAG="QueryTask";
 
     private MainApplication myApp;
@@ -21,7 +21,7 @@ public class QueryTask extends AsyncTask<String,Void,Void> {
 
     private MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule;
 
-    public QueryTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule){
+    public QueryNodeTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule){
         this.myApp=MainApplication.getInstance();
         this.mRequestSchedule=requestSchedule;
         helper= myApp.getNodesDBHelper();

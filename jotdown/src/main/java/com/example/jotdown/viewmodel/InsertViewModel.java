@@ -13,7 +13,6 @@ import com.example.jotdown.repositories.InsertNodeRepository;
 public class InsertViewModel extends ViewModel {
     private static final String TAG="InsertViewModel";
 
-    private MainApplication myApp;
     private NodesDBHelper helper;                       //数据库帮助器
     private InsertNodeRepository insertNodeRepo;
 
@@ -23,8 +22,7 @@ public class InsertViewModel extends ViewModel {
         if(insertNodeRepo!=null){
             return;
         }
-        myApp=MainApplication.getInstance();
-        helper= myApp.getNodesDBHelper();
+        helper= MainApplication.getInstance().getNodesDBHelper();
         insertNodeRepo= InsertNodeRepository.getInstance();
     }
 

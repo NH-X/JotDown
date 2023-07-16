@@ -36,7 +36,6 @@ import com.example.jotdown.widget.RecyclerExtras.OnItemClickListener;
 import com.example.jotdown.widget.RecyclerExtras.OnItemLongClickListener;
 import com.example.jotdown.widget.RecyclerExtras.OnItemPlayListener;
 import com.example.jotdown.widget.SpacesItemDecoration;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity
             adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
             adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
 
-            Snackbar.make(cl_main, "成功删除：" + info.title, Snackbar.LENGTH_LONG).show(); // 页面提醒用户
+            Toast.makeText(this, "成功删除：" + info.title, Toast.LENGTH_LONG).show();       // 页面提醒用户
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {      //取消删除
             @Override

@@ -2,16 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <!--录音-->
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 录音 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!--重启时启动闹钟-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 重启时启动闹钟 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MainApplication"
@@ -20,9 +16,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".ModifyNodeActivity"
+        <activity
+            android:name=".LabelActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModifyNodeActivity"
             android:exported="false"
-            android:theme="@style/AppCompatTheme"/>
+            android:theme="@style/AppCompatTheme" />
         <activity
             android:name=".AddToNodeActivity"
             android:exported="false"
@@ -38,17 +38,20 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.ReminderService"/>
+        <service android:name=".service.ReminderService" />
 
-        <receiver android:name=".receiver.AlarmReceiver" android:exported="false">
-            <intent-filter>
-                <action android:name="com.example.jotdown.action.DISPLAY_NOTIFICATION"></action>
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receiver.SampleBootReceiver"
+        <receiver
+            android:name=".receiver.AlarmReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="com.example.jotdown.action.DISPLAY_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.SampleBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

@@ -6,8 +6,9 @@ import com.example.jotdown.bean.NodeInfo;
 import com.example.jotdown.bean.QueryProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.task.DeleteTask;
-import com.example.jotdown.task.QueryTask;
+import com.example.jotdown.task.QueryNodeTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryNodesRepository {
@@ -30,11 +31,11 @@ public class QueryNodesRepository {
 
     public void startQuery(MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule,String query){
         mRequestSchedule.setValue(new Resource<>(
-                null,
+                new ArrayList<>(),
                 QueryProcessType.query_executing,
                 "查询中"
         ));
-        new QueryTask(mRequestSchedule).execute(query);
+        new QueryNodeTask(mRequestSchedule).execute(query);
     }
 
     public void startDelete(MutableLiveData<Resource<Long>> mRequestSchedule,long rowId){
