@@ -1,6 +1,6 @@
 package com.example.jotdown.bean;
 
-public enum QueryProcessType {
+public enum ProcessType {
     query_executing,
     query_failing,
     query_successful,

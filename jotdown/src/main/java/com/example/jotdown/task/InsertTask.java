@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
@@ -38,13 +38,13 @@ public class InsertTask extends AsyncTask<NodeInfo,Void,Void> {
             node._id= result;
             mRequestSchedule.postValue(new Resource<>(
                     true,
-                    QueryProcessType.insert_successful,
+                    ProcessType.insert_successful,
                     "成功"
             ));
         } else {
             mRequestSchedule.postValue(new Resource<>(
                     false,
-                    QueryProcessType.insert_failing,
+                    ProcessType.insert_failing,
                     "失败"
             ));
         }

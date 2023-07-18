@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.task.QueryNodeThread;
 import com.example.jotdown.task.UpdateTask;
@@ -25,7 +25,7 @@ public class UpDateNodeRepository {
     public void startUpdate(MutableLiveData<Resource<Boolean>> mRequestSchedule, NodeInfo node){
         mRequestSchedule.setValue(new Resource<>(
                 false,
-                QueryProcessType.update_executing,
+                ProcessType.update_executing,
                 "更新中"
         ));
         new UpdateTask(mRequestSchedule).execute(node);
@@ -37,7 +37,7 @@ public class UpDateNodeRepository {
             long rowId){
         mRequestSchedule.setValue(new Resource<>(
                 new NodeInfo(context),
-                QueryProcessType.query_executing,
+                ProcessType.query_executing,
                 "查询中"
         ));
         new QueryNodeThread(rowId,mRequestSchedule).start();

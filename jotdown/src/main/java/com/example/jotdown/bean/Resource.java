@@ -2,10 +2,10 @@ package com.example.jotdown.bean;
 
 public class Resource<T> {
     private final T data;
-    private final QueryProcessType type;
+    private final ProcessType type;
     private final String message;
 
-    public Resource(T data,QueryProcessType type, String message) {
+    public Resource(T data, ProcessType type, String message) {
         this.data = data;
         this.type=type;
         this.message = message;
@@ -15,7 +15,7 @@ public class Resource<T> {
         return data;
     }
 
-    public QueryProcessType getType(){
+    public ProcessType getType(){
         return type;
     }
 

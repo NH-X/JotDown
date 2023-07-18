@@ -3,7 +3,7 @@ package com.example.jotdown.repositories;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.task.InsertTask;
 
@@ -22,7 +22,7 @@ public class InsertNodeRepository {
     public void startInsert(MutableLiveData<Resource<Boolean>> mRequestSchedule, NodeInfo node){
         mRequestSchedule.setValue(new Resource<>(
                 false,
-                QueryProcessType.insert_executing,
+                ProcessType.insert_executing,
                 "插入中"
         ));
         new InsertTask(mRequestSchedule).execute(node);

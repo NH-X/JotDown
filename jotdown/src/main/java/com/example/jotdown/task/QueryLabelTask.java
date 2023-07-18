@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.LabelBean;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.LabelDBHelper;
 
@@ -40,13 +40,13 @@ public class QueryLabelTask extends AsyncTask<String,Void,Void> {
             if (labelsArray == null) {
                 mRequestSchedule.postValue(new Resource<>(
                         labelsArray,
-                        QueryProcessType.query_failing,
+                        ProcessType.query_failing,
                         "查询失败"
                 ));
             } else {
                 mRequestSchedule.postValue(new Resource<>(
                         labelsArray,
-                        QueryProcessType.query_successful,
+                        ProcessType.query_successful,
                         "数据库数据条数：" + labelsArray.size()
                 ));
                 Log.d(TAG, "doInBackground: first is run");
@@ -57,20 +57,20 @@ public class QueryLabelTask extends AsyncTask<String,Void,Void> {
             if (labelsArray == null) {
                 mRequestSchedule.postValue(new Resource<>(
                         new ArrayList<>(),
-                        QueryProcessType.delete_failing,
+                        ProcessType.delete_failing,
                         "查询失败"
                 ));
             } else {
                 if (labelsArray.size() <= 0) {
                     mRequestSchedule.postValue(new Resource<>(
                             labelsArray,
-                            QueryProcessType.query_successful,
+                            ProcessType.query_successful,
                             String.format("没有\"%s\"的搜索结果。\n请尝试检查您的拼写或使用关键词进行搜索", query)
                     ));
                 } else {
                     mRequestSchedule.postValue(new Resource<>(
                             labelsArray,
-                            QueryProcessType.query_successful,
+                            ProcessType.query_successful,
                             "数据库数据条数：" + labelsArray.size()
                     ));
                     Log.d(TAG, "doInBackground: second is run");

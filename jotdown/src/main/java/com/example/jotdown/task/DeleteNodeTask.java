@@ -6,11 +6,11 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.MainApplication;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
-public class DeleteTask extends AsyncTask<Long,Void,Void> {
+public class DeleteNodeTask extends AsyncTask<Long,Void,Void> {
     private static final String TAG="DeleteTask";
 
     private final MainApplication myApp;
@@ -18,7 +18,7 @@ public class DeleteTask extends AsyncTask<Long,Void,Void> {
 
     private MutableLiveData<Resource<Long>> mRequestSchedule;
 
-    public DeleteTask(MutableLiveData<Resource<Long>> requestSchedule){
+    public DeleteNodeTask(MutableLiveData<Resource<Long>> requestSchedule){
         this.myApp=MainApplication.getInstance();
         this.mRequestSchedule=requestSchedule;
         helper= myApp.getNodesDBHelper();
@@ -36,14 +36,14 @@ public class DeleteTask extends AsyncTask<Long,Void,Void> {
         if(helper.deleteById(_id)!=-1) {
             mRequestSchedule.postValue(new Resource<>(
                     _id,
-                    QueryProcessType.delete_successful,
+                    ProcessType.delete_successful,
                     "成功"
             ));
         }
         else {
             mRequestSchedule.postValue(new Resource<>(
                     -1l,
-                    QueryProcessType.delete_failing,
+                    ProcessType.delete_failing,
                     "失败"
             ));
         }

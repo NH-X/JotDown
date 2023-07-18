@@ -3,9 +3,9 @@ package com.example.jotdown.repositories;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
-import com.example.jotdown.task.DeleteTask;
+import com.example.jotdown.task.DeleteNodeTask;
 import com.example.jotdown.task.QueryNodeTask;
 
 import java.util.ArrayList;
@@ -29,21 +29,21 @@ public class QueryNodesRepository {
         return nodesArray;
     }
 
-    public void startQuery(MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule,String query){
-        mRequestSchedule.setValue(new Resource<>(
+    public void startQuery(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule, String query){
+        requestSchedule.setValue(new Resource<>(
                 new ArrayList<>(),
-                QueryProcessType.query_executing,
+                ProcessType.query_executing,
                 "查询中"
         ));
-        new QueryNodeTask(mRequestSchedule).execute(query);
+        new QueryNodeTask(requestSchedule).execute(query);
     }
 
-    public void startDelete(MutableLiveData<Resource<Long>> mRequestSchedule,long rowId){
-        mRequestSchedule.setValue(new Resource<>(
+    public void startDelete(MutableLiveData<Resource<Long>> requestSchedule, long rowId){
+        requestSchedule.setValue(new Resource<>(
                 -1L,
-                QueryProcessType.delete_executing,
+                ProcessType.delete_executing,
                 "删除中"
         ));
-        new DeleteTask(mRequestSchedule).execute(rowId);
+        new DeleteNodeTask(requestSchedule).execute(rowId);
     }
 }

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
@@ -35,13 +35,13 @@ public class UpdateTask extends AsyncTask<NodeInfo,Void,Void> {
         if (helper.update(node) != -1) {
             mRequestSchedule.postValue(new Resource<>(
                     true,
-                    QueryProcessType.update_successful,
+                    ProcessType.update_successful,
                     "成功"
             ));
         } else {
             mRequestSchedule.postValue(new Resource<>(
                     false,
-                    QueryProcessType.update_failing,
+                    ProcessType.update_failing,
                     "失败"
             ));
         }

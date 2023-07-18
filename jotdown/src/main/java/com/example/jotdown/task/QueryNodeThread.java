@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
@@ -40,7 +40,7 @@ public class QueryNodeThread extends Thread {
             Log.d(TAG, "run: 查询失败");
             mRequestSchedule.postValue(new Resource<>(
                     info,
-                    QueryProcessType.query_failing,
+                    ProcessType.query_failing,
                     "查询失败"
             ));
         }
@@ -48,7 +48,7 @@ public class QueryNodeThread extends Thread {
             Log.d(TAG, "run: 查询成功");
             mRequestSchedule.postValue(new Resource<>(
                     info,
-                    QueryProcessType.query_successful,
+                    ProcessType.query_successful,
                     "1"
             ));
         }

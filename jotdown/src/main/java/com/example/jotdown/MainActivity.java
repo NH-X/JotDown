@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jotdown.adapter.LinearDynamicAdapter;
 import com.example.jotdown.bean.NodeInfo;
-import com.example.jotdown.bean.QueryProcessType;
+import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.utils.DateUtil;
 import com.example.jotdown.utils.PermissionUtil;
 import com.example.jotdown.viewmodel.MainViewModel;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         mMainViewModel.init();
         if (!mMainViewModel.getQueryAllSchedule().hasObservers()) {
             mMainViewModel.getQueryAllSchedule().observe(MainActivity.this, listResource -> {
-                if (listResource.getType() == QueryProcessType.query_successful) {
+                if (listResource.getType() == ProcessType.query_successful) {
                     nodesArray = listResource.getData();
                     adapter.dataSet(listResource.getData());
                     adapter.notifyDataSetChanged();
