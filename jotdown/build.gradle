@@ -48,4 +48,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+    // RxJava
+    def rxJava_version = "3.1.6"
+
+    implementation "io.reactivex.rxjava3:rxjava:$rxJava_version"
+
+    // RxAndroid
+
+    def rxAndroid_version = "3.0.2"
+
+    implementation "io.reactivex.rxjava3:rxandroid:$rxAndroid_version"
 }
