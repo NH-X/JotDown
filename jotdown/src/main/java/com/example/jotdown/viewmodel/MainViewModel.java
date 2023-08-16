@@ -22,44 +22,39 @@ import com.example.jotdown.utils.CancellationNotifyUtil;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
-    private static final String TAG="MainViewModel";
+    private static final String TAG = "MainViewModel";
 
     private final Context context;
     private NodesDBHelper helper;               //数据库帮助器
     private QueryNodesRepository nodesRepo;
-    private MutableLiveData<List<NodeInfo>> nodesArray;
 
-    private MutableLiveData<Resource<List<NodeInfo>>> mQueryAllSchedule=new MutableLiveData<>();
-    private MutableLiveData<Resource<Long>> mDeleteSchedule =new MutableLiveData<>();
+    private MutableLiveData<Resource<List<NodeInfo>>> mNodeList = new MutableLiveData<>();
+    private MutableLiveData<Resource<Long>> mDeleteSchedule = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        context=application;
+        context = application;
     }
 
-    public void init(){
-        if(nodesRepo!=null){
+    public void init() {
+        if (nodesRepo != null) {
             return;
         }
-        helper= MainApplication.getInstance().getNodesDBHelper();
-        nodesRepo= QueryNodesRepository.getInstance();
-        nodesArray=nodesRepo.getNodesArray();
-    }
-    
-    public LiveData<List<NodeInfo>> getNodesArray(){
-        return nodesArray;
+        helper = MainApplication.getInstance().getNodesDBHelper();
+        nodesRepo = QueryNodesRepository.getInstance();
+        mNodeList = nodesRepo.getNodesArray();
     }
 
-    public LiveData<Resource<Long>> getDeleteSchedule(){
+    public LiveData<Resource<Long>> getDeleteSchedule() {
         return mDeleteSchedule;
     }
 
-    public LiveData<Resource<List<NodeInfo>>> getQueryAllSchedule(){
-        return mQueryAllSchedule;
+    public LiveData<Resource<List<NodeInfo>>> getNodeList() {
+        return mNodeList;
     }
 
-    public void deleteNode(NodeInfo info){
-        nodesRepo.startDelete(mDeleteSchedule,info._id);                        //删除数据库中的数据
+    public void deleteNode(NodeInfo info) {
+        nodesRepo.startDelete(mDeleteSchedule, info._id);                        //删除数据库中的数据
         if (info.audioFilePath != null && !info.audioFilePath.equals("")) {     //如果该备忘录有录音文件，删除录音文件
             new DeleteAudioThread(info.audioFilePath).start();
         }
@@ -73,20 +68,24 @@ public class MainViewModel extends AndroidViewModel {
         }
     }
 
-    public void queryNodes(String query){
-        nodesRepo.startQuery(mQueryAllSchedule,query);
+    public void queryNodes(String query) {
+        nodesRepo.startQuery(mNodeList, query);
     }
 
-    public void onResume(){
-        nodesRepo.startQuery(mQueryAllSchedule,"");
-    }
-
-    public void onStop(){
+    public void onCreate(){
 
     }
 
-    public void onDestroy(){
-        if(helper!=null){
+    public void onResume() {
+        nodesRepo.startQuery(mNodeList, null);
+    }
+
+    public void onStop() {
+
+    }
+
+    public void onDestroy() {
+        if (helper != null) {
             helper.close();                         //关闭数据库
         }
     }

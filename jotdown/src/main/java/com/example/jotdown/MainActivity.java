@@ -66,14 +66,14 @@ public class MainActivity extends AppCompatActivity
         initFindView();
         mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mMainViewModel.init();
-        if (!mMainViewModel.getQueryAllSchedule().hasObservers()) {
-            mMainViewModel.getQueryAllSchedule().observe(MainActivity.this, listResource -> {
+        if (!mMainViewModel.getNodeList().hasObservers()) {
+            mMainViewModel.getNodeList().observe(MainActivity.this, listResource -> {
                 if (listResource.getType() == ProcessType.query_successful) {
                     nodesArray = listResource.getData();
                     adapter.dataSet(listResource.getData());
                     adapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "目标总数：" + listResource.getData().size(), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "onChanged: getQueryAllSchedule().observer() is run");
+                    Log.d(TAG, "onChanged: getNodeList().observer() is run");
                 }
             });
         }
