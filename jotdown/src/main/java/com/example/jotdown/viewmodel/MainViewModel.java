@@ -28,7 +28,7 @@ public class MainViewModel extends AndroidViewModel {
     private NodesDBHelper helper;               //数据库帮助器
     private QueryNodesRepository nodesRepo;
 
-    private MutableLiveData<Resource<List<NodeInfo>>> mNodeList = new MutableLiveData<>();
+    private MutableLiveData<Resource<List<NodeInfo>>> mNodeList =new MutableLiveData<>();
     private MutableLiveData<Resource<Long>> mDeleteSchedule = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
@@ -49,7 +49,7 @@ public class MainViewModel extends AndroidViewModel {
         return mDeleteSchedule;
     }
 
-    public LiveData<Resource<List<NodeInfo>>> getNodeList() {
+    public LiveData<Resource<List<NodeInfo>>> getNodeList(){
         return mNodeList;
     }
 
