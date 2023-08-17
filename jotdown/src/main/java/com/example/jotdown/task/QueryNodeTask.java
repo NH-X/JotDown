@@ -19,7 +19,7 @@ public class QueryNodeTask extends AsyncTask<String,Void,Void> {
 
     private final NodesDBHelper helper;                       //数据库帮助器
 
-    private MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule;
+    private final MutableLiveData<Resource<List<NodeInfo>>> mRequestSchedule;
 
     public QueryNodeTask(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule) {
         this.mRequestSchedule = requestSchedule;
@@ -36,6 +36,7 @@ public class QueryNodeTask extends AsyncTask<String,Void,Void> {
             helper.getReadDB();
         }
         if (query == null || query.equals("")) {
+            Log.d(TAG, "doInBackground: queryAll");
             nodesArray = helper.queryInfoAll();
             if (nodesArray == null) {
                 mRequestSchedule.postValue(new Resource<>(
@@ -52,6 +53,7 @@ public class QueryNodeTask extends AsyncTask<String,Void,Void> {
                 Log.d(TAG, "doInBackground: first is run");
             }
         } else {
+            Log.d(TAG, "doInBackground: queryLike");
             nodesArray = helper.queryLikeInfo(query);
             Log.d(TAG, "doInBackground: nodesArray is null? " + (nodesArray == null));
             if (nodesArray == null) {

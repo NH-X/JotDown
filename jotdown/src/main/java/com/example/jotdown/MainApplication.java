@@ -90,7 +90,6 @@ public class MainApplication extends Application {
     }
 
     public static MainApplication getInstance() {
-        Log.d(TAG, "getInstance: myApp is null?" + (null == myApp));
         return myApp;
     }
 

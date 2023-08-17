@@ -70,6 +70,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public void queryNodes(String query) {
         nodesRepo.startQuery(mNodeList, query);
+        // nodesRepo.tmp(query);
     }
 
     public void onCreate(){
@@ -78,6 +79,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public void onResume() {
         nodesRepo.startQuery(mNodeList, null);
+        // nodesRepo.tmp(null);
     }
 
     public void onStop() {
