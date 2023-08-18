@@ -49,6 +49,8 @@ public class QueryNodesRepository {
         return nodesArray;
     }
 
+    // 此方法已弃用
+    @Deprecated
     public void startQuery(MutableLiveData<Resource<List<NodeInfo>>> requestSchedule, String query){
         requestSchedule.setValue(new Resource<>(
                 new ArrayList<>(),
@@ -58,43 +60,42 @@ public class QueryNodesRepository {
         new QueryNodeTask(requestSchedule).execute(query);
     }
 
-    public void tmp(String query){
+    public void startQuery(String query){
         Log.d(TAG, "tmp: run");
         if (!mNodesDBHelper.readIsOpen()){
             mNodesDBHelper.getReadDB();
         }
-        Single<Resource<List<NodeInfo>>> single = Single.create(new SingleOnSubscribe<Resource<List<NodeInfo>>>() {
-            @Override
-            public void subscribe(@NonNull SingleEmitter<Resource<List<NodeInfo>>> emitter) throws Throwable {
-                if(query == null || query.equals("")){
-                    // 这里执行异步操作，比如查询数据库或者从网络获取数据
-                    try {
-                        List<NodeInfo> data = mNodesDBHelper.queryInfoAll(); // 假设这是查询数据库的操作
-                        Log.d(TAG, "subscribe: query data row is "+data.size());
-                        Resource<List<NodeInfo>> resource = new Resource<>(
-                                data,
-                                ProcessType.delete_successful,
-                                "查询成功"
-                        );
-                        emitter.onSuccess(resource); // 发射成功的数据
-                    } catch (Exception e) {
-                        emitter.onError(e); // 发射错误
-                    }
+        Single<Resource<List<NodeInfo>>> single = Single.create(emitter -> {
+            if(query == null || query.equals("")){
+                Log.d(TAG, "tmp: query all");
+                // 这里执行异步操作，比如查询数据库或者从网络获取数据
+                try {
+                    List<NodeInfo> data = mNodesDBHelper.queryInfoAll(); // 假设这是查询数据库的操作
+                    Log.d(TAG, "subscribe: query data row is "+data.size());
+                    Resource<List<NodeInfo>> resource = new Resource<>(
+                            data,
+                            ProcessType.query_successful,
+                            "查询成功"
+                    );
+                    emitter.onSuccess(resource); // 发射成功的数据
+                } catch (Exception e) {
+                    emitter.onError(e); // 发射错误
                 }
-                else {
-                    // 这里执行异步操作，比如查询数据库或者从网络获取数据
-                    try {
-                        List<NodeInfo> data = mNodesDBHelper.queryLikeInfo(query); // 假设这是查询数据库的操作
-                        Log.d(TAG, "subscribe: query data row is "+data.size());
-                        Resource<List<NodeInfo>> resource = new Resource<>(
-                                data,
-                                ProcessType.delete_successful,
-                                "查询成功"
-                        );
-                        emitter.onSuccess(resource); // 发射成功的数据
-                    } catch (Exception e) {
-                        emitter.onError(e); // 发射错误
-                    }
+            }
+            else {
+                Log.d(TAG, "tmp: query title like is "+query);
+                // 这里执行异步操作，比如查询数据库或者从网络获取数据
+                try {
+                    List<NodeInfo> data = mNodesDBHelper.queryLikeInfo(query); // 假设这是查询数据库的操作
+                    Log.d(TAG, "subscribe: query data row is "+data.size());
+                    Resource<List<NodeInfo>> resource = new Resource<>(
+                            data,
+                            ProcessType.query_successful,
+                            "查询成功"
+                    );
+                    emitter.onSuccess(resource); // 发射成功的数据
+                } catch (Exception e) {
+                    emitter.onError(e); // 发射错误
                 }
             }
         });

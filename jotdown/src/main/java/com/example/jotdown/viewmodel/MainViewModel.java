@@ -50,6 +50,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<Resource<List<NodeInfo>>> getNodeList(){
+        Log.d(TAG, "getNodeList: run");
         return mNodeList;
     }
 
@@ -69,8 +70,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void queryNodes(String query) {
-        nodesRepo.startQuery(mNodeList, query);
-        // nodesRepo.tmp(query);
+        nodesRepo.startQuery(query);
     }
 
     public void onCreate(){
@@ -78,8 +78,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void onResume() {
-        nodesRepo.startQuery(mNodeList, null);
-        // nodesRepo.tmp(null);
+        nodesRepo.startQuery(null);
     }
 
     public void onStop() {

@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
         mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mMainViewModel.init();
         if (!mMainViewModel.getNodeList().hasObservers()) {
+            Log.d(TAG, "onCreate: node list not have observer");
             mMainViewModel.getNodeList().observe(MainActivity.this, listResource -> {
                 if (listResource.getType() == ProcessType.query_successful) {
                     nodesArray = listResource.getData();
