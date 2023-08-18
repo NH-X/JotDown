@@ -12,6 +12,8 @@ import com.example.jotdown.db.LabelDBHelper;
 
 import java.util.List;
 
+// 该类已弃用，更好的替代方式是使用RxJava and RxAndroid
+@Deprecated
 public class DeleteLabelTask extends AsyncTask<List<Long>,Void,Void> {
     public static final String TAG="DeleteLabelTask";
 
@@ -33,16 +35,25 @@ public class DeleteLabelTask extends AsyncTask<List<Long>,Void,Void> {
             helper.getWriteDB();
         }
         long deleteCount=0;
-        for (long _id:rowsId) {
-            if(helper.deleteById(_id)!=-1){
-                deleteCount++;
+        try{
+            for (long _id:rowsId) {
+                if(helper.deleteById(_id)!=-1){
+                    deleteCount++;
+                }
             }
+            mRequestSchedule.postValue(new Resource<>(
+                    deleteCount,
+                    ProcessType.delete_successful,
+                    "成功"
+            ));
+
+        } catch (Exception e) {
+            mRequestSchedule.postValue(new Resource<>(
+                    -1L,
+                    ProcessType.delete_failing,
+                    e.getMessage()
+            ));
         }
-        mRequestSchedule.postValue(new Resource<>(
-                deleteCount,
-                ProcessType.delete_successful,
-                "成功"
-        ));
         return null;
     }
 }

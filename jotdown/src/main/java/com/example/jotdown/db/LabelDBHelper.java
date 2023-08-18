@@ -119,7 +119,7 @@ public class LabelDBHelper extends DBHelper {
     }
 
     @Override
-    public long deleteById(long rowId){
+    public long deleteById(long rowId) throws Exception {
         return super.deleteById(rowId);
     }
 

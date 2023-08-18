@@ -20,7 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,7 +43,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements OnClickListener, OnItemClickListener ,OnItemLongClickListener ,OnItemPlayListener {
     private static final String TAG = "MainActivity";
-    private CoordinatorLayout cl_main;
     private TextView tv_fuzzy_query;
     private MediaPlayer mediaPlayer;
 
@@ -59,7 +57,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //hideStatusBarNavigationBar();
         setContentView(R.layout.activity_main);
 
         checkPermissions();                 //检查权限
@@ -78,6 +75,23 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+        if (!mMainViewModel.getDeleteSchedule().hasObservers()) {
+            mMainViewModel.getDeleteSchedule().observe(MainActivity.this, longResource -> {
+                if (longResource.getType() == ProcessType.delete_successful) {
+                    nodesArray.remove(removePosition);                    // 删除列表中对应的元素
+                    adapter.notifyItemRemoved(removePosition); // 通知适配器列表在第几项删除数据
+                    adapter.notifyItemRangeChanged(removePosition, nodesArray.size() - removePosition); // 更新列表
+
+                    Toast.makeText(this, "删除成功", Toast.LENGTH_LONG).show();       // 页面提醒用户
+                } else {
+                    Toast.makeText(
+                            this,
+                            longResource.getMessage(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -89,7 +103,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initFindView() {
-        cl_main = findViewById(R.id.cl_main);
         findViewById(R.id.fab_btn).setOnClickListener(this);
         Toolbar tl_head = findViewById(R.id.tl_head);
         tv_fuzzy_query = findViewById(R.id.tv_fuzzy_query);
@@ -227,13 +240,9 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onClick: nodesArray.size()=" + nodesArray.size());
             NodeInfo info = nodesArray.get(position);       // 获取要删除的元素
 
+            removePosition = position;
             mMainViewModel.deleteNode(info);                // 删除备忘录
             Log.d(TAG, "onClick: position is " + position);
-            nodesArray.remove(position);                    // 删除列表中对应的元素
-            adapter.notifyItemRemoved(position); // 通知适配器列表在第几项删除数据
-            adapter.notifyItemRangeChanged(position, nodesArray.size() - position); // 更新列表
-
-            Toast.makeText(this, "成功删除：" + info.title, Toast.LENGTH_LONG).show();       // 页面提醒用户
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {      //取消删除
             @Override
@@ -244,7 +253,9 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
-    private static boolean playerStopFlag = true;
+    private int removePosition;
+
+    private boolean playerStopFlag = true;
 
     @Override
     public void onItemPlayerClick(String audioFilePath) {

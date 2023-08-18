@@ -14,6 +14,8 @@ import com.example.jotdown.db.LabelDBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+// 该类已弃用，更好的替代方式是使用RxJava and RxAndroid
+@Deprecated
 public class QueryLabelTask extends AsyncTask<String,Void,Void> {
     public static final String TAG = "QueryLabelTask";
 

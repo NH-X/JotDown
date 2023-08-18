@@ -25,11 +25,10 @@ public class MainViewModel extends AndroidViewModel {
     private static final String TAG = "MainViewModel";
 
     private final Context context;
-    private NodesDBHelper helper;               //数据库帮助器
     private QueryNodesRepository nodesRepo;
 
-    private MutableLiveData<Resource<List<NodeInfo>>> mNodeList =new MutableLiveData<>();
-    private MutableLiveData<Resource<Long>> mDeleteSchedule = new MutableLiveData<>();
+    private MutableLiveData<Resource<List<NodeInfo>>> mNodeList;
+    private MutableLiveData<Resource<Long>> mDeleteSchedule;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -40,26 +39,26 @@ public class MainViewModel extends AndroidViewModel {
         if (nodesRepo != null) {
             return;
         }
-        helper = MainApplication.getInstance().getNodesDBHelper();
         nodesRepo = QueryNodesRepository.getInstance();
         mNodeList = nodesRepo.getNodesArray();
+        mDeleteSchedule = nodesRepo.getDeleteNode();
     }
 
     public LiveData<Resource<Long>> getDeleteSchedule() {
         return mDeleteSchedule;
     }
 
-    public LiveData<Resource<List<NodeInfo>>> getNodeList(){
+    public LiveData<Resource<List<NodeInfo>>> getNodeList() {
         Log.d(TAG, "getNodeList: run");
         return mNodeList;
     }
 
     public void deleteNode(NodeInfo info) {
-        nodesRepo.startDelete(mDeleteSchedule, info._id);                        //删除数据库中的数据
+        nodesRepo.startDelete(info._id);                                        //删除数据库中的数据
         if (info.audioFilePath != null && !info.audioFilePath.equals("")) {     //如果该备忘录有录音文件，删除录音文件
             new DeleteAudioThread(info.audioFilePath).start();
         }
-        if (!info.remind.equals(context.getString(R.string.notRemind))) {       //如果该备忘录有设置提醒时间
+        if (!info.remind.equals(context.getString(R.string.notRemind))) {                                   //如果该备忘录有设置提醒时间
             CancellationNotifyUtil.deleteReminder(
                     context,
                     AlarmReceiver.class,
@@ -73,21 +72,19 @@ public class MainViewModel extends AndroidViewModel {
         nodesRepo.startQuery(query);
     }
 
-    public void onCreate(){
-
+    public void onCreate() {
+        nodesRepo.onCreate();
     }
 
     public void onResume() {
-        nodesRepo.startQuery(null);
+        nodesRepo.onResume();
     }
 
     public void onStop() {
-
+        nodesRepo.onStop();
     }
 
     public void onDestroy() {
-        if (helper != null) {
-            helper.close();                         //关闭数据库
-        }
+        nodesRepo.onDestroy();
     }
 }

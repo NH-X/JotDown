@@ -11,6 +11,8 @@ import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
+// 该类已弃用，更好的替代方式是使用RxJava and RxAndroid
+@Deprecated
 public class InsertTask extends AsyncTask<NodeInfo,Void,Void> {
     private static final String TAG="InsertTask";
 

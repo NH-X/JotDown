@@ -10,6 +10,8 @@ import com.example.jotdown.bean.ProcessType;
 import com.example.jotdown.bean.Resource;
 import com.example.jotdown.db.NodesDBHelper;
 
+// 该类已弃用，更好的替代方式是使用RxJava and RxAndroid
+@Deprecated
 public class DeleteNodeTask extends AsyncTask<Long,Void,Void> {
     private static final String TAG="DeleteTask";
 
@@ -33,20 +35,21 @@ public class DeleteNodeTask extends AsyncTask<Long,Void,Void> {
             helper.getWriteDB();
         }
 
-        if(helper.deleteById(_id)!=-1) {
+        try{
+            helper.deleteById(_id);
             mRequestSchedule.postValue(new Resource<>(
                     _id,
                     ProcessType.delete_successful,
                     "成功"
             ));
-        }
-        else {
+        } catch (Exception e) {
             mRequestSchedule.postValue(new Resource<>(
                     -1l,
                     ProcessType.delete_failing,
                     "失败"
             ));
         }
+
         return null;
     }
 }

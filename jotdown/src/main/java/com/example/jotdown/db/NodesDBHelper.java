@@ -8,7 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.jotdown.MainApplication;
 import com.example.jotdown.bean.NodeInfo;
 
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class NodesDBHelper extends DBHelper{
     }
 
     @Override
-    public long deleteById(long rowId) {
+    public long deleteById(long rowId) throws Exception {
         return super.deleteById(rowId);
     }
 

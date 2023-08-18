@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.jotdown.MainApplication;
 import com.example.jotdown.db.LabelDBHelper;
 
-public class LabelActivity extends ViewModel {
-    private final static String TAG="LabelActivity";
+public class LabelViewModel extends ViewModel {
+    private final static String TAG="LabelViewModel";
 
     private LabelDBHelper helper;                           //数据库帮助器
 
