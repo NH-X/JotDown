@@ -19,22 +19,23 @@ public class UpdateViewModel extends AndroidViewModel {
 
     private final Context context;
     private NodesDBHelper helper;                       //数据库帮助器
-    private static UpDateNodeRepository updateNodeRepo;
+    private UpDateNodeRepository updateNodeRepo;
 
-    private MutableLiveData<Resource<Boolean>> mUpdateSchedule =new MutableLiveData<>();
-    private MutableLiveData<Resource<NodeInfo>> mQuerySchedule = new MutableLiveData<>();
+    private MutableLiveData<Resource<Boolean>> mUpdateSchedule;
+    private MutableLiveData<Resource<NodeInfo>> mQuerySchedule;
 
     public UpdateViewModel(@NonNull Application application) {
         super(application);
         context=application;
     }
 
-    public void init(){
-        if(updateNodeRepo!=null){
-            return;
+    public void init() {
+        if (updateNodeRepo == null) {
+            helper = MainApplication.getInstance().getNodesDBHelper();
+            updateNodeRepo = UpDateNodeRepository.getInstance();
+            mUpdateSchedule = updateNodeRepo.getUpdateSchedule();
+            mQuerySchedule = updateNodeRepo.getQuerySchedule();
         }
-        helper= MainApplication.getInstance().getNodesDBHelper();
-        updateNodeRepo=UpDateNodeRepository.getInstance();
     }
 
     public LiveData<Resource<Boolean>> getUpdateSchedule(){
@@ -46,11 +47,11 @@ public class UpdateViewModel extends AndroidViewModel {
     }
 
     public void updateNode(NodeInfo node){
-        updateNodeRepo.startUpdate(mUpdateSchedule,node);
+        updateNodeRepo.startUpdate(node);
     }
 
     public void queryNode(long rowId){
-        updateNodeRepo.startQuery(context,mQuerySchedule,rowId);
+        updateNodeRepo.startQuery(context,rowId);
     }
 
     public void onResume() {

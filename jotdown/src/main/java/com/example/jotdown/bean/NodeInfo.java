@@ -27,7 +27,7 @@ public class NodeInfo {
         content = null;
         contentSize = 20;
         importance = "其他";
-        labelColor = context.getColor(R.color.grey);
+        labelColor = 0xD1D1D1;
         remind = context.getString(R.string.notRemind);
         requestCode = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
         audioFilePath = "";

@@ -91,31 +91,42 @@ public class NodesDBHelper extends DBHelper{
     @Override
     public long add(Object node) {
         NodeInfo info=(NodeInfo) node;
-        long result;
 
-        if(info._id>-1){
-            result= info._id;
-            update(info);
-        }
-        else {
-            ContentValues cv = new ContentValues();
-            cv.put("title", info.title);
-            cv.put("titleSize", info.titleSize);
-            cv.put("content", info.content);
-            cv.put("contentSize", info.contentSize);
-            cv.put("importance", info.importance);
-            cv.put("labelColor", info.labelColor);
-            cv.put("remind", info.remind);
-            cv.put("requestCode",info.requestCode);
-            cv.put("audioFilePath",info.audioFilePath);
-            result=writeDB.insert(tableName,"",cv);
-            Log.d(TAG, "add: result="+result);
-        }
+//        ContentValues cv = new ContentValues();
+//        cv.put("title", info.title);
+//        cv.put("titleSize", info.titleSize);
+//        cv.put("content", info.content);
+//        cv.put("contentSize", info.contentSize);
+//        cv.put("importance", info.importance);
+//        cv.put("labelColor", info.labelColor);
+//        cv.put("remind", info.remind);
+//        cv.put("requestCode", info.requestCode);
+//        cv.put("audioFilePath", info.audioFilePath);
+//        long result = writeDB.insert(tableName, "", cv);
+//        Log.d(TAG, "add: result=" + result);
+//
+//        if (result == -1) {
+//            throw new Exception("保存失败");
+//        }
+
+        ContentValues cv = new ContentValues();
+        cv.put("title", info.title);
+        cv.put("titleSize", info.titleSize);
+        cv.put("content", info.content);
+        cv.put("contentSize", info.contentSize);
+        cv.put("importance", info.importance);
+        cv.put("labelColor", info.labelColor);
+        cv.put("remind", info.remind);
+        cv.put("requestCode",info.requestCode);
+        cv.put("audioFilePath",info.audioFilePath);
+        long result=writeDB.insert(tableName,"",cv);
+        Log.d(TAG, "add: result="+result);
+
         return result;
     }
 
     @Override
-    public long update(Object obj) {
+    public void update(Object obj) throws Exception {
         NodeInfo info=(NodeInfo) obj;
         ContentValues values=new ContentValues();
         values.put("title",info.title);
@@ -132,9 +143,13 @@ public class NodesDBHelper extends DBHelper{
             String whereClause = "_id = ?";
             String[] whereArgs = { String.valueOf(info._id) };
 
-            return writeDB.update(tableName, values, whereClause, whereArgs);
+            int rowsUpdated = writeDB.update(tableName, values, whereClause, whereArgs);
+            if (rowsUpdated == 0) {
+                throw new Exception("更新失败"); // 使用 throw 抛出异常
+            }
+        } else {
+            throw new IllegalArgumentException("无效的参数"); // 或者抛出其他适当的异常
         }
-        return -1;
     }
 
     @Override

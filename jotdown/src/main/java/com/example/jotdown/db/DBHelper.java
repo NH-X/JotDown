@@ -48,7 +48,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[] { String.valueOf(rowId) };
         int deletedRows = writeDB.delete(tableName, whereClause, whereArgs);
         if (deletedRows == -1){
-            new Exception("删除失败");
+            throw new Exception("删除失败");
         }
         return deletedRows;
     }
@@ -80,7 +80,7 @@ public abstract class DBHelper extends SQLiteOpenHelper {
     protected abstract long add(Object obj);
 
     //修改一行数据
-    protected abstract long update(Object obj);
+    protected abstract void update(Object obj) throws Exception;
 
     //判断写数据库是否打开
     public boolean writeIsOpen(){

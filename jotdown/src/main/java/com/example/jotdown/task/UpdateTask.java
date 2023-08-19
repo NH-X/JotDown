@@ -34,17 +34,18 @@ public class UpdateTask extends AsyncTask<NodeInfo,Void,Void> {
             Log.d(TAG, "doInBackground: writeDB is close");
             helper.getWriteDB();
         }
-        if (helper.update(node) != -1) {
+        try{
+            helper.update(node);
             mRequestSchedule.postValue(new Resource<>(
                     true,
                     ProcessType.update_successful,
                     "成功"
             ));
-        } else {
+        } catch (Exception e) {
             mRequestSchedule.postValue(new Resource<>(
                     false,
                     ProcessType.update_failing,
-                    "失败"
+                    e.getMessage()
             ));
         }
         return null;

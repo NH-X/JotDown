@@ -86,36 +86,43 @@ public class LabelDBHelper extends DBHelper {
     @Override
     protected long add(Object obj) {
         LabelBean info= (LabelBean) obj;
-        long result;
 
-        if(info._id>-1){
-            result = info._id;
-            update(info);
-        }
-        else {
-            ContentValues cv=new ContentValues();
-            cv.put("_id",info._id);
-            cv.put("importance",info.importance);
-            result=writeDB.insert(tableName,"",cv);
-            Log.d(TAG, "add: result is "+result);
-        }
+//        ContentValues cv=new ContentValues();
+//        cv.put("_id",info._id);
+//        cv.put("importance",info.importance);
+//        long result=writeDB.insert(tableName,"",cv);
+//        Log.d(TAG, "add: result is "+result);
+//        if(result == -1){
+//            throw new Exception("保存失败");
+//        }
+
+        ContentValues cv=new ContentValues();
+        cv.put("_id",info._id);
+        cv.put("importance",info.importance);
+        long result=writeDB.insert(tableName,"",cv);
+        Log.d(TAG, "add: result is "+result);
+
         return result;
     }
 
     @Override
-    protected long update(Object obj) {
+    protected void update(Object obj) throws Exception {
         LabelBean info= (LabelBean) obj;
-        ContentValues cv=new ContentValues();
-        cv.put("_id",info._id);
-        cv.put("importance",info.importance);
+        ContentValues values =new ContentValues();
+        values.put("_id",info._id);
+        values.put("importance",info.importance);
 
-        if(info._id>-1){
-            String whereClause="_id=?";
-            String[] whereArgs={String.valueOf(info._id)};
+        if (info._id > -1) {
+            String whereClause = "_id = ?";
+            String[] whereArgs = { String.valueOf(info._id) };
 
-            return writeDB.update(tableName,cv,whereClause,whereArgs);
+            int rowsUpdated = writeDB.update(tableName, values, whereClause, whereArgs);
+            if (rowsUpdated == 0) {
+                throw new Exception("更新失败"); // 使用 throw 抛出异常
+            }
+        } else {
+            throw new IllegalArgumentException("无效的参数"); // 或者抛出其他适当的异常
         }
-        return -1;
     }
 
     @Override
