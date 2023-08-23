@@ -1,5 +1,7 @@
 package com.example.jotdown.viewmodel;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.example.jotdown.receiver.AlarmReceiver;
 import com.example.jotdown.repositories.QueryNodesRepository;
 import com.example.jotdown.task.DeleteAudioThread;
 import com.example.jotdown.utils.CancellationNotifyUtil;
+import com.example.jotdown.utils.PermissionUtil;
 
 import java.util.List;
 
@@ -70,10 +73,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public void queryNodes(String query) {
         nodesRepo.startQuery(query);
-    }
-
-    public void onCreate() {
-        nodesRepo.onCreate();
     }
 
     public void onResume() {

@@ -311,7 +311,10 @@ public class MainActivity extends AppCompatActivity
                 android.Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
-        if (PermissionUtil.checkMultiPermission(this, permissions, 0)) {
+        if (!PermissionUtil.checkMultiPermission(
+                this,
+                permissions,
+                PermissionUtil.REQUEST_CODE)) {
 
         }
     }
@@ -320,7 +323,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 0) {
+        if (requestCode == PermissionUtil.REQUEST_CODE) {
             boolean allPermissionsGranted = true;
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
@@ -332,7 +335,7 @@ public class MainActivity extends AppCompatActivity
                 // 已获取到所有权限，继续应用的正常逻辑
             } else {
                 // 未完全启用权限，向用户解释为何应用需要这些权限，并提供引导用户手动打开权限的选项
-                //finish();
+                // finish();
             }
         }
     }

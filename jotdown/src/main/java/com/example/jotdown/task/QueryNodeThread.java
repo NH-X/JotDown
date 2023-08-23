@@ -49,7 +49,7 @@ public class QueryNodeThread extends Thread {
             mRequestSchedule.postValue(new Resource<>(
                     info,
                     ProcessType.query_successful,
-                    "1"
+                    "查询成功"
             ));
         }
     }

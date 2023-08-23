@@ -14,9 +14,11 @@ import java.util.List;
 public class PermissionUtil {
     private final static String TAG = "PermissionUtil";
 
+    public static final int REQUEST_CODE = 200;
+
     // 检查某个权限。返回true表示已启用该权限，返回false表示未启用该权限
     public static boolean checkPermission(Activity act, String permission, int requestCode) {
-        Log.d(TAG, "checkPermission: "+permission);
+        Log.d(TAG, "checkPermission: " + permission);
         boolean result = true;
         // 只对Android6.0及以上系统进行校验
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -28,7 +30,7 @@ public class PermissionUtil {
                 result = false;
             }
         }
-        Log.d(TAG, String.format("checkPermission: has permission %s %s",permission,(result?"true":"false")));
+        Log.d(TAG, String.format("checkPermission: has permission %s %s", permission, (result ? "true" : "false")));
 
         return result;
     }
