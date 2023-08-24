@@ -43,7 +43,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     def lifecycle_version = "2.5.1"
-
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
@@ -51,11 +50,13 @@ dependencies {
 
     // RxJava
     def rxJava_version = "3.1.6"
-
     implementation "io.reactivex.rxjava3:rxjava:$rxJava_version"
 
     // RxAndroid
     def rxAndroid_version = "3.0.2"
-
     implementation "io.reactivex.rxjava3:rxandroid:$rxAndroid_version"
+
+    // Gson
+    def gson_version = "2.10.1"
+    implementation "com.google.code.gson:gson:$gson_version"
 }

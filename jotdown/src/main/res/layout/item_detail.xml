@@ -23,14 +23,20 @@
         android:textSize="15sp"
         android:textColor="@color/black"
         android:id="@+id/tv_content"/>
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:scaleType="fitCenter"
-        android:layout_marginBottom="15dp"
-        android:id="@+id/iv_listen"
-        android:clickable="true"
-        android:src="@drawable/baseline_hearing_24"/>
+    <LinearLayout
+        android:id="@+id/ll_stream_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/iv_listen"
+            android:clickable="true"
+            android:src="@drawable/baseline_hearing_24"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
