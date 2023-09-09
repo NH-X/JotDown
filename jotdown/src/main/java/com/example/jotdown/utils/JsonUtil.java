@@ -1,9 +1,5 @@
 package com.example.jotdown.utils;
 
-/**
- * @author NH-X
- */
-
 import android.util.Log;
 
 import org.json.JSONArray;

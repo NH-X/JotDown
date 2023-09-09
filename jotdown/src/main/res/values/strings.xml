@@ -1,24 +1,24 @@
 <resources>
-    <string name="app_name">记下</string>
-    <string name="edit_title">输入标题</string>
-    <string name="edit_content">输入内容</string>
+    <string name="app_name" translatable="false">记下</string>
+    <string name="edit_title" translatable="false">输入标题</string>
+    <string name="edit_content" translatable="false">输入内容</string>
 
-    <string name="confirm">确定</string>
-    <string name="cancel">取消</string>
+    <string name="confirm" translatable="false">确定</string>
+    <string name="cancel" translatable="false">取消</string>
 
-    <string name="notRemind">不提醒</string>
+    <string name="notRemind" translatable="false">不提醒</string>
 
-    <string name="moreLabel">更多标签</string>
-    <string name="unknown">未知</string>
-    <string name="personal">个人</string>
-    <string name="work">工作</string>
-    <string name="study">学习</string>
-    <string name="important">重要</string>
-    <string name="red">红色</string>
-    <string name="green">绿色</string>
-    <string name="blue">蓝色</string>
-    <string name="purple">紫色</string>
-    <string name="grey">灰色</string>
-    <string name="yellow">黄色</string>
-    <string name="orange">橙色</string>
+    <string name="moreLabel" translatable="false">更多标签</string>
+    <string name="unknown" translatable="false">未知</string>
+    <string name="personal" translatable="false">个人</string>
+    <string name="work" translatable="false">工作</string>
+    <string name="study" translatable="false">学习</string>
+    <string name="important" translatable="false">重要</string>
+    <string name="red" translatable="false">红色</string>
+    <string name="green" translatable="false">绿色</string>
+    <string name="blue" translatable="false">蓝色</string>
+    <string name="purple" translatable="false">紫色</string>
+    <string name="grey" translatable="false">灰色</string>
+    <string name="yellow" translatable="false">黄色</string>
+    <string name="orange" translatable="false">橙色</string>
 </resources>
